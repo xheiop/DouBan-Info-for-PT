@@ -1,3 +1,12 @@
+## [1.7.10](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.9...1.7.10) (2026-01-26)
+
+
+### Features
+
+* remove douban awards ([6926810](https://github.com/techmovie/DouBan-Info-for-PT/commit/69268101e2453e0c33460f2d65678fa1a00ebd82))
+
+
+
 ## [1.7.9](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.7.8...1.7.9) (2025-06-28)
 
 

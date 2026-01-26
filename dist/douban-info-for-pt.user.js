@@ -2,7 +2,7 @@
 // @name            douban-info-for-pt
 // @name:en         douban-info-for-pt
 // @namespace       https://github.com/techmovie/DouBan-Info-for-PT
-// @version         1.7.9
+// @version         1.7.10
 // @author          birdplane
 // @description     在PT站电影详情页展示部分中文信息
 // @description:en  Display some Chinese information on the PT site movie details page
@@ -111,7 +111,6 @@
     <div><strong>语言:</strong> ${data.language}</div>
     <div><strong>时长:</strong> ${data.runtime}</div>
     <div><strong>又名:</strong>  ${data.aka}</div
-    <div><strong>获奖情况:</strong> <br> ${data.awards}</div
     </div>`);
     if (data.average) {
       $("#movie-ratings-table tr").prepend(
@@ -156,7 +155,6 @@
           <li><strong>语言:</strong> ${data.language}</li>
           <li><strong>时长:</strong> ${data.runtime}</li>
           <li><strong>又名:</strong>  ${data.aka}</li
-          <li><strong>获奖情况:</strong> <br> ${data.awards}</li
       </ul>
       </div>    
     </div>`);
@@ -272,7 +270,6 @@
       }
       const subjectLink = mobileLink.replace("m.douban.com/movie", "movie.douban.com").replace(/\/$/, "");
       const doubanId = (_b2 = (_a2 = subjectLink.match(/subject\/(\d+)/)) == null ? void 0 : _a2[1]) != null ? _b2 : "";
-      const awards = await getAwardInfo(subjectLink);
       const doubanInfo = {
         director: (_c2 = attrs.director) == null ? void 0 : _c2.join(" / "),
         runtime: (_d = attrs.movie_duration) == null ? void 0 : _d.join(" / "),
@@ -286,7 +283,6 @@
         chineseTitle,
         votes: rating.numRaters,
         average: rating.average,
-        awards,
         id: (_j = (_i = subjectLink.match(/subject\/(\d+)/)) == null ? void 0 : _i[1]) != null ? _j : "",
         episodes: (_l = (_k = attrs.episodes) == null ? void 0 : _k.join(" / ")) != null ? _l : ""
       };
@@ -302,15 +298,6 @@
     } catch (error) {
       console.log(error);
     }
-  };
-  const getAwardInfo = async (doubanLink) => {
-    var _a2;
-    const awardsPage = await fetch(`${doubanLink}/awards/`, {
-      responseType: "text"
-    });
-    const awardsDoc = new DOMParser().parseFromString(awardsPage, "text/html");
-    const awards = $("#content > div > div.article", awardsDoc).html().replace(/[ \n]/g, "").replace(/<\/li><li>/g, "</li> <li>").replace(/<\/a><span/g, "</a> <span").replace(/<(div|ul)[^>]*>/g, "\n").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/ +\n/g, "\n").trim();
-    return (_a2 = awards == null ? void 0 : awards.replace(/\n/g, "<br>")) != null ? _a2 : "";
   };
   const formatDoubanInfo = async (domString) => {
     var _a2, _b2;
@@ -343,7 +330,6 @@
       }).join("/");
       aka = aka.split("/");
     }
-    const awards = await getAwardInfo(link);
     return {
       director: director.map((item) => item.name),
       runtime,
@@ -356,8 +342,7 @@
       summary,
       chineseTitle,
       votes,
-      average: rating,
-      awards
+      average: rating
     };
   };
   const getTorrentTitle = () => {
