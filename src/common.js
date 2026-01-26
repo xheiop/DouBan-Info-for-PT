@@ -31,7 +31,6 @@ const addToPtpPage = (data) => {
     <div><strong>语言:</strong> ${data.language}</div>
     <div><strong>时长:</strong> ${data.runtime}</div>
     <div><strong>又名:</strong>  ${data.aka}</div
-    <div><strong>获奖情况:</strong> <br> ${data.awards}</div
     </div>`);
   if (data.average) {
     $('#movie-ratings-table tr').prepend(
@@ -75,7 +74,6 @@ const addToANTPage = (data) => {
           <li><strong>语言:</strong> ${data.language}</li>
           <li><strong>时长:</strong> ${data.runtime}</li>
           <li><strong>又名:</strong>  ${data.aka}</li
-          <li><strong>获奖情况:</strong> <br> ${data.awards}</li
       </ul>
       </div>    
     </div>`);
@@ -250,7 +248,6 @@ const getDoubanInfoByIMDB = async (imdbId) => {
     }
     const subjectLink = mobileLink.replace('m.douban.com/movie', 'movie.douban.com').replace(/\/$/, '');
     const doubanId = subjectLink.match(/subject\/(\d+)/)?.[1] ?? '';
-    const awards = await getAwardInfo(subjectLink);
     const doubanInfo = {
       director: attrs.director?.join(' / '),
       runtime: attrs.movie_duration?.join(' / '),
@@ -264,7 +261,6 @@ const getDoubanInfoByIMDB = async (imdbId) => {
       chineseTitle,
       votes: rating.numRaters,
       average: rating.average,
-      awards: awards,
       id: subjectLink.match(/subject\/(\d+)/)?.[1] ?? '',
       episodes: attrs.episodes?.join(' / ') ?? '',
     };
@@ -283,22 +279,22 @@ const getDoubanInfoByIMDB = async (imdbId) => {
     console.log(error);
   }
 };
-const getAwardInfo = async (doubanLink) => {
+/* const getAwardInfo = async (doubanLink) => {
   const awardsPage = await fetch(`${doubanLink}/awards/`, {
     responseType: 'text',
   });
   const awardsDoc = new DOMParser().parseFromString(awardsPage, 'text/html');
   const awards = $('#content > div > div.article', awardsDoc).html()
-    .replace(/[ \n]/g, '')
-    .replace(/<\/li><li>/g, '</li> <li>')
-    .replace(/<\/a><span/g, '</a> <span')
-    .replace(/<(div|ul)[^>]*>/g, '\n')
-    .replace(/<[^>]+>/g, '')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/ +\n/g, '\n')
-    .trim();
+    ?.replace(/[ \n]/g, '')
+    ?.replace(/<\/li><li>/g, '</li> <li>')
+    ?.replace(/<\/a><span/g, '</a> <span')
+    ?.replace(/<(div|ul)[^>]*>/g, '\n')
+    ?.replace(/<[^>]+>/g, '')
+    ?.replace(/&nbsp;/g, ' ')
+    ?.replace(/ +\n/g, '\n')
+    ?.trim();
   return awards?.replace(/\n/g, '<br>') ?? '';
-};
+}; */
 const formatDoubanInfo = async (domString) => {
   const dom = new DOMParser().parseFromString(domString, 'text/html');
   const chineseTitle = $('title', dom).text().replace('(豆瓣)', '').trim();
@@ -332,7 +328,6 @@ const formatDoubanInfo = async (domString) => {
     }).join('/');
     aka = aka.split('/');
   }
-  const awards = await getAwardInfo(link);
   return {
     director: director.map(item => item.name),
     runtime,
@@ -346,7 +341,6 @@ const formatDoubanInfo = async (domString) => {
     chineseTitle,
     votes,
     average: rating,
-    awards,
   };
 };
 const getTorrentTitle = () => {
