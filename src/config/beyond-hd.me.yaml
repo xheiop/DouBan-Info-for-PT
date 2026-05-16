@@ -4,3 +4,4 @@ siteName: BHD
 imdb: '.movie-details a[href*="imdb.com/title"]:nth-child(1)'
 insertDomSelector: '.movie-wrapper'
 doubanContainerDom: '<div class="douban-dom bhd"></div>'
+poster: '.new-hacker'

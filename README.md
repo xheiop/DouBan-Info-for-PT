@@ -19,15 +19,3 @@
 ## 声明
 
 如需使用本脚本，请注明来源，谢谢合作！
-
-## ☕️Buy Me a coffee
-
-如果本项目对你有帮助，不妨通过微信或者支付宝进行小额捐赠，以支持该项目的持续维护和发展。
-
-微信:
-
-<img alt="wechat.png" src="https://ptpimg.me/6zq3va.jpg" width="200">
-
-支付宝:
-
-<img alt="alipay.png" src="https://ptpimg.me/3dw5k6.jpg" width="200">

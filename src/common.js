@@ -1,5 +1,5 @@
 import {
-  CURRENT_SITE_INFO, PIC_URLS,
+  CURRENT_SITE_INFO,
   DOUBAN_API_URL, DOUBAN_SEARCH_API, CURRENT_SITE_NAME, DOUBAN_SUGGEST_API,
   DOUBAN_SUBJECT_URL,
 } from './const';
@@ -393,8 +393,6 @@ const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
   });
   htmlData = htmlData.replace(/wrapper/g, 'douban-wrapper').replace(/<script.+?script>/g, '');
   htmlData = htmlData.replace(/(html,)body,/, '$1');// HDB body样式覆盖
-  htmlData = htmlData.replace(/url\(.+?output_card\/border.png\)/g, `url(${PIC_URLS.border})`);
-  htmlData = htmlData.replace(/src=.+?output_card\/line\.png/g, `src="${PIC_URLS.line}`);
   let headDom = htmlData.match(/<head>((.|\n)+)<\/head>/)[1];
   headDom = headDom.replace(/<link.+?>/g, '');
   const bodyDom = htmlData.match(/<body>((.|\n)+)<\/body>/)[1];
@@ -404,14 +402,13 @@ const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
   $('.douban-dom .grid-col4').after(`
   <div class="fix-col grid-col3">
   <div class="line-wrap">
-    <img src="https://ptpimg.me/e11hb1.png">
   </div>
   </div>
   <div class="fix-col grid-col5"></div>`);
   const doubanData = doubanInfo || await getDoubanInfo(doubanId, imdbId);
   $('.douban-dom .grid-col5').html(`<div class="summary">${doubanData.summary || '暂无简介'}</div>`);
   let posterStyle = $('.picture-douban-wrapper').attr('style');
-  const posterImg = siteName === 'MTV' ? $(poster).attr('src') : doubanData.poster;
+  const posterImg = $(poster).attr('src') ? $(poster).attr('src') : doubanData.poster;
   posterStyle = posterStyle?.replace(/\(.+\)/, `(${posterImg})`);
   $('.picture-douban-wrapper').attr('style', posterStyle);
   $('.douban-dom').click(() => {
