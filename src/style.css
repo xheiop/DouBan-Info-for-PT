@@ -475,3 +475,39 @@
     background-color: #131313;
     color: #fff;
 }
+
+/* BLU blutopia.cc（主题蓝 #2196f3，与站点片名同色系） */
+.douban-title-blu {
+    color: #2196f3;
+    font-size: inherit;
+    font-weight: 700;
+    margin-left: 8px;
+    white-space: nowrap
+}
+
+/* HDB hdbits.org（中文片名跟在原片名右侧） */
+.douban-title-hdb {
+    margin-left: 6px
+}
+
+/* BTN banner 下方片名行：中文片名 + 原英文片名 + 年份整体为一个豆瓣链接，
+   字体/颜色/居中对齐完全沿用站点原生 h2 样式（16px tahoma 白字加粗居中） */
+.douban-title-line {
+    margin: 5px 0;
+    font: bold 16px tahoma, helvetica, sans-serif;
+    text-align: center;
+    color: #fff
+}
+.douban-title-line .douban-title-link {
+    color: #fff;
+    text-decoration: none
+}
+.douban-title-line .douban-title-link:hover {
+    text-decoration: underline
+}
+
+/* BTN Series Summary 豆瓣 tab 面板：面板底色/字体/内边距完全继承站点原生
+   .ui-tabs-panel 类，仅按中文阅读习惯微调行高 */
+.douban-summary-tab-text {
+    line-height: 1.6
+}

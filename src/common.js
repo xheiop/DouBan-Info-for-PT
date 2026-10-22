@@ -1,7 +1,7 @@
 import {
   CURRENT_SITE_INFO,
   DOUBAN_API_URL, DOUBAN_SEARCH_API, CURRENT_SITE_NAME, DOUBAN_SUGGEST_API,
-  DOUBAN_SUBJECT_URL,
+  DOUBAN_SUGGEST_API_URL, DOUBAN_SUBJECT_URL,
 } from './const';
 import $ from 'jquery';
 
@@ -180,6 +180,47 @@ const getDoubanIdByIMDB = async (imdbId) => {
 //     }
 //   });
 // };
+const numberToChinese = (num) => {
+  const digits = ['〇', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  const value = parseInt(num, 10);
+  if (!value || value < 1) {
+    return '';
+  }
+  if (value < 10) {
+    return digits[value];
+  }
+  if (value === 10) {
+    return '十';
+  }
+  if (value < 20) {
+    return `十${digits[value - 10]}`;
+  }
+  const tens = digits[Math.floor(value / 10)];
+  const ones = value % 10 ? digits[value % 10] : '';
+  return `${tens}十${ones}`;
+};
+const matchSeasonSubject = (subjects, chineseTitle, seasonNumber, strict = true) => {
+  const cnSeason = numberToChinese(seasonNumber);
+  const seasonMarkers = [
+    `第${seasonNumber}季`,
+    cnSeason ? `第${cnSeason}季` : '',
+    `season ${seasonNumber}`,
+  ].filter(Boolean);
+  const nameHit = (subject) => {
+    const title = subject.title || '';
+    const originalTitle = subject.original_title || '';
+    return title.includes(chineseTitle) || originalTitle.includes(chineseTitle);
+  };
+  const seasonHit = (subject) => {
+    const title = (subject.title || '').toLowerCase();
+    return seasonMarkers.some(marker => title.includes(marker.toLowerCase()));
+  };
+  const bothMatched = subjects.find(subject => nameHit(subject) && seasonHit(subject));
+  if (bothMatched || strict) {
+    return bothMatched;
+  }
+  return subjects.find(subject => nameHit(subject));
+};
 const getTvSeasonData = async (data) => {
   const torrentTitle = getTorrentTitle();
   const { episodes = '', chineseTitle } = data;
@@ -190,15 +231,42 @@ const getTvSeasonData = async (data) => {
     } else {
       const query = `${chineseTitle} 第${seasonNumber}季`;
       const params = encodeURI('apikey=0ab215a8b1977939201640fa14c66bab');
-      const searchData = await fetch(`${DOUBAN_API_URL}/search?q=${query}`, {
-        data: params,
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-      });
-      if (searchData.count > 0) {
-        return { id: searchData.subjects[0].id };
+      let subjects = [];
+      try {
+        const searchData = await fetch(`${DOUBAN_API_URL}/search?q=${query}`, {
+          data: params,
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        });
+        if (searchData.count > 0) {
+          subjects = searchData.subjects;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+      let subject = matchSeasonSubject(subjects, chineseTitle, seasonNumber);
+      if (!subject) {
+        try {
+          const suggestData = await fetch(`${DOUBAN_SUGGEST_API_URL}?q=${encodeURIComponent(query)}`, {
+            responseType: 'json',
+          });
+          if (Array.isArray(suggestData) && suggestData.length > 0) {
+            subject = matchSeasonSubject(suggestData, chineseTitle, seasonNumber);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      if (!subject) {
+        subject = matchSeasonSubject(subjects, chineseTitle, seasonNumber, false);
+      }
+      if (subject) {
+        return { id: subject.id };
+      }
+      if (subjects.length > 0) {
+        return { id: subjects[0].id };
       }
     }
   }
@@ -211,13 +279,13 @@ const getDoubanInfo = async (doubanId, imdbId) => {
     });
     if (data) {
       const doubanInfo = await formatDoubanInfo(data);
-      const savedIds = GM_getValue('ids') || {};
+      const savedIds = GM_getValue('ids_v2') || {};
       savedIds[imdbId] = {
         doubanId,
         updateTime: Date.now(),
         ...doubanInfo,
       };
-      GM_setValue('ids', savedIds);
+      GM_setValue('ids_v2', savedIds);
       return doubanInfo;
     } else {
       console.log('豆瓣数据获取失败');
@@ -266,13 +334,13 @@ const getDoubanInfoByIMDB = async (imdbId) => {
     };
     // no need to save series info
     if (!attrs.episodes) {
-      const savedIds = GM_getValue('ids') || {};
+      const savedIds = GM_getValue('ids_v2') || {};
       savedIds[imdbId] = {
         doubanId,
         updateTime: Date.now(),
         ...doubanInfo,
       };
-      GM_setValue('ids', savedIds);
+      GM_setValue('ids_v2', savedIds);
     }
     return doubanInfo;
   } catch (error) {
@@ -360,24 +428,11 @@ const getTorrentTitle = () => {
           titleDom = $(element).find('td:last');
         }
       });
-    } else if (CURRENT_SITE_NAME === 'UHD') {
-      const torrentId = getUrlParam('torrentid');
-      const torrentFilePathDom = $(`#files_${torrentId} .filelist_path`);
-      const torrentFileDom = $(`#files_${torrentId} .filelist_table>tbody>tr:nth-child(2) td`).eq(0);
-      titleDom = torrentFilePathDom || torrentFileDom;
     } else if (CURRENT_SITE_NAME === 'HDT') {
       return document.title.replace(/HD-Torrents.org\s*-/ig, '').trim();
     }
   }
   return $(titleDom).text();
-};
-const getUrlParam = (key) => {
-  const reg = new RegExp('(^|&)' + key + '=([^&]*)(&|$)');
-  const regArray = location.search.substr(1).match(reg);
-  if (regArray) {
-    return unescape(regArray[2]);
-  }
-  return '';
 };
 const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
   const div = document.createElement('div');
@@ -415,6 +470,275 @@ const createDoubanDom = async (doubanId, imdbId, doubanInfo) => {
     GM_openInTab(doubanLink);
   });
 };
+// BTN 横幅下方新增中文片名行：中文片名点击跳转豆瓣，其后保留站点原英文片名与年份，
+// 如「翠鸟谋杀案 Marble Hall Murders (2026)」，横幅本身保持站点原样
+const addTitleLine = (doubanData, doubanLink) => {
+  const { addTitleLineAfter, addTitleLineHtml } = CURRENT_SITE_INFO;
+  const chineseTitle = doubanData.chineseTitle;
+  if (!addTitleLineAfter || !addTitleLineHtml || !chineseTitle) {
+    return false;
+  }
+  const anchor = document.querySelector(addTitleLineAfter);
+  if (!anchor) {
+    return false;
+  }
+  // 插入点取横幅所在 h2 的父容器之后（横幅与播放按钮之间），无 h2 时退化到横幅的父节点
+  const host = (anchor.closest('h2') || anchor).parentNode;
+  if (!host || !host.parentNode || document.querySelector('.douban-title-line')) {
+    return true;
+  }
+  // 英文片名取自 document.title（如 Ghost Adventures :: BroadcasTheNet），年份取自 First Aired
+  const rawTitle = (document.title.split(' :: ')[0] || '').trim();
+  // document.title 有时自带年份（如 Monster (2022) :: BroadcasTheNet），先取下避免拼出两个年份
+  const titleYear = rawTitle.match(/\((\d{4})\)\s*$/);
+  const nativeTitle = rawTitle.replace(/\s*\(\d{4}\)\s*$/, '');
+  const airedRow = Array.prototype.find.call(
+    document.querySelectorAll('tr'),
+    (row) => /First Aired/i.test(row.textContent),
+  );
+  const airedYear = airedRow && airedRow.textContent.match(/\b(?:19|20)\d{2}\b/);
+  // 年份优先用 First Aired，没有该行时回退用片名自带的年份
+  const year = (airedYear && airedYear[0]) || (titleYear && titleYear[1]) || '';
+  const titleHtml = addTitleLineHtml
+    .replace(/\{link\}/g, doubanLink)
+    .replace(/\{title\}/g, chineseTitle)
+    .replace(/\{nativeTitle\}/g, year ? `${nativeTitle} (${year})` : nativeTitle)
+    // 没有原英文片名时去掉模板里多余的空格
+    .replace(/\s+<\/a>/, '</a>');
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = titleHtml;
+  host.parentNode.insertBefore(wrapper.firstChild, host.nextSibling);
+  return true;
+};
+// BTN Series Summary：以原生 tab 形式融入豆瓣简介（左侧豆图标 + 右侧中文简介），
+// 点击互斥状态手动管理，风格完全复用站点 jQuery UI tabs 的类名
+const addDoubanSummaryTab = (doubanData) => {
+  const { addSummaryTab, addSummaryTabIcon } = CURRENT_SITE_INFO;
+  // 豆瓣没有中文简介时不增加 tab
+  const summary = doubanData.summary && doubanData.summary !== '暂无相关剧情介绍' && isChinese(doubanData.summary)
+    ? doubanData.summary
+    : '';
+  if (!addSummaryTab || !summary) {
+    return false;
+  }
+  const tabs = document.querySelector(addSummaryTab);
+  if (!tabs) {
+    return false;
+  }
+  const panelId = 'douban-summary-panel';
+  if (document.getElementById(panelId)) {
+    return true;
+  }
+  const nav = tabs.querySelector('ul.ui-tabs-nav');
+  if (!nav) {
+    return false;
+  }
+  const li = document.createElement('li');
+  li.className = 'ui-state-default ui-corner-left';
+  li.innerHTML = `<a href="#${panelId}" target="_self" title="豆瓣简介"><img src="${addSummaryTabIcon}" width="17" height="17" alt="Douban"></a>`;
+  nav.insertBefore(li, nav.firstChild);
+  const panel = document.createElement('div');
+  panel.id = panelId;
+  panel.className = 'ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide';
+  const text = document.createElement('div');
+  text.className = 'douban-summary-tab-text';
+  text.textContent = summary;
+  panel.appendChild(text);
+  tabs.appendChild(panel);
+  const nativeLis = Array.prototype.filter.call(nav.children, (item) => item !== li);
+  const nativePanels = Array.prototype.filter.call(tabs.querySelectorAll('.ui-tabs-panel'), (item) => item !== panel);
+  // 默认选中豆瓣 tab：进页面即显示中文简介，原生日志 tab 的选中态一并取消
+  nativeLis.forEach((item) => item.classList.remove('ui-tabs-selected', 'ui-state-active'));
+  nativePanels.forEach((item) => item.classList.add('ui-tabs-hide'));
+  li.classList.add('ui-tabs-selected', 'ui-state-active');
+  panel.classList.remove('ui-tabs-hide');
+  const anchor = li.querySelector('a');
+  anchor.addEventListener('click', (event) => {
+    event.preventDefault();
+    nativeLis.forEach((item) => item.classList.remove('ui-tabs-selected', 'ui-state-active'));
+    nativePanels.forEach((item) => item.classList.add('ui-tabs-hide'));
+    li.classList.add('ui-tabs-selected', 'ui-state-active');
+    panel.classList.remove('ui-tabs-hide');
+  });
+  // 原生 tab 的切换由站点 widget 完成，其后隐藏豆瓣面板并取消选中态
+  nativeLis.forEach((item) => {
+    const nativeAnchor = item.querySelector('a');
+    if (nativeAnchor) {
+      nativeAnchor.addEventListener('click', () => {
+        setTimeout(() => {
+          li.classList.remove('ui-tabs-selected', 'ui-state-active');
+          panel.classList.add('ui-tabs-hide');
+        }, 0);
+      });
+    }
+  });
+  return true;
+};
+// 就地替换：保留站点原片名/原简介，把豆瓣中文片名挂到原片名右侧，中文简介替换原简介，
+// 并在站点评分和外链按钮处加入豆瓣入口。返回是否命中，未命中时由调用方回退到豆瓣卡片
+const replaceNativeInfo = (doubanData, doubanLink) => {
+  const {
+    addTitleAfter, addTitleBefore, addTitleInside, addTitleHtml, replaceOverview, replaceOverviewLabel,
+    replaceRating, replaceRatingHtml, replaceRatingPosition, renameRatingLabel,
+    addLinkButtonAfter, addLinkButtonHtml,
+    addTitleLineAfter,
+    addSummaryTab,
+  } = CURRENT_SITE_INFO;
+  if (!doubanData || !(addTitleAfter || addTitleBefore || addTitleInside || addTitleLineAfter || addSummaryTab || replaceOverview || replaceOverviewLabel)) {
+    return false;
+  }
+  if (document.documentElement.dataset.doubanInserted) {
+    return true;
+  }
+  const score = doubanData.average;
+  const votes = doubanData.votes ?? 0;
+  const votesComma = String(votes).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const chineseTitle = doubanData.chineseTitle;
+  // 豆瓣没有中文简介时保留站点原简介
+  const summary = doubanData.summary && doubanData.summary !== '暂无相关剧情介绍' && isChinese(doubanData.summary)
+    ? doubanData.summary
+    : '';
+  let replaced = false;
+
+  // 横幅下方新增中文片名行，横幅保持站点原样（如 BTN 顶部 TVDB 横幅）
+  if (addTitleLine(doubanData, doubanLink)) {
+    replaced = true;
+  }
+
+  // 中文片名：挂在站内原片名旁边，点击跳转豆瓣
+  if (addTitleHtml && chineseTitle) {
+    const titleHtml = addTitleHtml
+      .replace(/\{link\}/g, doubanLink)
+      .replace(/\{title\}/g, chineseTitle);
+    if (addTitleInside) {
+      const host = $(addTitleInside).first()[0];
+      if (host) {
+        const link = $(titleHtml)[0];
+        const lastText = host.lastChild;
+        // 行尾的 (年份) 挪到中文片名之后，如 Wings of Dread (2026) → Wings of Dread 追风筝的人 (2026)
+        const yearMatched = lastText && lastText.nodeType === 3 &&
+          lastText.textContent.match(/^([\s\S]*?)(\s*\(\d{4}\)\s*)$/);
+        if (yearMatched) {
+          lastText.textContent = `${yearMatched[1].replace(/\s+$/, '')} `;
+          host.appendChild(link);
+          host.appendChild(document.createTextNode(` ${yearMatched[2].trim()}`));
+        } else {
+          if (lastText && lastText.nodeType === 3 && !/\s$/.test(lastText.textContent)) {
+            host.appendChild(document.createTextNode(' '));
+          }
+          host.appendChild(link);
+        }
+        replaced = true;
+      }
+    } else {
+      const $titleAnchor = $(addTitleAfter || addTitleBefore).first();
+      if ($titleAnchor.length) {
+        if (addTitleAfter) {
+          $titleAnchor.after(titleHtml);
+        } else {
+          $titleAnchor.before(titleHtml);
+        }
+        replaced = true;
+      }
+    }
+  }
+
+  // 剧情：整个元素文本替换，原内容留作 tooltip
+  if (replaceOverview && summary) {
+    const $overview = $(replaceOverview).first();
+    if ($overview.length) {
+      const original = $overview.text().trim();
+      $overview.text(summary).attr('title', original);
+      replaced = true;
+    }
+  }
+
+  // 剧情：站点剧情是「Plot:」标签后的裸文本节点时，替换该文本节点
+  if (replaceOverviewLabel && summary) {
+    const label = Array.prototype.find.call(
+      document.querySelectorAll('font,strong,b,span,td'),
+      (element) => element.children.length === 0 && element.textContent.trim() === replaceOverviewLabel,
+    );
+    if (label) {
+      let node = label.nextSibling;
+      while (node && !(node.nodeType === 3 && node.textContent.trim())) {
+        node = node.nextSibling;
+      }
+      // 标签可能是父容器的最后一个子节点（如 AR 的 <span><span class="size4">PLOT</span></span>），
+      // 剧情文本跟在父容器之后，此时从父容器继续向后查找文本节点
+      if (!node && label.parentNode && label.parentNode !== document.body) {
+        node = label.parentNode.nextSibling;
+        while (node && !(node.nodeType === 3 && node.textContent.trim())) {
+          node = node.nextSibling;
+        }
+      }
+      if (node) {
+        node.textContent = ` ${summary} `;
+        replaced = true;
+      }
+    }
+  }
+
+  // 评分：在站点评分元素旁插入豆瓣评分，沿用站点自身样式类
+  if (replaceRating && score && replaceRatingHtml) {
+    const $rating = $(replaceRating).first();
+    if ($rating.length) {
+      // 站点评分标签改名（如 HDB 的 Rating → IMDB Rating），豆瓣评分单独占一行
+      if (renameRatingLabel) {
+        const $label = $rating.find('th').first();
+        if ($label.length) {
+          $label.text(renameRatingLabel);
+        }
+      }
+      const ratingHtml = replaceRatingHtml
+        .replace(/\{link\}/g, doubanLink)
+        .replace(/\{score\}/g, score)
+        .replace(/\{votesComma\}/g, votesComma)
+        .replace(/\{votes\}/g, votes);
+      if (replaceRatingPosition === 'before') {
+        $rating.before(ratingHtml);
+      } else {
+        $rating.after(ratingHtml);
+      }
+      replaced = true;
+    }
+  }
+
+  // Series Summary：以原生 tab 形式融入豆瓣简介（豆图标 + 中文简介）
+  if (addDoubanSummaryTab(doubanData)) {
+    replaced = true;
+  }
+
+  // 外链按钮：在站点自身的外部链接按钮旁加入豆瓣按钮
+  if (addLinkButtonAfter && addLinkButtonHtml) {
+    const $button = $(addLinkButtonAfter).first();
+    if ($button.length) {
+      $button.after(addLinkButtonHtml.replace(/\{link\}/g, doubanLink));
+      replaced = true;
+    }
+  }
+
+  if (replaced) {
+    document.documentElement.dataset.doubanInserted = '1';
+  }
+  return replaced;
+};
+// 已做就地融合的站点只替换站内原生内容，不生成豆瓣卡片；
+// 其余站点保持原有的豆瓣信息卡片
+const renderDoubanInfo = async (doubanInfo, doubanId, imdbId) => {
+  const nativeReplaceFields = [
+    'addTitleAfter', 'addTitleBefore', 'addTitleInside', 'addTitleLineAfter',
+    'addSummaryTab', 'replaceOverview', 'replaceOverviewLabel',
+  ];
+  if (nativeReplaceFields.some(field => CURRENT_SITE_INFO[field])) {
+    const doubanData = doubanInfo || await getDoubanInfo(doubanId, imdbId);
+    if (doubanData) {
+      replaceNativeInfo(doubanData, `https://movie.douban.com/subject/${doubanId}`);
+    }
+  } else {
+    await createDoubanDom(doubanId, imdbId, doubanInfo);
+  }
+};
 function fetch (url, options = {}) {
   return new Promise((resolve, reject) => {
     GM_xmlhttpRequest({
@@ -443,11 +767,12 @@ export {
   isChinese,
   getImdbId,
   getDoubanInfo,
+  createDoubanDom,
   addToPtpPage,
   addToANTPage,
   getDoubanId,
-  createDoubanDom,
   getTvSeasonData,
   getDoubanIdByIMDB,
   getDoubanInfoByIMDB,
+  renderDoubanInfo,
 };

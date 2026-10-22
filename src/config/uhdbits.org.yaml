@@ -1,7 +1,0 @@
-url: 'https://uhdbits.org'
-host: uhdbits.org
-siteName: UHD
-imdb: '.tooltip.imdb_icon'
-poster: '.poster_box .imgbox img'
-insertDomSelector: 'div.head:contains(IMDB)'
-doubanContainerDom: '<div class="box"><div class="head"><a href="#">↑</a>&nbsp;<strong>豆瓣</strong></div><div class="body douban-dom"></div></div>'

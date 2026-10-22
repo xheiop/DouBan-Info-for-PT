@@ -2,6 +2,8 @@ url: 'https://beyond-hd.me'
 host: beyond-hd.me
 siteName: BHD
 imdb: '.movie-details a[href*="imdb.com/title"]:nth-child(1)'
-insertDomSelector: '.movie-wrapper'
-doubanContainerDom: '<div class="douban-dom bhd"></div>'
-poster: '.new-hacker'
+addTitleAfter: 'h1.bhd-title-h1 a.beta-link-blend'
+addTitleHtml: '<a class="douban-title-link douban-title-bhd" href="{link}" target="_blank" rel="noreferrer" title="{title}">{title}</a>'
+replaceOverview: '.movie-overview'
+replaceRating: '.badge-meta[title="IMDb Rating"]'
+replaceRatingHtml: '<span class="badge-meta" title="豆瓣评分"><a rel="noreferrer" href="{link}" target="_blank"><span class="movie-rating-stars"><span class="douban-badge-icon">豆</span></span> {score}</a></span>'

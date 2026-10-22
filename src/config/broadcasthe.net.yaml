@@ -1,7 +1,14 @@
-url: https://broadcasthe.net
+url: 'https://broadcasthe.net'
 host: broadcasthe.net
 siteName: BTN
 imdb: '.stats td a[href*="imdb.com/title"]'
-insertDomSelector: '#content .linkbox'
-poster: '.sidebar .box img:first'
-doubanContainerDom: '<div class="douban-dom btn" style="display:flex;justify-content: center;width: 850px;margin-left: -20px;"></div>'
+titleDom: 'h2:first'
+addTitleLineAfter: 'img#banner'
+addTitleLineHtml: '<div class="douban-title-line"><a class="douban-title-link" target="_blank" rel="noreferrer" href="{link}" title="{title}">{title} {nativeTitle}</a></div>'
+addSummaryTab: '#tabs'
+addSummaryTabIcon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAACh0lEQVR42o2SvWvUWRSGn3M//CVjSCaChQbNLCqioCgoxhhxkXW3EHYLS/0TVKx2RVAQKzuLmNJOEBEVwRQGxUYk6ILFqohhk4iLC4lhNJmZ/D7uPRYmE+Mg+sLlVuflfc95BGDHpT2btGQuqfIzgXZQ4ZsSxdIQ4aHU46lnp0Zfy87Bvo3By4hNbCXWA4ryPQmCKVlCGiZsrodMFAZtYivFXJ5nIeNHlIaUfC7PXWIrURh0EQ5KI+p8TP25A6cZWL+XqBEjpmVYNSJieDH1kj/vnfWhHjTCQSeCB4ga6e1aR6W8/oeSLJQWEbxsH+pTQSi0oDPppCvpJA85kdgybMTgjWc2naWafsCJQ1EcgKIkdgXvZt+xb90eft98mDaXYI0DFBBCLJgvUu68usuN57dZVeqmiAHgs8lSZ2Xr6i3s7+3n1fRrFEVEUFUEYXfPJsZm/kW5tSzhchOULGTkMefw1SNU04+0uzYaxTzlpJOXJ/4mC1kLBu7r3s44vPEMH7tJEQP1vE7Jl3DG4o3HGde6qy+reOMZr04y+t9TpmrTqEZ2rd2JamSqNs3o2yeMVyfxxqO6lEa2D/XplyRmIcMaS6Xcy4bun7j46wX+uneW8eokk9U3pCElccm3TYwYalmNgd5+rvwx1BL7zP3zXPvnBuW2LsLCZQBk2+W+TAQHyCJ0K32JA5UBvPUIn68TUR69ecz7+gzOuMXlqiqFM/DAlNxvxVyRi8EbMdTyOtef32oysviv9KWmgUZy1+F8rBUPnFGOhzSMuA5bCfXQrNXdVl7ItqQYY/O8rsP6kIYJqxy3/w+/nVnzS8+wGjYg0rNAsSiK6vLXxMlKg6gjphGPPjs5OvYJRYI+gaJ9V4UAAAAASUVORK5CYII='
+replaceRating: 'tr:has(b:contains("TVDB Rating"))'
+replaceRatingHtml: '<tr><td><b>DouBan Rating:</b></td><td>{score}</td></tr>'
+replaceRatingPosition: 'after'
+addLinkButtonAfter: 'a[href*="thetvdb.com"]'
+addLinkButtonHtml: ' <a target="_blank" rel="noreferrer" href="{link}"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACT0lEQVR42oWTv2sUQRzFP9/Z2du93J5GLRJJkAO1sfAHCElnlIhgJSgICpapQkgriGCaWFrE/Aci2AgKQUkTRYSgSGwkqGDQRM4faDTn7d3uzn4tjpy5GPTBNDNvHu99540AHL4xsF+7zA2QIXEUAWFrqHrEoHNSz8cXxuffyJGpwX3Ol1kbeJV4LSbXnH9BxFAsF3FNt+SletLmolM2sJXGWjPtLff4kV9Ct7CwvtdwTT7+qKZBuVBxWTplVcyJZi3RbWHk3z1/m+3hNv6H07fO+u++L2nghSesCL6IkOUZi19fs7O4A6cO2eRBUTzxyPKMOG1gxAiivhycHlQBnOZkuWPP9n4CG6CabwiiiBiaWZMPP5cxYrBiURS7ns8aS+JSJo5fYaD/6JbW55efc+nuCKEf4tQBtATW4dRRDiKerbxg4tEk3WE3AKuNVa4eu0w5iHDqULR9x24edetQEaRNXJ+Htggd6BAwxlBLfjHQd5R7F+78HWHlOcaYzl4cnB7UPzVTess9lIMyjSTm6tBlACbmJgn9kLWkRrX2qeOFOgQ84/Gp9pnrw9c4d+AMRb8IQJzGPH7/lJH7Y+wKu3Eb2mpVSUWwgKgqUaHEqy+LzC09IXEJAvhegYXqS7psuHEEqkomh24OPjAleyqrZamYVqnqSZ3EpYhIm2mNR1SIUBTNSW1k/fxX9tAaZdQ13ayNvIqrO1SVUqFEJJuaqNr+aDbyfNd0S54y6lVnlr/tHu6bUcNeRPpQrKKiqnSslnnFk5hcZ02cX1wYm3/7G0f0F7GPR+eKAAAAAElFTkSuQmCC" border="0" width="16" height="16" alt="Douban" title="Douban"></a>'

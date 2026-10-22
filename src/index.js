@@ -2,8 +2,8 @@ import {
   CURRENT_SITE_INFO, CURRENT_SITE_NAME,
 } from './const';
 import {
-  getImdbId, getTvSeasonData, createDoubanDom,
-  addToPtpPage, getDoubanInfoByIMDB, addToANTPage,
+  getImdbId, getTvSeasonData,
+  addToPtpPage, getDoubanInfoByIMDB, addToANTPage, renderDoubanInfo,
 } from './common';
 import './style.css';
 (async () => {
@@ -13,7 +13,7 @@ import './style.css';
       return;
     }
     try {
-      const savedIds = GM_getValue('ids') || {};
+      const savedIds = GM_getValue('ids_v2') || {};
       if (!savedIds[imdbId] ||
         (savedIds[imdbId] && savedIds[imdbId].updateTime && Date.now() - savedIds[imdbId].updateTime >= 30 * 24 * 60 * 60 * 1000)) {
         let doubanId = '';
@@ -32,7 +32,7 @@ import './style.css';
         } else if (CURRENT_SITE_NAME.match(/ANT/)) {
           addToANTPage(movieData);
         } else {
-          createDoubanDom(doubanId, imdbId);
+          renderDoubanInfo(null, doubanId, imdbId);
         }
       } else {
         const savedData = savedIds[imdbId];
@@ -41,7 +41,7 @@ import './style.css';
         } else if (CURRENT_SITE_NAME.match(/ANT/)) {
           addToANTPage(savedData);
         } else {
-          createDoubanDom(savedData.doubanId, imdbId, savedData);
+          renderDoubanInfo(savedData, savedData.doubanId, imdbId);
         }
       }
     } catch (error) {

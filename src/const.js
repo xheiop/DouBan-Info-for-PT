@@ -13,10 +13,12 @@ const DOUBAN_SUBJECT_URL = 'https://movie.douban.com/subject/{doubanId}';
 const DOUBAN_SEARCH_API = 'https://movie.douban.com/j/subject_suggest?q={query}';
 const DOUBAN_SUGGEST_API = 'https://www.douban.com/search?cat=1002&q={query}';
 const DOUBAN_API_URL = 'https://api.douban.com/v2/movie';
+const DOUBAN_SUGGEST_API_URL = 'https://movie.douban.com/j/subject_suggest';
 export {
   CURRENT_SITE_INFO,
   CURRENT_SITE_NAME,
   DOUBAN_API_URL,
+  DOUBAN_SUGGEST_API_URL,
   DOUBAN_SEARCH_API,
   DOUBAN_SUGGEST_API,
   DOUBAN_SUBJECT_URL,

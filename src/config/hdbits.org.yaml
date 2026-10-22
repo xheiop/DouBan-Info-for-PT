@@ -2,9 +2,14 @@ url: 'https://hdbits.org'
 host: hdbits.org
 siteName: HDB
 imdb:
-  movie: '.contentlayout h1 a' 
+  movie: '.contentlayout h1 a'
   tv: '#details .showlinks li:nth-child(2) a'
   tvRequest: '.lottery_table2 .showlinks li:nth-child(2) a'
-titleDom: h1:first
-insertDomSelector: '#details>tbody>tr:nth-child(2),.lottery_table2>tbody>tr:nth-child(1)'
-doubanContainerDom: '<tr><td><div id="l7829483" class="label collapsable" onclick="showHideEl(7829483);(7829483)"><span class="plusminus">- </span>豆瓣信息</div><div id="c7829483" class="hideablecontent" ><div class="contentlayout douban-dom hdb"></div></td></tr>'
+titleDom: 'table.contentlayout h1'
+addTitleInside: 'table.contentlayout h1'
+addTitleHtml: '<a class="douban-title-link douban-title-hdb" href="{link}" target="_blank" rel="noreferrer" title="{title}">{title}</a>'
+replaceOverview: '#plotcell tr:has(th:contains("Plot")) + tr > td'
+replaceRating: '#imdbinfo tr:has(th:contains("Rating"))'
+renameRatingLabel: 'IMDB Rating'
+replaceRatingHtml: '<tr><th>DouBan Rating</th><td>{score} ({votesComma} votes)</td></tr>'
+replaceRatingPosition: 'after'
