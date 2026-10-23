@@ -1,0 +1,14 @@
+url: 'https://hdf.world'
+host: hdf.world
+siteName: HDF
+imdb: 'a[href*="imdb.com/title"]'
+titleDom: 'h2'
+addTitleAfter: 'h2 span[dir="ltr"]'
+addTitleHtml: ' <a class="douban-title-link" style="color: #36F69F; text-decoration: none;" href="{link}" target="_blank" rel="noreferrer" title="{title}">{title}</a>'
+replaceOverview: '#plotcell tr:has(th:contains("Synopsis")) + tr > td'
+replaceOverviewLabel: 'Synopsis'
+replaceRating: '.torrent_description a[href*="wikipedia.org"]'
+replaceRatingPosition: 'before'
+replaceRatingHtml: '<a href="{link}" target="_blank" rel="noreferrer" title="豆瓣评分"><img class="scale_image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0iIzAwNzcyMiIvPjx0ZXh0IHg9IjYwIiB5PSI0MyIgZm9udC1mYW1pbHk9IlBpbmdGYW5nIFNDLEhpcmFnaW5vIFNhbnMgR0IsTWljcm9zb2Z0IFlhSGVpLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7osYbnk6M8L3RleHQ+PC9zdmc+" width="62" height="30" alt="Douban"></a> : <strong>{score}</strong>/10 | '
+addLinkButtonAfter: '.db-links-container-details a[href*="imdb.com/title"]'
+addLinkButtonHtml: '<a href="{link}" target="_blank" rel="noreferrer" class="tooltip db-link db-link-copy" title="Douban"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0iIzAwNzcyMiIvPjx0ZXh0IHg9IjYwIiB5PSI0MyIgZm9udC1mYW1pbHk9IlBpbmdGYW5nIFNDLEhpcmFnaW5vIFNhbnMgR0IsTWljcm9zb2Z0IFlhSGVpLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7osYbnk6M8L3RleHQ+PC9zdmc+" alt="Douban"></a>'

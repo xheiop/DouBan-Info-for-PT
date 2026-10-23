@@ -1,0 +1,14 @@
+url: 'https://hd-space.org'
+host: hd-space.org
+siteName: HDS
+imdb: '#imdb a[href*="imdb.com/title"]'
+titleDom: '#imdb td.header a'
+addTitleInside: '#imdb td.header b a'
+addTitleHtml: '<a class="douban-title-link" style="color:inherit; text-decoration: underline;" href="{link}" target="_blank" rel="noreferrer" title="{title}">{title}</a>'
+replaceRating: '#imdb tr:has(b:contains("Rating:"))'
+replaceRatingPosition: 'after'
+renameRatingLabel: 'IMDB Rating:'
+starFullHtml: '<span class="star" style="background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_full.png); background-repeat: no-repeat; display: inline-block; width: 8px; height: 16px; background-position: 0px 0px; cursor: default;"></span><span class="star" style="background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_full.png); background-repeat: no-repeat; display: inline-block; width: 9px; height: 16px; background-position: -8px 0px; cursor: default;"></span>'
+starEmptyHtml: '<span class="star" style="background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_empty.png); background-repeat: no-repeat; display: inline-block; width: 8px; height: 16px; background-position: 0px 0px; cursor: default;"></span><span class="star" style="background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_empty.png); background-repeat: no-repeat; display: inline-block; width: 9px; height: 16px; background-position: -8px 0px; cursor: default;"></span>'
+replaceRatingHtml: '<tr><td class="lista"><b>DouBan Rating:</b></td><td class="lista"><a href="{link}" target="_blank" rel="noreferrer" title="豆瓣评分 {votes}人评价" style="text-decoration:none">{stars}<span style="color:#999;font-size:12px;font-weight:bold">{score}/10</span></a></td></tr>'
+replaceOverview: '#imdb tr:has(b:contains("Plot:")) > td + td'
