@@ -46,8 +46,20 @@ const resolveSeason = async (doubanData, imdbId) => {
   return { doubanId, doubanData };
 };
 
+// 部分站点的 IMDB 信息由页面脚本异步注入（如 HDS 的 #imdb 链接由 imdb.js 延迟填充），
+// 取不到 IMDB 链接时轮询等待其出现，超时后放弃
+const waitForImdbId = async (timeout = 15000) => {
+  const deadline = Date.now() + timeout;
+  let imdbId = getImdbId();
+  while (!imdbId && Date.now() < deadline) {
+    await new Promise(resolve => setTimeout(resolve, 300));
+    imdbId = getImdbId();
+  }
+  return imdbId;
+};
+
 (async () => {
-  const imdbId = CURRENT_SITE_INFO ? getImdbId() : '';
+  const imdbId = CURRENT_SITE_INFO ? await waitForImdbId() : '';
   if (!imdbId) {
     return;
   }

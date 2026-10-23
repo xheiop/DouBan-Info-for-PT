@@ -631,8 +631,10 @@ const addDoubanSummaryTab = (doubanData) => {
 // 并在站点评分和外链按钮处加入豆瓣入口。返回是否命中，未命中时由调用方回退到豆瓣卡片
 const replaceNativeInfo = (doubanData, doubanLink) => {
   const {
-    addTitleAfter, addTitleBefore, addTitleInside, addTitleHtml, replaceOverview, replaceOverviewLabel,
+    addTitleAfter, addTitleBefore, addTitleInside, addTitleHtml, addTitleYearFrom,
+    replaceOverview, replaceOverviewLabel,
     replaceRating, replaceRatingHtml, replaceRatingPosition, renameRatingLabel,
+    starFullHtml, starEmptyHtml,
     addLinkButtonAfter, addLinkButtonHtml,
     addTitleLineAfter,
     addSummaryTab,
@@ -660,9 +662,14 @@ const replaceNativeInfo = (doubanData, doubanLink) => {
 
   // 中文片名：挂在站内原片名旁边，点击跳转豆瓣
   if (addTitleHtml && chineseTitle) {
+    // 年份从配置的元素里提取（如站点信息表的 Released 行），取不到时 {year} 替换为空，
+    // 便于拼出「追风筝的人 (2007)」这类片名
+    const yearSource = addTitleYearFrom ? $(addTitleYearFrom).first().text() : '';
+    const yearMatched = yearSource.match(/\b(?:19|20)\d{2}\b/);
     const titleHtml = addTitleHtml
       .replace(/\{link\}/g, doubanLink)
-      .replace(/\{title\}/g, chineseTitle);
+      .replace(/\{title\}/g, chineseTitle)
+      .replace(/\{year\}/g, yearMatched ? ` (${yearMatched[0]})` : '');
     if (addTitleInside) {
       const host = $(addTitleInside).first()[0];
       if (host) {
@@ -738,16 +745,38 @@ const replaceNativeInfo = (doubanData, doubanLink) => {
     if ($rating.length) {
       // 站点评分标签改名（如 HDB 的 Rating → IMDB Rating），豆瓣评分单独占一行
       if (renameRatingLabel) {
-        const $label = $rating.find('th').first();
+        const $label = $rating.find('th, td')
+          .filter((index, element) => /^\s*Rating\b/i.test(element.textContent))
+          .first();
         if ($label.length) {
-          $label.text(renameRatingLabel);
+          // 标签常包裹在 <b>Rating:</b> 这类加粗子元素里，改子元素文本以保留站点样式
+          const $bold = $label.find('b, strong').first();
+          if ($bold.length) {
+            $bold.text(renameRatingLabel);
+          } else {
+            $label.text(renameRatingLabel);
+          }
         }
       }
-      const ratingHtml = replaceRatingHtml
+      // 星级条宽度：豆瓣分按 /10 换算成百分比，供站点自身的星级样式使用
+      const scorePercent = /^\d+(?:\.\d+)?$/.test(String(score))
+        ? `${Math.round(parseFloat(score) * 10)}%`
+        : '0%';
+      let ratingHtml = replaceRatingHtml
         .replace(/\{link\}/g, doubanLink)
         .replace(/\{score\}/g, score)
-        .replace(/\{votesComma\}/g, votesComma)
-        .replace(/\{votes\}/g, votes);
+        .replace(/\{scorePercent\}/g, scorePercent)
+        .replace(/\{votesComma\}/g, votesComma);
+      // 星星图标沿用站点自身的满星/空星片段（如 HDS 的盒式星级），按豆瓣分折算满星数
+      if (starFullHtml && starEmptyHtml) {
+        const fullStars = Math.max(0, Math.min(10, Math.round(parseFloat(score))));
+        let stars = '';
+        for (let star = 0; star < 10; star++) {
+          stars += star < fullStars ? starFullHtml : starEmptyHtml;
+        }
+        ratingHtml = ratingHtml.replace(/\{stars\}/g, stars);
+      }
+      ratingHtml = ratingHtml.replace(/\{votes\}/g, votes);
       if (replaceRatingPosition === 'before') {
         $rating.before(ratingHtml);
       } else {
