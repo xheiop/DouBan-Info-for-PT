@@ -1,7 +1,15 @@
-url: http://shadowthein.net
+url: 'http://shadowthein.net'
 host: shadowthein.net
 siteName: iTS
 imdb: '.IMDBtable a[href*="imdb.com/title"]:first'
-insertDomSelector: 'h1+table.line'
-titleDom: h1:first
-doubanContainerDom: '<div class="douban-dom its"></div>'
+titleDom: 'h1:first'
+addTitleAfter: '.IMDBtable tr:has(td:contains("Title:")) b'
+addTitleHtml: ' <a class="douban-title-link" style="color:inherit;font-weight:bold;" href="{link}" target="_blank" rel="noreferrer" title="{title}">{title}</a>{year}'
+addTitleYearFrom: '.IMDBtable tr:has(td:contains("Released:")) td + td'
+replaceRating: '.IMDBtable tr:has(td:contains("Rating:"))'
+replaceRatingPosition: 'after'
+renameRatingLabel: 'IMDB Rating:'
+replaceRatingHtml: '<tr><td>DouBan Rating:</td><td><a href="{link}" target="_blank" rel="noreferrer" title="豆瓣评分 {votes}人评价" style="color:darkorange">{score}</a></td></tr>'
+replaceOverview: '.IMDBtable tr:has(td:contains("Plot:")) > td + td'
+addLinkButtonAfter: '.IMDBtable tr:has(td:contains("Link:")) a'
+addLinkButtonHtml: ' <a href="redir.php?{link}" style="color:darkorange">{link}</a>'
