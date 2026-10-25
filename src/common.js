@@ -643,7 +643,8 @@ const replaceNativeInfo = (doubanData, doubanLink) => {
     addTitleAfter, addTitleBefore, addTitleInside, addTitleHtml, addTitleYearFrom,
     replaceOverview, replaceOverviewLabel,
     replaceRating, replaceRatingHtml, replaceRatingPosition, renameRatingLabel,
-    starFullHtml, starEmptyHtml,
+    starFullHtml, starEmptyHtml, ratingSourceLabel,
+    ratingRewriteHtml, removeRatingVotes, groupRating,
     addLinkButtonAfter, addLinkButtonHtml,
     addTitleLineAfter,
     addSummaryTab,
@@ -683,18 +684,35 @@ const replaceNativeInfo = (doubanData, doubanLink) => {
       const host = $(addTitleInside).first()[0];
       if (host) {
         const link = $(titleHtml)[0];
-        const lastText = host.lastChild;
+        // 片名文本通常是容器最后一个子节点；容器末尾是其他元素时（如 IPT 片名区末尾
+        // 跟着评分框），回退取第一个文本子节点
+        const lastText = host.lastChild && host.lastChild.nodeType === 3
+          ? host.lastChild
+          : Array.prototype.find.call(
+            host.childNodes,
+            (node) => node.nodeType === 3 && node.textContent.trim(),
+          );
         // 行尾的 (年份) 挪到中文片名之后，如 Wings of Dread (2026) → Wings of Dread 追风筝的人 (2026)
         const yearMatched = lastText && lastText.nodeType === 3 &&
           lastText.textContent.match(/^([\s\S]*?)(\s*\(\d{4}\)\s*)$/);
-        if (yearMatched) {
-          lastText.textContent = `${yearMatched[1].replace(/\s+$/, '')} `;
-          host.appendChild(link);
-          host.appendChild(document.createTextNode(` ${yearMatched[2].trim()}`));
-        } else {
-          if (lastText && lastText.nodeType === 3 && !/\s$/.test(lastText.textContent)) {
-            host.appendChild(document.createTextNode(' '));
+        // 片名文本后紧邻插入，避免容器末尾是其他元素时（如 IPT 的片名区末尾跟着
+        // 评分框）把中文片名追加到容器尾部
+        const titleParent = lastText && lastText.nodeType === 3 ? lastText.parentNode : null;
+        if (titleParent) {
+          if (yearMatched) {
+            lastText.textContent = `${yearMatched[1].replace(/\s+$/, '')} `;
+            titleParent.insertBefore(link, lastText.nextSibling);
+            titleParent.insertBefore(document.createTextNode(` ${yearMatched[2].trim()}`), link.nextSibling);
+          } else {
+            let after = lastText;
+            if (!/\s$/.test(lastText.textContent)) {
+              const space = document.createTextNode(' ');
+              titleParent.insertBefore(space, lastText.nextSibling);
+              after = space;
+            }
+            titleParent.insertBefore(link, after.nextSibling);
           }
+        } else {
           host.appendChild(link);
         }
         replaced = true;
@@ -750,8 +768,50 @@ const replaceNativeInfo = (doubanData, doubanLink) => {
 
   // 评分：在站点评分元素旁插入豆瓣评分，沿用站点自身样式类
   if (replaceRating && score && replaceRatingHtml) {
-    const $rating = $(replaceRating).first();
+    let $rating = $(replaceRating).first();
     if ($rating.length) {
+      // 站点评分重写：把站点自身的星级图评分改成文字标签，并把另行展示的票数
+      // 并进同一行，如 HDT 的「⭐ 6.5/10 + Votes: 38716」→「IMDB：6.5/10（Votes: 38716）」
+      if (ratingRewriteHtml) {
+        const ratingNode = $rating[0];
+        // 评分值：取评分元素自身的 alt，取不到再取紧随其后的评分文本
+        let siteScore = ratingNode.getAttribute('alt') || '';
+        const ratingTrailing = ratingNode.nextSibling;
+        if (!siteScore && ratingTrailing && ratingTrailing.nodeType === 3) {
+          siteScore = ratingTrailing.textContent.trim();
+        }
+        siteScore = siteScore.replace(/\/\s*10\s*$/, '').trim();
+        // 票数值：票数标签后紧跟的文本，取到后把整行票数清掉避免留下空行。
+        // 票数必须紧跟标签之后，取不到就原样保留该行，避免误删站内其他内容
+        let siteVotes = '';
+        if (removeRatingVotes) {
+          const $votesLabel = $(removeRatingVotes).first();
+          const votesLabel = $votesLabel[0];
+          const votesText = votesLabel && votesLabel.nextSibling;
+          if (votesText && votesText.nodeType === 3 && /\d/.test(votesText.textContent)) {
+            const votesParent = votesLabel.parentNode;
+            const afterLabel = votesText.nextSibling;
+            siteVotes = votesText.textContent.trim().replace(/,/g, '');
+            votesParent.removeChild(votesText);
+            votesParent.removeChild(votesLabel);
+            if (afterLabel && afterLabel.nodeType === 1 && afterLabel.nodeName === 'BR') {
+              votesParent.removeChild(afterLabel);
+            }
+          }
+        }
+        const siteVotesComma = siteVotes ? Number(siteVotes).toLocaleString('en-US') : '';
+        const $rewritten = $(ratingRewriteHtml
+          .replace(/\{siteScore\}/g, siteScore)
+          .replace(/\{siteVotes\}/g, siteVotes)
+          .replace(/\{siteVotesComma\}/g, siteVotesComma));
+        $rewritten.insertBefore($rating);
+        $rating.remove();
+        // 原评分元素后面紧跟的评分文本（如「&nbsp;&nbsp;6.5/10」）一并移除
+        if (ratingTrailing && ratingTrailing.nodeType === 3 && ratingTrailing.parentNode) {
+          ratingTrailing.parentNode.removeChild(ratingTrailing);
+        }
+        $rating = $rewritten;
+      }
       // 站点评分标签改名（如 HDB 的 Rating → IMDB Rating），豆瓣评分单独占一行
       if (renameRatingLabel) {
         const $label = $rating.find('th, td')
@@ -767,14 +827,27 @@ const replaceNativeInfo = (doubanData, doubanLink) => {
           }
         }
       }
+      // 站点评分未标注来源时（如 FL 的纯星图评分），在星星图标后补上来源名称
+      if (ratingSourceLabel) {
+        const $icon = $rating.find('img').first();
+        if ($icon.length) {
+          $icon.after(` ${ratingSourceLabel}`);
+        }
+      }
       // 星级条宽度：豆瓣分按 /10 换算成百分比，供站点自身的星级样式使用
       const scorePercent = /^\d+(?:\.\d+)?$/.test(String(score))
         ? `${Math.round(parseFloat(score) * 10)}%`
         : '0%';
+      // 星级条宽度（像素）：按站点星级图总宽 200px / 10 分折算，
+      // 供直接复用站点星级条元素的站点使用（如 IPT 的 .imdb-rating）
+      const scoreWidth = /^\d+(?:\.\d+)?$/.test(String(score))
+        ? `${Math.round(parseFloat(score) * 20)}px`
+        : '0px';
       let ratingHtml = replaceRatingHtml
         .replace(/\{link\}/g, doubanLink)
         .replace(/\{score\}/g, score)
         .replace(/\{scorePercent\}/g, scorePercent)
+        .replace(/\{scoreWidth\}/g, scoreWidth)
         .replace(/\{votesComma\}/g, votesComma);
       // 星星图标沿用站点自身的满星/空星片段（如 HDS 的盒式星级），按豆瓣分折算满星数
       if (starFullHtml && starEmptyHtml) {
@@ -786,10 +859,20 @@ const replaceNativeInfo = (doubanData, doubanLink) => {
         ratingHtml = ratingHtml.replace(/\{stars\}/g, stars);
       }
       ratingHtml = ratingHtml.replace(/\{votes\}/g, votes);
-      if (replaceRatingPosition === 'before') {
-        $rating.before(ratingHtml);
+      // 评分重写后原评分元素可能被换成多个节点，统一取首/末节点作为插入锚点，
+      // 否则豆瓣评分会被重复插到每个节点后面
+      const $ratingFirst = $rating.first();
+      const $ratingLast = $rating.last();
+      if (groupRating) {
+        // 评分分组：站点评分框与豆瓣评分框放进同一个右对齐弹性容器，
+        // 固定两行显示（站点评分与片名同行在上，豆瓣评分在下），两行左对齐
+        const $group = $('<div class="douban-rating-group"></div>');
+        $group.insertBefore($ratingFirst);
+        $group.append($rating).append(ratingHtml);
+      } else if (replaceRatingPosition === 'before') {
+        $ratingFirst.before(ratingHtml);
       } else {
-        $rating.after(ratingHtml);
+        $ratingLast.after(ratingHtml);
       }
       replaced = true;
     }
@@ -813,6 +896,18 @@ const replaceNativeInfo = (doubanData, doubanLink) => {
     document.documentElement.dataset.doubanInserted = '1';
   }
   return replaced;
+};
+// 影片没有豆瓣条目时，在站点外链按钮处插入暗色占位按钮，
+// 与站点自身的「无数据」按钮（暗色、不可点击）保持一致
+const addDarkLinkButton = () => {
+  const { addDarkLinkButtonAfter, addDarkLinkButtonHtml } = CURRENT_SITE_INFO;
+  if (!addDarkLinkButtonAfter || !addDarkLinkButtonHtml) {
+    return;
+  }
+  const $button = $(addDarkLinkButtonAfter).first();
+  if ($button.length) {
+    $button.after(addDarkLinkButtonHtml);
+  }
 };
 // 已做就地融合的站点只替换站内原生内容，不生成豆瓣卡片；
 // 其余站点保持原有的豆瓣信息卡片
@@ -868,4 +963,5 @@ export {
   getDoubanInfoBySubject,
   getDoubanInfoFallback,
   renderDoubanInfo,
+  addDarkLinkButton,
 };

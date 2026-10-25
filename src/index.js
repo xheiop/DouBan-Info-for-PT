@@ -4,7 +4,7 @@ import {
 import {
   getImdbId, getTvSeasonData, isChinese,
   addToPtpPage, getDoubanInfo, getDoubanInfoByIMDB, getDoubanInfoBySubject, getDoubanInfoFallback,
-  addToANTPage, renderDoubanInfo,
+  addToANTPage, renderDoubanInfo, addDarkLinkButton,
 } from './common';
 import './style.css';
 
@@ -80,5 +80,7 @@ const waitForImdbId = async (timeout = 15000) => {
     }
   } catch (error) {
     console.log(error);
+    // 没有豆瓣条目时补上暗色的豆瓣入口按钮，保持外链栏完整
+    addDarkLinkButton();
   }
 })();
