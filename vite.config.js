@@ -72,6 +72,11 @@ export default defineConfig({
         updateURL:
           'https://github.com/techmovie/DouBan-Info-for-PT/raw/main/dist/douban-info-for-pt.user.js',
         license: 'MIT',
+        connect: [
+          'movie.douban.com',
+          'www.douban.com',
+          'api.douban.com',
+        ],
       },
       build: {
         externalGlobals: {
