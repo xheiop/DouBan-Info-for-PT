@@ -505,3 +505,13 @@
 .douban-title-bhd {
     margin-left: 5px;
 }
+
+/* FL filelist.io：上映日期、IMDb、豆瓣三个评分同一行显示，放不下时缩小字号 */
+.cblock-innercontent span:has(img[src*="starbig"]) {
+    font-size: 13px !important;
+    white-space: nowrap;
+}
+
+.cblock-innercontent span:has(img[src*="date.png"]) {
+    white-space: nowrap;
+}
