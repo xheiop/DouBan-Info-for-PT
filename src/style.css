@@ -506,6 +506,17 @@
     margin-left: 5px;
 }
 
+/* IPT iptorrents.com：站点评分与豆瓣评分收进同一右对齐容器，
+   固定两行显示（IMDb 与片名同行在上，豆瓣在下），两行左边缘保持一致 */
+.douban-rating-group {
+    float: right;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: 6px;
+}
+
 /* FL filelist.io：上映日期、IMDb、豆瓣三个评分同一行显示，放不下时缩小字号 */
 .cblock-innercontent span:has(img[src*="starbig"]) {
     font-size: 13px !important;

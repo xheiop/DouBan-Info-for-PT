@@ -2,6 +2,12 @@ url: https://iptorrents.com
 host: iptorrents.com
 siteName: IPT
 imdb: '.main td a[href*="imdb.com/title"]'
-titleDom: '.dBox h1'
-insertDomSelector: '.dBox .info'
-doubanContainerDom: '<div class="douban-dom" style="display:flex;justify-content: center;"></div>'
+titleDom: '.tt'
+addTitleInside: '.tt'
+addTitleHtml: '<a class="douban-title-link" style="color:inherit" href="{link}" target="_blank" rel="noreferrer" title="{title}">{title}</a>'
+replaceRating: '.imdb-voters'
+groupRating: true
+replaceRatingHtml: '<div class="douban-voters rbox" title="豆瓣评分 {score} / 10, {votes} votes" style="padding-right:25px;font-size:12px"><a class="rsrc" href="{link}" target="_blank" rel="noreferrer nofollow" style="background:#007722;color:#fff">豆瓣</a>{score} / 10<div class="imdb-rating" style="width:{scoreWidth}"></div><div class="rvotes">{votesComma} votes</div></div>'
+replaceOverview: '.main tr:has(td:contains("Plot")) > td + td'
+addLinkButtonAfter: '.main td:has(a[href*="imdb.com/title"]) a[href*="imdb.com/title"]'
+addLinkButtonHtml: ' <a class="douban-ipt-btn" href="{link}" target="_blank" rel="noreferrer nofollow" style="display:inline-flex;align-items:center;gap:5px;background:#007722;color:#fff;padding:6px 14px;border-radius:5px;text-decoration:none;font-weight:700;font-size:13px;border:1px solid #005c1b;transition:background .15s,color .15s" onmouseover="this.style.background=''#005c1b''" onmouseout="this.style.background=''#007722''">豆瓣</a>'
