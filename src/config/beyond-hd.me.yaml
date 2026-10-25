@@ -7,3 +7,7 @@ addTitleHtml: '<a class="douban-title-link douban-title-bhd" href="{link}" targe
 replaceOverview: '.movie-overview'
 replaceRating: '.badge-meta[title="IMDb Rating"]'
 replaceRatingHtml: '<span class="badge-meta" title="豆瓣评分"><a rel="noreferrer" href="{link}" target="_blank"><span class="movie-rating-stars"><span class="douban-badge-icon">豆</span></span> {score}</a></span>'
+addLinkButtonAfter: '.badge-meta:has(.fa-tv-retro)'
+addLinkButtonHtml: '<span class="badge-meta"><a rel="noreferrer" href="{link}" title="Douban" target="_blank" class="beta-link-blend"> DOUBAN</a></span>'
+addDarkLinkButtonAfter: '.badge-meta:has(.fa-tv-retro)'
+addDarkLinkButtonHtml: '<span class="badge-meta class-base"><span class="class-base">DOUBAN</span></span>'
