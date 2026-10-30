@@ -11,3 +11,15 @@ replaceRatingHtml: '<div class="douban-voters rbox" title="豆瓣评分 {score} 
 replaceOverview: '.main tr:has(td:contains("Plot")) > td + td'
 addLinkButtonAfter: '.main td:has(a[href*="imdb.com/title"]) a[href*="imdb.com/title"]'
 addLinkButtonHtml: ' <a class="douban-ipt-btn" href="{link}" target="_blank" rel="noreferrer nofollow" style="display:inline-flex;align-items:center;gap:5px;background:#007722;color:#fff;padding:6px 14px;border-radius:5px;text-decoration:none;font-weight:700;font-size:13px;border:1px solid #005c1b;transition:background .15s,color .15s" onmouseover="this.style.background=''#005c1b''" onmouseout="this.style.background=''#007722''">豆瓣</a>'
+listPage:
+  path: '^/t$'
+  # 只取主表 #torrents：顶部 Staff Picks 表（#topTables）与主表可能出现同一条
+  # 种子，按种子编号分组只会给其中一处插片名，而 Staff Picks 默认可折叠收起，
+  # 片名插在收起的那一行，主表对应资源就看不到了
+  titleLink: '#torrents a[href*="/t/"]'
+  row: 'tr'
+  idPattern: '/t/(\d+)'
+  # 标题链接里挂着站点自己的悬浮卡片占位（Loading... 的 tTip），
+  # 取文本前先剔掉，否则提示文字会粘在发行名尾巴上
+  titleTextStrip: '.tTip'
+  popupTheme: 'card'

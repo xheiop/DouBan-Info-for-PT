@@ -11,3 +11,6 @@ addLinkButtonAfter: '.badge-meta:has(.fa-tv-retro)'
 addLinkButtonHtml: '<span class="badge-meta"><a rel="noreferrer" href="{link}" title="Douban" target="_blank" class="beta-link-blend"> DOUBAN</a></span>'
 addDarkLinkButtonAfter: '.badge-meta:has(.fa-tv-retro)'
 addDarkLinkButtonHtml: '<span class="badge-meta class-base"><span class="class-base">DOUBAN</span></span>'
+listPage:
+  path: '^/torrents/?$'
+  titleLink: 'a.torrent-name'

@@ -13,3 +13,11 @@ replaceRatingHtml: '<tr><td>DouBan Rating:</td><td><a href="{link}" target="_bla
 replaceOverview: '.IMDBtable tr:has(td:contains("Plot:")) > td + td'
 addLinkButtonAfter: '.IMDBtable tr:has(td:contains("Link:")) a'
 addLinkButtonHtml: ' <a href="redir.php?{link}" style="color:darkorange">{link}</a>'
+listPage:
+  path: '^/browse\.php$'
+  titleLink: 'a[href*="/details.php?id="]'
+  row: 'tr'
+  idPattern: '[?&]id=(\d+)'
+  # 标题被截断显示，完整发行名在链接的 output 属性里
+  titleAttr: 'output'
+  popupTheme: 'card'

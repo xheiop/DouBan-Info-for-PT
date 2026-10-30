@@ -12,3 +12,20 @@ replaceRatingHtml: '<tr><td><b>DouBan Rating:</b></td><td>{score}</td></tr>'
 replaceRatingPosition: 'after'
 addLinkButtonAfter: 'a[href*="thetvdb.com"]'
 addLinkButtonHtml: ' <a target="_blank" rel="noreferrer" href="{link}"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACT0lEQVR42oWTv2sUQRzFP9/Z2du93J5GLRJJkAO1sfAHCElnlIhgJSgICpapQkgriGCaWFrE/Aci2AgKQUkTRYSgSGwkqGDQRM4faDTn7d3uzn4tjpy5GPTBNDNvHu99540AHL4xsF+7zA2QIXEUAWFrqHrEoHNSz8cXxuffyJGpwX3Ol1kbeJV4LSbXnH9BxFAsF3FNt+SletLmolM2sJXGWjPtLff4kV9Ct7CwvtdwTT7+qKZBuVBxWTplVcyJZi3RbWHk3z1/m+3hNv6H07fO+u++L2nghSesCL6IkOUZi19fs7O4A6cO2eRBUTzxyPKMOG1gxAiivhycHlQBnOZkuWPP9n4CG6CabwiiiBiaWZMPP5cxYrBiURS7ns8aS+JSJo5fYaD/6JbW55efc+nuCKEf4tQBtATW4dRRDiKerbxg4tEk3WE3AKuNVa4eu0w5iHDqULR9x24edetQEaRNXJ+Htggd6BAwxlBLfjHQd5R7F+78HWHlOcaYzl4cnB7UPzVTess9lIMyjSTm6tBlACbmJgn9kLWkRrX2qeOFOgQ84/Gp9pnrw9c4d+AMRb8IQJzGPH7/lJH7Y+wKu3Eb2mpVSUWwgKgqUaHEqy+LzC09IXEJAvhegYXqS7psuHEEqkomh24OPjAleyqrZamYVqnqSZ3EpYhIm2mNR1SIUBTNSW1k/fxX9tAaZdQ13ayNvIqrO1SVUqFEJJuaqNr+aDbyfNd0S54y6lVnlr/tHu6bUcNeRPpQrKKiqnSslnnFk5hcZ02cX1wYm3/7G0f0F7GPR+eKAAAAAElFTkSuQmCC" border="0" width="16" height="16" alt="Douban" title="Douban"></a>'
+listPage:
+  path: '^/torrents\.php$'
+  # 列表页与影片组详情页同走 torrents.php，详情页带 id= 编号，排除它走详情页流程：
+  # 否则组页面会被列表逻辑占用——侧栏的 Season / S01E01 跳转链接被当成种子标题插片名，
+  # 横幅下方的中文片名行、豆瓣评分行、简介 tab 反而都插不上
+  excludeQuery: '[?&]id='
+  titleLink: 'a[title="View Torrent"]'
+  row: 'tr.torrent'
+  # View Torrent 链接是 torrents.php?id={剧集组}&torrentid={种子}，两个编号:
+  # torrentid 才是单条种子，同一集的所有压制版本各不相同；id 是剧集组编号，
+  # 所有版本共用它。按 torrentid 分组才能给每个版本都插片名，取不到再退回组编号
+  idPattern:
+    - '[?&]torrentid=(\d+)'
+    - '[?&]id=(\d+)'
+  # 标题只显示剧集名与集数，完整发行名在 Release Name 那一行的 title 属性里
+  releaseName: 'div.nobr span[title]'
+  popupTheme: 'card'
