@@ -5,3 +5,6 @@ siteType: gazelle
 imdb: 
   request: '#request-table a[href*="imdb.com/title"]:first'
   torrent: '#imdb-title-link'
+top10:
+  path: '^/top10\.php$'
+  browsePath: '^/torrents\.php$'

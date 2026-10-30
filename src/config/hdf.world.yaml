@@ -12,3 +12,12 @@ replaceRatingPosition: 'before'
 replaceRatingHtml: '<a href="{link}" target="_blank" rel="noreferrer" title="豆瓣评分"><img class="scale_image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0iIzAwNzcyMiIvPjx0ZXh0IHg9IjYwIiB5PSI0MyIgZm9udC1mYW1pbHk9IlBpbmdGYW5nIFNDLEhpcmFnaW5vIFNhbnMgR0IsTWljcm9zb2Z0IFlhSGVpLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7osYbnk6M8L3RleHQ+PC9zdmc+" width="62" height="30" alt="Douban"></a> : <strong>{score}</strong>/10 | '
 addLinkButtonAfter: '.db-links-container-details a[href*="imdb.com/title"]'
 addLinkButtonHtml: '<a href="{link}" target="_blank" rel="noreferrer" class="tooltip db-link db-link-copy" title="Douban"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0iIzAwNzcyMiIvPjx0ZXh0IHg9IjYwIiB5PSI0MyIgZm9udC1mYW1pbHk9IlBpbmdGYW5nIFNDLEhpcmFnaW5vIFNhbnMgR0IsTWljcm9zb2Z0IFlhSGVpLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7osYbnk6M8L3RleHQ+PC9zdmc+" alt="Douban"></a>'
+listPage:
+  path: '^/torrents\.php$'
+  # 列表页与详情页同走 torrents.php，详情页带 id= 编号，排除它走详情页流程
+  excludeQuery: '[?&]id='
+  titleLink: '.group_info a[href*="torrents.php?id="]'
+  row: 'tr.group'
+  idPattern: '[?&]id=(\d+)'
+  releaseName: '.group_info'
+  popupTheme: 'card'

@@ -13,3 +13,8 @@ replaceRating: '#imdbinfo tr:has(th:contains("Rating"))'
 renameRatingLabel: 'IMDB Rating'
 replaceRatingHtml: '<tr><th>DouBan Rating</th><td>{score} ({votesComma} votes)</td></tr>'
 replaceRatingPosition: 'after'
+listPage:
+  path: '^/browse\.php$'
+  titleLink: 'td.browse_td_name_cell b a'
+  idPattern: '[?&]id=(\d+)'
+  popupTheme: 'card'

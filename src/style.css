@@ -166,7 +166,7 @@
 
 #douban-wrapper #content .score-container .ratings-on-weight {
     margin-top: 10px;
-    min-weight: 1px
+    min-height: 1px
 }
 
 #douban-wrapper #content .score-container .ratings-on-weight .item {
@@ -525,4 +525,163 @@
 
 .cblock-innercontent span:has(img[src*="date.png"]) {
     white-space: nowrap;
+}
+
+/* BHD 种子列表页：中文片名挂在原标题下方，块级 + 左对齐；
+   字体大小、颜色、粗细由脚本逐个拷贝原标题的计算样式，这里只负责换行与对齐 */
+/* 间距按站点区分：BHD 的原标题下方自带 .beta-divider 间距，中文片名要跟上，
+       否则与下方分隔线挤在一起；其余站点的行没有这段间距，
+       加了反而让中文片名那一行比上下都高（如 BTN） */
+[data-douban-list-site="BHD"] .douban-list-title {
+    margin-top: 6px;
+}
+
+.douban-list-title {
+    display: block;
+    text-align: left;
+}
+.douban-list-title-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* BHD 种子列表页：停用站点自己的悬浮简介面板（脚本生成的豆瓣面板带
+   .douban-list-popup 类，不受影响），光标放到原标题或豆瓣片名上，
+   统一弹脚本生成的豆瓣简介面板 */
+[data-douban-list-page] .librarydiv:not(.douban-list-popup) {
+    display: none !important;
+}
+
+/* 其余站点的原生悬浮提示也一并停用，避免和豆瓣面板同时弹出：
+   overlib 的浮层是 #overDiv，Bootstrap 的提示是 .tooltip。
+   HDF 把 tooltip 类直接放在内容链接、按钮上（它自己的 tooltip 插件没加载，
+   这类元素只是带 title 属性的普通内容），整类隐藏会把站点的标题一起藏掉，豁免 */
+[data-douban-list-page]:not([data-douban-list-site="HDF"]) #overDiv,
+[data-douban-list-page]:not([data-douban-list-site="HDF"]) .tooltip {
+    display: none !important;
+}
+
+/* HDB 种子列表页：停用站点自己的 IMDb 海报悬浮。它由名称格里的
+   .browse_imdb_poster 承担（默认 display:none，站点脚本在 mouseenter 时
+   改成 block 并给单元格加 has_hover 类），和豆瓣简介面板重复。海报图仍留在
+   行内不外链图片全被拦时脚本拿它做兜底，所以只隐藏、不摘除 */
+[data-douban-list-page][data-douban-list-site="HDB"] .browse_imdb_poster {
+    display: none !important;
+}
+
+/* IPT 种子列表页：停用站点自己的影片卡片悬浮（剧集行标题链接挂 1 秒延时的
+   AJAX 卡片，与豆瓣简介面板重复）。卡片内容在链接里的 tTip 子节点中，
+   整块隐藏即可，链接文字与布局保持原样 */
+[data-douban-list-page][data-douban-list-site="IPT"] #torrents a.hv .tTip {
+    display: none !important;
+}
+
+/* 自包含的暗色卡片面板：站点没有可复刻的原站悬浮面板时用这一套，
+   配色优先取站点变量，取不到时用内置的暗色值 */
+.douban-card-inner .douban-card-head {
+    height: 30px;
+    box-sizing: border-box;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    background: var(--torrent-card-head-bg, #1c1c1c);
+    border-bottom: 1px solid #3c3c3c;
+}
+
+.douban-card-inner .douban-card-rating {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.douban-card-inner .douban-card-rating--none {
+    color: #878787;
+    font-weight: 400;
+}
+
+.douban-card-inner .douban-card-star {
+    color: #ffb800;
+    margin-right: 4px;
+}
+
+.douban-card-inner .douban-card-body {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    box-sizing: border-box;
+    height: calc(100% - 30px);
+    padding: 10px;
+}
+
+.douban-card-inner .douban-card-poster-cell {
+    flex: 0 0 120px;
+    width: 120px;
+}
+
+.douban-card-inner .douban-card-info {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+}
+
+.douban-card-inner .douban-card-title-line {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.douban-card-inner .douban-card-title {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.douban-card-inner .douban-card-title:hover {
+    color: var(--color-light-blue, #42a5f5);
+}
+
+.douban-card-inner .douban-card-year {
+    color: #878787;
+    font-size: 13px;
+}
+
+.douban-card-inner .douban-card-rule {
+    height: 1px;
+    margin: 8px 0;
+    background: #3c3c3c;
+}
+
+.douban-card-inner .douban-card-summary {
+    max-height: 118px;
+    overflow-y: auto;
+    color: #ddd;
+    font-size: 13px;
+    text-align: left;
+}
+
+.douban-card-inner .douban-card-countries {
+    margin-top: 8px;
+    color: #878787;
+    font-size: 12px;
+}
+
+.douban-card-inner .douban-card-sep {
+    margin: auto 6px;
+}
+
+.douban-card-inner .douban-card-genres {
+    margin-top: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.douban-card-inner .douban-card-genre {
+    padding: 2px 10px;
+    border-radius: 9999px;
+    background: #ffffff1a;
+    color: #eee;
+    font-size: 12px;
 }
