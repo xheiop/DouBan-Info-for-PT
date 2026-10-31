@@ -2,7 +2,7 @@
 // @name            douban-info-for-pt
 // @name:en         douban-info-for-pt
 // @namespace       https://github.com/techmovie/DouBan-Info-for-PT
-// @version         1.8.4
+// @version         1.9.0
 // @author          birdplane
 // @description     在PT站电影详情页展示部分中文信息
 // @description:en  Display some Chinese information on the PT site movie details page
@@ -93,7 +93,7 @@
   };
   var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
   var _a, _b, _c;
-  const PT_SITE = /* @__PURE__ */ JSON.parse(`{"aither.cc":{"url":"https://aither.cc","host":"aither.cc","siteName":"Aither","poster":"#meta-poster","imdb":".badge-user a[href*=\\"imdb.com/title\\"]:nth-child(1)","insertDomSelector":".torrent-buttons","doubanContainerDom":"<div class=\\"movie-wrapper\\"><div class=\\"movie-overlay\\" style=\\"background-color: rgba(81, 51, 40, 0.75);\\"></div><div class=\\"douban-dom\\" style=\\"position: relative;z-index: 2;\\"></div></div>"},"alpharatio.cc":{"url":"https://alpharatio.cc","host":"alpharatio.cc","siteName":"AR","imdb":"a[href*=\\"imdb.com/title\\"]","titleDom":"span.size6","addTitleAfter":"span.size6","addTitleHtml":"<br><a class=\\"douban-title-link douban-title-ar\\" style=\\"color:#008000;\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\"><span class=\\"size6\\">{title}</span></a>","replaceOverviewLabel":"PLOT","addLinkButtonAfter":"a[href*=\\"themoviedb.org\\"]","addLinkButtonHtml":" <a rel=\\"noreferrer\\" target=\\"_blank\\" href=\\"{link}\\"><img class=\\"scale_image\\" src=\\"data:image/png;base64,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\\" alt=\\"Douban\\" title=\\"Douban\\"></a>","listPage":{"path":"^/torrents\\\\.php$","excludeQuery":"[?&]id=","titleLink":"a[href*=\\"torrentid=\\"]","row":"tr.torrent","idPattern":["[?&]torrentid=(\\\\d+)","[?&]id=(\\\\d+)"],"imdbTagPattern":"taglist=(tt\\\\d+)","popupTheme":"card"}},"anthelion.me":{"url":"https://anthelion.me","host":"anthelion.me","siteName":"ANT","siteType":"gazelle","imdb":{"request":".layout a[href*=\\"imdb.com/title\\"]:first","torrent":".torrent_ratings a[href*=\\"imdb.com/title\\"]:first"}},"avistaz.to":{"url":"https://avistaz.to","host":"avistaz.to","siteName":"AvistaZ","imdb":".movie-details .badge-extra a[href*=\\"imdb.com/title\\"]:first","titleDom":".title .torrent-filename","poster":".movie-poster img","insertDomSelector":".movie-poster","doubanContainerDom":"<div class=\\"douban-dom\\" style=\\"justify-content: flex-start;\\"></div>"},"beyond-hd.me":{"url":"https://beyond-hd.me","host":"beyond-hd.me","siteName":"BHD","imdb":".movie-details a[href*=\\"imdb.com/title\\"]:nth-child(1)","addTitleAfter":"h1.bhd-title-h1 a.beta-link-blend","addTitleHtml":"<a class=\\"douban-title-link douban-title-bhd\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":".movie-overview","replaceRating":".badge-meta[title=\\"IMDb Rating\\"]","replaceRatingHtml":"<span class=\\"badge-meta\\" title=\\"豆瓣评分\\"><a rel=\\"noreferrer\\" href=\\"{link}\\" target=\\"_blank\\"><span class=\\"movie-rating-stars\\"><span class=\\"douban-badge-icon\\">豆</span></span> {score}</a></span>","addLinkButtonAfter":".badge-meta:has(.fa-tv-retro)","addLinkButtonHtml":"<span class=\\"badge-meta\\"><a rel=\\"noreferrer\\" href=\\"{link}\\" title=\\"Douban\\" target=\\"_blank\\" class=\\"beta-link-blend\\"> DOUBAN</a></span>","addDarkLinkButtonAfter":".badge-meta:has(.fa-tv-retro)","addDarkLinkButtonHtml":"<span class=\\"badge-meta class-base\\"><span class=\\"class-base\\">DOUBAN</span></span>","listPage":{"path":"^/torrents/?$","titleLink":"a.torrent-name"}},"blutopia.cc":{"url":"https://blutopia.cc","host":"blutopia.cc","siteName":"BLU","imdb":".meta__imdb a[href*=\\"imdb.com/title\\"]:nth-child(1)","titleDom":".torrent__name","addTitleInside":"h1.meta__title","addTitleHtml":"<a class=\\"douban-title-link douban-title-blu\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":"p.meta__description","replaceRating":"li.work__rating","replaceRatingHtml":"<li class=\\"work__rating\\"><a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分 {votes}人评价\\"><span class=\\"work__rating-text\\">豆瓣 {score}</span></a></li>","addLinkButtonAfter":"ul.meta__ids li.meta__imdb","addLinkButtonHtml":"<li class=\\"meta__douban\\"><a class=\\"meta-id-tag\\" href=\\"{link}\\" title=\\"Douban\\" target=\\"_blank\\" rel=\\"noreferrer\\"><img src=\\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAARCAYAAACilZ5PAAAEHElEQVR42s2Wy29VVRTGf2uffe7j9N5a+uZRCgJpMLUVkdAUhCYycuCMARP/AU30HzBiYkIiE00U49DEGF8JAxONAyOIaGKICgIRMbQX5EJf3F7u+55z9nLQYhwg9Bg17GRnD85e63z723t96xMOHvTGpq4dFl9eUKcdOAQQHqyhGFSM1DTUN86dGDrsjT+fP2zz/kuu6dLovw9a/iadJPuNoAiOtM3bff3rS8ijb020xeDhkCTZjJh7fne6nDB0IdZYjBhEhNjFqCpOHZ7xEARFV8u7YlB1xFYMPpqMZ6eORti4556MnyF0If1BH7eaJWrtGqELyafyWM+SsRmq7Sqhi0gZf3Xgl08pYjB2JWJVsEWEZtRipGcrh0YP0orbyF0iU16Kd396n5mlAs+OH+LS4mUuLf7G/uE9bOvZwpnij6S8NKqOjy8eR1WTvniVsWMTiaKcOjr8gN6gh1bcxv8LWwKELiLrZ5kuzTA5tJs9GyewxuIbn7RN83v5Ohk/TegierLdnCp8y2eXvyCXyuHUrRqHTVps1niUmmWCVMCLE88xW53DMwYFVJXeoIejp1+nHjaYLhXoznZTbpXpC3oZyPVTDWvM1xcpVorkUjkuzv+CNTYx6za5LoGqY21ukFJjiVdPvUZXqhMFamGdI0+9TF/Qy43KLP25PnYMjmGM4cqtaXzj49SRT+fY1bmTjQ9tYLY2x/VKMbFa2X8qc7HGrMsPsn94L93ZNSjK7WaF3qCXWB3WWBbrizTjFqVqCYcSuYjIRRgxLDXL5FIdlJtlrNj/AbhC2maYLhX4ee4Ce4YmmF6aQRC2bxjh7Ox5ipUbZP0M1ys3WagvUKzcJPCzBH6WcrOM7/m0ouX6KJSvISIrd7n6YZLjVkCZrc7y0fnj5NN53jv7AW9+/w5GDF9Nn2S+tkAravNI7wiPr32MXet3smXNZmar8wzk+tnWvZXJod2MDmxnfGCUdtxeAf8fMu7U0ZXpYlPXMPWwjhFhatM+glTAtp4t1MM644OjlFsVzhR/4MLcJF8XTvPEuh3UwxrPjDxNoXyVb65+h2c8vrxykrX5QSIXJevIY8cm3Gp13IihFtY4sHmKJ4f30o5bRC7CMx6BHxC7mEbUpMMP+PTXz0l7KTZ1DeNQZkoFMjbNgYenWKjfInIRxepNPjz/CZ2pTmKNE128jL09oUme1502HroI0JVmBs7FiAhGlqXRikc+naMRNsn4GZpRkzCOcOrI2DRZP4sVj3Lr9n3tw11AYNURJvEqiuIbn5SXuu++etjAiKGxsqZtCkFw6qi1ayiKJ16yAlvxKsaIHrEd1iQxWMqySbrXVNU/mbyz3jFXAJ54yWVQENthjRE94s0Gk6f61i0Z8WUHrBiuB9WPe1J1DXf03ImNr/wBwjPs2VghyRoAAAAASUVORK5CYII=\\" alt=\\"Douban\\" title=\\"Douban\\"></a></li>","listPage":{"path":"^/torrents/?$","titleLink":"a.torrent-search--list__name","popupTheme":"card"}},"broadcasthe.net":{"url":"https://broadcasthe.net","host":"broadcasthe.net","siteName":"BTN","imdb":".stats td a[href*=\\"imdb.com/title\\"]","titleDom":"h2:first","addTitleLineAfter":"img#banner","addTitleLineHtml":"<div class=\\"douban-title-line\\"><a class=\\"douban-title-link\\" target=\\"_blank\\" rel=\\"noreferrer\\" href=\\"{link}\\" title=\\"{title}\\">{title} {nativeTitle}</a></div>","addSummaryTab":"#tabs","addSummaryTabIcon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAACh0lEQVR42o2SvWvUWRSGn3M//CVjSCaChQbNLCqioCgoxhhxkXW3EHYLS/0TVKx2RVAQKzuLmNJOEBEVwRQGxUYk6ILFqohhk4iLC4lhNJmZ/D7uPRYmE+Mg+sLlVuflfc95BGDHpT2btGQuqfIzgXZQ4ZsSxdIQ4aHU46lnp0Zfy87Bvo3By4hNbCXWA4ryPQmCKVlCGiZsrodMFAZtYivFXJ5nIeNHlIaUfC7PXWIrURh0EQ5KI+p8TP25A6cZWL+XqBEjpmVYNSJieDH1kj/vnfWhHjTCQSeCB4ga6e1aR6W8/oeSLJQWEbxsH+pTQSi0oDPppCvpJA85kdgybMTgjWc2naWafsCJQ1EcgKIkdgXvZt+xb90eft98mDaXYI0DFBBCLJgvUu68usuN57dZVeqmiAHgs8lSZ2Xr6i3s7+3n1fRrFEVEUFUEYXfPJsZm/kW5tSzhchOULGTkMefw1SNU04+0uzYaxTzlpJOXJ/4mC1kLBu7r3s44vPEMH7tJEQP1vE7Jl3DG4o3HGde6qy+reOMZr04y+t9TpmrTqEZ2rd2JamSqNs3o2yeMVyfxxqO6lEa2D/XplyRmIcMaS6Xcy4bun7j46wX+uneW8eokk9U3pCElccm3TYwYalmNgd5+rvwx1BL7zP3zXPvnBuW2LsLCZQBk2+W+TAQHyCJ0K32JA5UBvPUIn68TUR69ecz7+gzOuMXlqiqFM/DAlNxvxVyRi8EbMdTyOtef32oysviv9KWmgUZy1+F8rBUPnFGOhzSMuA5bCfXQrNXdVl7ItqQYY/O8rsP6kIYJqxy3/w+/nVnzS8+wGjYg0rNAsSiK6vLXxMlKg6gjphGPPjs5OvYJRYI+gaJ9V4UAAAAASUVORK5CYII=","replaceRating":"tr:has(b:contains(\\"TVDB Rating\\"))","replaceRatingHtml":"<tr><td><b>DouBan Rating:</b></td><td>{score}</td></tr>","replaceRatingPosition":"after","addLinkButtonAfter":"a[href*=\\"thetvdb.com\\"]","addLinkButtonHtml":" <a target=\\"_blank\\" rel=\\"noreferrer\\" href=\\"{link}\\"><img src=\\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACT0lEQVR42oWTv2sUQRzFP9/Z2du93J5GLRJJkAO1sfAHCElnlIhgJSgICpapQkgriGCaWFrE/Aci2AgKQUkTRYSgSGwkqGDQRM4faDTn7d3uzn4tjpy5GPTBNDNvHu99540AHL4xsF+7zA2QIXEUAWFrqHrEoHNSz8cXxuffyJGpwX3Ol1kbeJV4LSbXnH9BxFAsF3FNt+SletLmolM2sJXGWjPtLff4kV9Ct7CwvtdwTT7+qKZBuVBxWTplVcyJZi3RbWHk3z1/m+3hNv6H07fO+u++L2nghSesCL6IkOUZi19fs7O4A6cO2eRBUTzxyPKMOG1gxAiivhycHlQBnOZkuWPP9n4CG6CabwiiiBiaWZMPP5cxYrBiURS7ns8aS+JSJo5fYaD/6JbW55efc+nuCKEf4tQBtATW4dRRDiKerbxg4tEk3WE3AKuNVa4eu0w5iHDqULR9x24edetQEaRNXJ+Htggd6BAwxlBLfjHQd5R7F+78HWHlOcaYzl4cnB7UPzVTess9lIMyjSTm6tBlACbmJgn9kLWkRrX2qeOFOgQ84/Gp9pnrw9c4d+AMRb8IQJzGPH7/lJH7Y+wKu3Eb2mpVSUWwgKgqUaHEqy+LzC09IXEJAvhegYXqS7psuHEEqkomh24OPjAleyqrZamYVqnqSZ3EpYhIm2mNR1SIUBTNSW1k/fxX9tAaZdQ13ayNvIqrO1SVUqFEJJuaqNr+aDbyfNd0S54y6lVnlr/tHu6bUcNeRPpQrKKiqnSslnnFk5hcZ02cX1wYm3/7G0f0F7GPR+eKAAAAAElFTkSuQmCC\\" border=\\"0\\" width=\\"16\\" height=\\"16\\" alt=\\"Douban\\" title=\\"Douban\\"></a>","listPage":{"path":"^/torrents\\\\.php$","excludeQuery":"[?&]id=","titleLink":"a[title=\\"View Torrent\\"]","row":"tr.torrent","idPattern":["[?&]torrentid=(\\\\d+)","[?&]id=(\\\\d+)"],"releaseName":"div.nobr span[title]","popupTheme":"card"}},"eiga.moi":{"url":"https://eiga.moi","host":"eiga.moi","siteName":"ACM","imdb":".meta__imdb a[href*=\\"imdb.com/title\\"]:nth-child(1)","titleDom":".torrent__name","addTitleInside":"h1.meta__title","addTitleHtml":"<a class=\\"douban-title-link douban-title-acm\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":"p.meta__description","replaceRating":"li.work__rating","replaceRatingHtml":"<li class=\\"work__rating\\"><a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分 {votes}人评价\\"><span class=\\"work__rating-text\\">豆瓣 {score}</span></a></li>","addLinkButtonAfter":"ul.meta__ids li.meta__imdb","addLinkButtonHtml":"<li class=\\"meta__douban\\"><a class=\\"meta-id-tag\\" href=\\"{link}\\" title=\\"Douban\\" target=\\"_blank\\" rel=\\"noreferrer\\"><img src=\\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAARCAYAAACilZ5PAAAEHElEQVR42s2Wy29VVRTGf2uffe7j9N5a+uZRCgJpMLUVkdAUhCYycuCMARP/AU30HzBiYkIiE00U49DEGF8JAxONAyOIaGKICgIRMbQX5EJf3F7u+55z9nLQYhwg9Bg17GRnD85e63z723t96xMOHvTGpq4dFl9eUKcdOAQQHqyhGFSM1DTUN86dGDrsjT+fP2zz/kuu6dLovw9a/iadJPuNoAiOtM3bff3rS8ijb020xeDhkCTZjJh7fne6nDB0IdZYjBhEhNjFqCpOHZ7xEARFV8u7YlB1xFYMPpqMZ6eORti4556MnyF0If1BH7eaJWrtGqELyafyWM+SsRmq7Sqhi0gZf3Xgl08pYjB2JWJVsEWEZtRipGcrh0YP0orbyF0iU16Kd396n5mlAs+OH+LS4mUuLf7G/uE9bOvZwpnij6S8NKqOjy8eR1WTvniVsWMTiaKcOjr8gN6gh1bcxv8LWwKELiLrZ5kuzTA5tJs9GyewxuIbn7RN83v5Ohk/TegierLdnCp8y2eXvyCXyuHUrRqHTVps1niUmmWCVMCLE88xW53DMwYFVJXeoIejp1+nHjaYLhXoznZTbpXpC3oZyPVTDWvM1xcpVorkUjkuzv+CNTYx6za5LoGqY21ukFJjiVdPvUZXqhMFamGdI0+9TF/Qy43KLP25PnYMjmGM4cqtaXzj49SRT+fY1bmTjQ9tYLY2x/VKMbFa2X8qc7HGrMsPsn94L93ZNSjK7WaF3qCXWB3WWBbrizTjFqVqCYcSuYjIRRgxLDXL5FIdlJtlrNj/AbhC2maYLhX4ee4Ce4YmmF6aQRC2bxjh7Ox5ipUbZP0M1ys3WagvUKzcJPCzBH6WcrOM7/m0ouX6KJSvISIrd7n6YZLjVkCZrc7y0fnj5NN53jv7AW9+/w5GDF9Nn2S+tkAravNI7wiPr32MXet3smXNZmar8wzk+tnWvZXJod2MDmxnfGCUdtxeAf8fMu7U0ZXpYlPXMPWwjhFhatM+glTAtp4t1MM644OjlFsVzhR/4MLcJF8XTvPEuh3UwxrPjDxNoXyVb65+h2c8vrxykrX5QSIXJevIY8cm3Gp13IihFtY4sHmKJ4f30o5bRC7CMx6BHxC7mEbUpMMP+PTXz0l7KTZ1DeNQZkoFMjbNgYenWKjfInIRxepNPjz/CZ2pTmKNE128jL09oUme1502HroI0JVmBs7FiAhGlqXRikc+naMRNsn4GZpRkzCOcOrI2DRZP4sVj3Lr9n3tw11AYNURJvEqiuIbn5SXuu++etjAiKGxsqZtCkFw6qi1ayiKJ16yAlvxKsaIHrEd1iQxWMqySbrXVNU/mbyz3jFXAJ54yWVQENthjRE94s0Gk6f61i0Z8WUHrBiuB9WPe1J1DXf03ImNr/wBwjPs2VghyRoAAAAASUVORK5CYII=\\"></a></li>","listPage":{"path":"^/torrents/?$","titleLink":"a.torrent-search--list__name","popupTheme":"card"}},"filelist.io":{"url":"https://filelist.io","host":"filelist.io","siteName":"FL","imdb":".cblock-innercontent div a[href*=\\"imdb.com/title\\"]:first","titleDom":".cblock-header h4","addTitleBefore":".cblock-innercontent span[style*=\\"padding-left:25px\\"]","addTitleHtml":"<a class=\\"douban-title-link douban-title-fl\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":".cblock-innercontent span[style*=\\"padding-left:25px\\"]","replaceRating":".cblock-innercontent span:has(img[src*=\\"starbig\\"])","replaceRatingPosition":"before","ratingSourceLabel":"IMDb","replaceRatingHtml":"<span style=\\"font-size:18px;float:right;margin-right:12px;\\"><img src=\\"/styles/images/starbig.png\\" alt=\\"豆瓣评分\\" style=\\"position:relative;bottom:2px;\\"> 豆瓣 {score}</span>","addLinkButtonAfter":".cblock-innercontent a:has(img[src*=\\"imdb.png\\"])","addLinkButtonHtml":" <a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\"><img src=\\"data:image/png;base64,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\\" alt=\\"Douban\\" title=\\"Douban\\"></a>","listPage":{"path":"^/browse\\\\.php$","titleLink":".torrentrow a[href*=\\"details.php?id=\\"]","row":"div.torrentrow","idPattern":"[?&]id=(\\\\d+)","titleAttr":"title","popupTheme":"card"}},"hd-space.org":{"url":"https://hd-space.org","host":"hd-space.org","siteName":"HDS","imdb":"#imdb a[href*=\\"imdb.com/title\\"]","titleDom":"#imdb td.header a","addTitleInside":"#imdb td.header b a","addTitleHtml":"<a class=\\"douban-title-link\\" style=\\"color:inherit; text-decoration: underline;\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceRating":"#imdb tr:has(b:contains(\\"Rating:\\"))","replaceRatingPosition":"after","renameRatingLabel":"IMDB Rating:","starFullHtml":"<span class=\\"star\\" style=\\"background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_full.png); background-repeat: no-repeat; display: inline-block; width: 8px; height: 16px; background-position: 0px 0px; cursor: default;\\"></span><span class=\\"star\\" style=\\"background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_full.png); background-repeat: no-repeat; display: inline-block; width: 9px; height: 16px; background-position: -8px 0px; cursor: default;\\"></span>","starEmptyHtml":"<span class=\\"star\\" style=\\"background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_empty.png); background-repeat: no-repeat; display: inline-block; width: 8px; height: 16px; background-position: 0px 0px; cursor: default;\\"></span><span class=\\"star\\" style=\\"background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_empty.png); background-repeat: no-repeat; display: inline-block; width: 9px; height: 16px; background-position: -8px 0px; cursor: default;\\"></span>","replaceRatingHtml":"<tr><td class=\\"lista\\"><b>DouBan Rating:</b></td><td class=\\"lista\\"><a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分 {votes}人评价\\" style=\\"text-decoration:none\\">{stars}<span style=\\"color:#999;font-size:12px;font-weight:bold\\">{score}/10</span></a></td></tr>","replaceOverview":"#imdb tr:has(b:contains(\\"Plot:\\")) > td + td","listPage":{"path":"^/index\\\\.php$","query":"[?&]page=torrents(?:&|$)","titleLink":"a[href*=\\"page=torrent-details\\"]","row":"tr","idPattern":"id=([0-9a-f]{40})","popupTheme":"card"}},"hd-torrents.org":{"url":"https://hd-torrents.org","host":"hd-torrents.org","siteName":"HDT","imdb":".imdbnew2 a[href*=\\"imdb.com/title\\"]:first","addTitleAfter":".imdbnew2 a[href*=\\"imdb.com/title\\"]","addTitleHtml":"<strong><font color=\\"black\\"> <img src=\\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAMCAIAAAD3UuoiAAAB/0lEQVR4nHWTPWhUQRDHZ3b3vUu4u9wlohIT9RA/CitLsRYsxMJKucI2YB2tLRS1UMQijViIiBY2FmKlFioEYhMRMa2gJuTOJN69d+/tzozs3b13H8Fhi2WY/4+Z2f/i2vv5IDAiAkOhFExOKKWGcz6EoZOKcyPFiGitM1oZY4IcRAzlIr79FN182DAGmAcCo9E6uXRhaqFebW6T0ZiDmMA4J0pLDhKBOJb5/WahXi0VEaFf3RVAO+KDB4JWm4XBZRJEcE4MEzB5fT8LEEVwrBb+2eL7j5vOCYtPKuUFF8+VT5+a/L3pAo15r4ieMA4C8OOQg69ryefVzqPbs6kVZpmpmOt3Nz6uxJfPV5iARnb0f5Cwn9wEyAJJ6gd3JGGACpHZ1/NuEJEQDXbUA8Ud3jut9s3oxVvrpaJihtSK1nC8Frb9gmSsI6JdO+pFFMnZM6VqWS/e2Xh2b+7EkfDKtZ/lorpan17fJBD/TGMdqR4oP0QAAo0mr35LQFAr/LASvX7Xevnmb20u/PI9+fHL9qcbPbj84lBYGPjIkeypmAdPGk9fbRdCDAw6knbELDBVUp1ETh4tLN2YjRNRmTEQMU0sLj8/PAwSAIXQiji1vtQbEkH7t0cibwQEqJT1mLPTxJrWjjNB14hZCIDWOKF7tywpYrIfs7NlBzbtkpx1/wDkbTxzYNS8TAAAAABJRU5ErkJggg==\\" border=\\"0\\"> </font></strong><a class=\\"douban-title-link douban-title-hdt\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\"><font size=\\"3\\"><b>{title}</b></font></a>","replaceOverviewLabel":"Plot:","replaceRating":".imdbnew2 img[src*=\\"ratings/\\"]","ratingRewriteHtml":"<strong><font color=\\"black\\">IMDB：</font></strong>{siteScore}/10<strong><font color=\\"black\\">（Votes: {siteVotesComma}）</font></strong>","removeRatingVotes":".imdbnew2 strong:has(> font:contains(\\"Votes\\"))","replaceRatingHtml":"<br><strong><font color=\\"black\\">豆瓣: </font></strong>{score}/10 <strong><font color=\\"black\\">（Votes: {votesComma}）</font></strong>","listPage":{"path":"^/torrents\\\\.php$","titleLink":"a[href*=\\"details.php?id=\\"]","row":"tr","idPattern":"id=([0-9a-f]{40})","popupTheme":"card"}},"hdbits.org":{"url":"https://hdbits.org","host":"hdbits.org","siteName":"HDB","imdb":{"movie":".contentlayout h1 a","tv":"#details .showlinks li:nth-child(2) a","tvRequest":".lottery_table2 .showlinks li:nth-child(2) a"},"titleDom":"table.contentlayout h1","addTitleInside":"table.contentlayout h1","addTitleHtml":"<a class=\\"douban-title-link douban-title-hdb\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":"#plotcell tr:has(th:contains(\\"Plot\\")) + tr > td","replaceRating":"#imdbinfo tr:has(th:contains(\\"Rating\\"))","renameRatingLabel":"IMDB Rating","replaceRatingHtml":"<tr><th>DouBan Rating</th><td>{score} ({votesComma} votes)</td></tr>","replaceRatingPosition":"after","listPage":{"path":"^/browse\\\\.php$","titleLink":"td.browse_td_name_cell b a","idPattern":"[?&]id=(\\\\d+)","popupTheme":"card"}},"hdf.world":{"url":"https://hdf.world","host":"hdf.world","siteName":"HDF","imdb":"a[href*=\\"imdb.com/title\\"]","titleDom":"h2","addTitleAfter":"h2 span[dir=\\"ltr\\"]","addTitleHtml":" <a class=\\"douban-title-link\\" style=\\"color: #36F69F; text-decoration: none;\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":"#plotcell tr:has(th:contains(\\"Synopsis\\")) + tr > td","replaceOverviewLabel":"Synopsis","replaceRating":".torrent_description a[href*=\\"wikipedia.org\\"]","replaceRatingPosition":"before","replaceRatingHtml":"<a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分\\"><img class=\\"scale_image\\" src=\\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0iIzAwNzcyMiIvPjx0ZXh0IHg9IjYwIiB5PSI0MyIgZm9udC1mYW1pbHk9IlBpbmdGYW5nIFNDLEhpcmFnaW5vIFNhbnMgR0IsTWljcm9zb2Z0IFlhSGVpLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7osYbnk6M8L3RleHQ+PC9zdmc+\\" width=\\"62\\" height=\\"30\\" alt=\\"Douban\\"></a> : <strong>{score}</strong>/10 | ","addLinkButtonAfter":".db-links-container-details a[href*=\\"imdb.com/title\\"]","addLinkButtonHtml":"<a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" class=\\"tooltip db-link db-link-copy\\" title=\\"Douban\\"><img src=\\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0iIzAwNzcyMiIvPjx0ZXh0IHg9IjYwIiB5PSI0MyIgZm9udC1mYW1pbHk9IlBpbmdGYW5nIFNDLEhpcmFnaW5vIFNhbnMgR0IsTWljcm9zb2Z0IFlhSGVpLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7osYbnk6M8L3RleHQ+PC9zdmc+\\" alt=\\"Douban\\"></a>","listPage":{"path":"^/torrents\\\\.php$","excludeQuery":"[?&]id=","titleLink":".group_info a[href*=\\"torrents.php?id=\\"]","row":"tr.group","idPattern":"[?&]id=(\\\\d+)","releaseName":".group_info","popupTheme":"card"}},"iptorrents.com":{"url":"https://iptorrents.com","host":"iptorrents.com","siteName":"IPT","imdb":".main td a[href*=\\"imdb.com/title\\"]","titleDom":".tt","addTitleInside":".tt","addTitleHtml":"<a class=\\"douban-title-link\\" style=\\"color:inherit\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceRating":".imdb-voters","groupRating":true,"replaceRatingHtml":"<div class=\\"douban-voters rbox\\" title=\\"豆瓣评分 {score} / 10, {votes} votes\\" style=\\"padding-right:25px;font-size:12px\\"><a class=\\"rsrc\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer nofollow\\" style=\\"background:#007722;color:#fff\\">豆瓣</a>{score} / 10<div class=\\"imdb-rating\\" style=\\"width:{scoreWidth}\\"></div><div class=\\"rvotes\\">{votesComma} votes</div></div>","replaceOverview":".main tr:has(td:contains(\\"Plot\\")) > td + td","addLinkButtonAfter":".main td:has(a[href*=\\"imdb.com/title\\"]) a[href*=\\"imdb.com/title\\"]","addLinkButtonHtml":" <a class=\\"douban-ipt-btn\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer nofollow\\" style=\\"display:inline-flex;align-items:center;gap:5px;background:#007722;color:#fff;padding:6px 14px;border-radius:5px;text-decoration:none;font-weight:700;font-size:13px;border:1px solid #005c1b;transition:background .15s,color .15s\\" onmouseover=\\"this.style.background='#005c1b'\\" onmouseout=\\"this.style.background='#007722'\\">豆瓣</a>","listPage":{"path":"^/t$","titleLink":"#torrents a[href*=\\"/t/\\"]","row":"tr","idPattern":"/t/(\\\\d+)","titleTextStrip":".tTip","popupTheme":"card"}},"karagarga.in":{"url":"https://karagarga.in","host":"karagarga.in","siteName":"KG","imdb":"td a[href*=\\"imdb.com/title\\"]:first","insertDomSelector":".outer h1~table:first","doubanContainerDom":"<div class=\\"douban-dom kg\\" style=\\"width:1100px;padding-top:20px;\\"></div>"},"passthepopcorn.me":{"url":"https://passthepopcorn.me","host":"passthepopcorn.me","siteName":"PTP","siteType":"gazelle","imdb":{"request":"#request-table a[href*=\\"imdb.com/title\\"]:first","torrent":"#imdb-title-link"},"top10":{"path":"^/top10\\\\.php$","browsePath":"^/torrents\\\\.php$"}},"privatehd.to":{"url":"https://privatehd.to","host":"privatehd.to","siteName":"PHD","imdb":".movie-details .badge-extra a[href*=\\"imdb.com/title\\"]:first","titleDom":".title .torrent-filename","poster":".movie-poster img","insertDomSelector":".movie-poster","doubanContainerDom":"<div class=\\"douban-dom\\" style=\\"justify-content: flex-start;\\"></div>"},"secret-cinema.pw":{"url":"https://secret-cinema.pw","host":"secret-cinema.pw","siteName":"SC","imdb":".torrent_row a[href*=\\"imdb.com/title\\"]:first","insertDomSelector":".linkbox:first","doubanContainerDom":"<div class=\\"douban-dom sc\\"></div>"},"shadowthein.net":{"url":"http://shadowthein.net","host":"shadowthein.net","siteName":"iTS","imdb":".IMDBtable a[href*=\\"imdb.com/title\\"]:first","titleDom":"h1:first","addTitleAfter":".IMDBtable tr:has(td:contains(\\"Title:\\")) b","addTitleHtml":" <a class=\\"douban-title-link\\" style=\\"color:inherit;font-weight:bold;\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>{year}","addTitleYearFrom":".IMDBtable tr:has(td:contains(\\"Released:\\")) td + td","replaceRating":".IMDBtable tr:has(td:contains(\\"Rating:\\"))","replaceRatingPosition":"after","renameRatingLabel":"IMDB Rating:","replaceRatingHtml":"<tr><td>DouBan Rating:</td><td><a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分 {votes}人评价\\" style=\\"color:darkorange\\">{score}</a></td></tr>","replaceOverview":".IMDBtable tr:has(td:contains(\\"Plot:\\")) > td + td","addLinkButtonAfter":".IMDBtable tr:has(td:contains(\\"Link:\\")) a","addLinkButtonHtml":" <a href=\\"redir.php?{link}\\" style=\\"color:darkorange\\">{link}</a>","listPage":{"path":"^/browse\\\\.php$","titleLink":"a[href*=\\"/details.php?id=\\"]","row":"tr","idPattern":"[?&]id=(\\\\d+)","titleAttr":"output","popupTheme":"card"}},"tgx.rs":{"url":"https://tgx.rs","host":"tgx.rs","siteName":"TorrentGalaxy","poster":"#covercell img","imdb":"#imdbpage[href*=\\"imdb.com/title\\"]","titleDom":".torrentpagetable.limitwidth:first a.textshadow","insertDomSelector":".buttonbox","doubanContainerDom":"<div class=\\"douban-dom\\" style=\\"display:flex;justify-content: center;\\"></div>"},"www.torrentleech.org":{"url":"https://www.torrentleech.org","host":"torrentleech.org","siteName":"IPT","imdb":".imdb-info a[href*=\\"imdb.com/title\\"]","titleDom":"#torrentnameid","poster":".imdb_cover img","insertDomSelector":".torrent-info .torrent-info-details","doubanContainerDom":"<div class=\\"douban-dom\\"></div>"}}`);
+  const PT_SITE = /* @__PURE__ */ JSON.parse('{"aither.cc":{"url":"https://aither.cc","host":"aither.cc","siteName":"Aither","poster":"#meta-poster","imdb":".badge-user a[href*=\\"imdb.com/title\\"]:nth-child(1)","insertDomSelector":".torrent-buttons","doubanContainerDom":"<div class=\\"movie-wrapper\\"><div class=\\"movie-overlay\\" style=\\"background-color: rgba(81, 51, 40, 0.75);\\"></div><div class=\\"douban-dom\\" style=\\"position: relative;z-index: 2;\\"></div></div>"},"alpharatio.cc":{"url":"https://alpharatio.cc","host":"alpharatio.cc","siteName":"AR","imdb":"a[href*=\\"imdb.com/title\\"]","titleDom":"span.size6","addTitleAfter":"span.size6","addTitleHtml":"<br><a class=\\"douban-title-link douban-title-ar\\" style=\\"color:#008000;\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\"><span class=\\"size6\\">{title}</span></a>","replaceOverviewLabel":"PLOT","addLinkButtonAfter":"a[href*=\\"themoviedb.org\\"]","addLinkButtonHtml":" <a rel=\\"noreferrer\\" target=\\"_blank\\" href=\\"{link}\\"><img class=\\"scale_image\\" src=\\"data:image/png;base64,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\\" alt=\\"Douban\\" title=\\"Douban\\"></a>","listPage":{"path":"^/torrents\\\\.php$","excludeQuery":"[?&]id=","titleLink":"a[href*=\\"torrentid=\\"]","row":"tr.torrent","idPattern":["[?&]torrentid=(\\\\d+)","[?&]id=(\\\\d+)"],"imdbTagPattern":"taglist=(tt\\\\d+)","popupTheme":"card"}},"anthelion.me":{"url":"https://anthelion.me","host":"anthelion.me","siteName":"ANT","siteType":"gazelle","imdb":{"request":".layout a[href*=\\"imdb.com/title\\"]:first","torrent":".torrent_ratings a[href*=\\"imdb.com/title\\"]:first"}},"avistaz.to":{"url":"https://avistaz.to","host":"avistaz.to","siteName":"AvistaZ","imdb":".movie-details .badge-extra a[href*=\\"imdb.com/title\\"]:first","titleDom":".title .torrent-filename","poster":".movie-poster img","insertDomSelector":".movie-poster","doubanContainerDom":"<div class=\\"douban-dom\\" style=\\"justify-content: flex-start;\\"></div>"},"beyond-hd.me":{"url":"https://beyond-hd.me","host":"beyond-hd.me","siteName":"BHD","imdb":".movie-details a[href*=\\"imdb.com/title\\"]:nth-child(1)","addTitleAfter":"h1.bhd-title-h1 a.beta-link-blend","addTitleHtml":"<a class=\\"douban-title-link douban-title-bhd\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":".movie-overview","replaceRating":".badge-meta[title=\\"IMDb Rating\\"]","replaceRatingHtml":"<span class=\\"badge-meta\\" title=\\"豆瓣评分\\"><a rel=\\"noreferrer\\" href=\\"{link}\\" target=\\"_blank\\"><span class=\\"movie-rating-stars\\"><span class=\\"douban-badge-icon\\">豆</span></span> {score}</a></span>","addLinkButtonAfter":".badge-meta:has(.fa-tv-retro)","addLinkButtonHtml":"<span class=\\"badge-meta\\"><a rel=\\"noreferrer\\" href=\\"{link}\\" title=\\"Douban\\" target=\\"_blank\\" class=\\"beta-link-blend\\"> DOUBAN</a></span>","addDarkLinkButtonAfter":".badge-meta:has(.fa-tv-retro)","addDarkLinkButtonHtml":"<span class=\\"badge-meta class-base\\"><span class=\\"class-base\\">DOUBAN</span></span>","listPage":{"path":"^/torrents/?$","titleLink":"a.torrent-name"}},"blutopia.cc":{"url":"https://blutopia.cc","host":"blutopia.cc","siteName":"BLU","imdb":".meta__imdb a[href*=\\"imdb.com/title\\"]:nth-child(1)","titleDom":".torrent__name","addTitleInside":"h1.meta__title","addTitleHtml":"<a class=\\"douban-title-link douban-title-blu\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":"p.meta__description","replaceRating":"li.work__rating","replaceRatingHtml":"<li class=\\"work__rating\\"><a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分 {votes}人评价\\"><span class=\\"work__rating-text\\">豆瓣 {score}</span></a></li>","addLinkButtonAfter":"ul.meta__ids li.meta__imdb","addLinkButtonHtml":"<li class=\\"meta__douban\\"><a class=\\"meta-id-tag\\" href=\\"{link}\\" title=\\"Douban\\" target=\\"_blank\\" rel=\\"noreferrer\\"><img src=\\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAARCAYAAACilZ5PAAAEHElEQVR42s2Wy29VVRTGf2uffe7j9N5a+uZRCgJpMLUVkdAUhCYycuCMARP/AU30HzBiYkIiE00U49DEGF8JAxONAyOIaGKICgIRMbQX5EJf3F7u+55z9nLQYhwg9Bg17GRnD85e63z723t96xMOHvTGpq4dFl9eUKcdOAQQHqyhGFSM1DTUN86dGDrsjT+fP2zz/kuu6dLovw9a/iadJPuNoAiOtM3bff3rS8ijb020xeDhkCTZjJh7fne6nDB0IdZYjBhEhNjFqCpOHZ7xEARFV8u7YlB1xFYMPpqMZ6eORti4556MnyF0If1BH7eaJWrtGqELyafyWM+SsRmq7Sqhi0gZf3Xgl08pYjB2JWJVsEWEZtRipGcrh0YP0orbyF0iU16Kd396n5mlAs+OH+LS4mUuLf7G/uE9bOvZwpnij6S8NKqOjy8eR1WTvniVsWMTiaKcOjr8gN6gh1bcxv8LWwKELiLrZ5kuzTA5tJs9GyewxuIbn7RN83v5Ohk/TegierLdnCp8y2eXvyCXyuHUrRqHTVps1niUmmWCVMCLE88xW53DMwYFVJXeoIejp1+nHjaYLhXoznZTbpXpC3oZyPVTDWvM1xcpVorkUjkuzv+CNTYx6za5LoGqY21ukFJjiVdPvUZXqhMFamGdI0+9TF/Qy43KLP25PnYMjmGM4cqtaXzj49SRT+fY1bmTjQ9tYLY2x/VKMbFa2X8qc7HGrMsPsn94L93ZNSjK7WaF3qCXWB3WWBbrizTjFqVqCYcSuYjIRRgxLDXL5FIdlJtlrNj/AbhC2maYLhX4ee4Ce4YmmF6aQRC2bxjh7Ox5ipUbZP0M1ys3WagvUKzcJPCzBH6WcrOM7/m0ouX6KJSvISIrd7n6YZLjVkCZrc7y0fnj5NN53jv7AW9+/w5GDF9Nn2S+tkAravNI7wiPr32MXet3smXNZmar8wzk+tnWvZXJod2MDmxnfGCUdtxeAf8fMu7U0ZXpYlPXMPWwjhFhatM+glTAtp4t1MM644OjlFsVzhR/4MLcJF8XTvPEuh3UwxrPjDxNoXyVb65+h2c8vrxykrX5QSIXJevIY8cm3Gp13IihFtY4sHmKJ4f30o5bRC7CMx6BHxC7mEbUpMMP+PTXz0l7KTZ1DeNQZkoFMjbNgYenWKjfInIRxepNPjz/CZ2pTmKNE128jL09oUme1502HroI0JVmBs7FiAhGlqXRikc+naMRNsn4GZpRkzCOcOrI2DRZP4sVj3Lr9n3tw11AYNURJvEqiuIbn5SXuu++etjAiKGxsqZtCkFw6qi1ayiKJ16yAlvxKsaIHrEd1iQxWMqySbrXVNU/mbyz3jFXAJ54yWVQENthjRE94s0Gk6f61i0Z8WUHrBiuB9WPe1J1DXf03ImNr/wBwjPs2VghyRoAAAAASUVORK5CYII=\\" alt=\\"Douban\\" title=\\"Douban\\"></a></li>","listPage":{"path":"^/torrents/?$","titleLink":"a.torrent-search--list__name","popupTheme":"card"}},"broadcasthe.net":{"url":"https://broadcasthe.net","host":"broadcasthe.net","siteName":"BTN","imdb":".stats td a[href*=\\"imdb.com/title\\"]","titleDom":"h2:first","addTitleLineAfter":"img#banner","addTitleLineHtml":"<div class=\\"douban-title-line\\"><a class=\\"douban-title-link\\" target=\\"_blank\\" rel=\\"noreferrer\\" href=\\"{link}\\" title=\\"{title}\\">{title} {nativeTitle}</a></div>","addSummaryTab":"#tabs","addSummaryTabIcon":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABEAAAARCAYAAAA7bUf6AAACh0lEQVR42o2SvWvUWRSGn3M//CVjSCaChQbNLCqioCgoxhhxkXW3EHYLS/0TVKx2RVAQKzuLmNJOEBEVwRQGxUYk6ILFqohhk4iLC4lhNJmZ/D7uPRYmE+Mg+sLlVuflfc95BGDHpT2btGQuqfIzgXZQ4ZsSxdIQ4aHU46lnp0Zfy87Bvo3By4hNbCXWA4ryPQmCKVlCGiZsrodMFAZtYivFXJ5nIeNHlIaUfC7PXWIrURh0EQ5KI+p8TP25A6cZWL+XqBEjpmVYNSJieDH1kj/vnfWhHjTCQSeCB4ga6e1aR6W8/oeSLJQWEbxsH+pTQSi0oDPppCvpJA85kdgybMTgjWc2naWafsCJQ1EcgKIkdgXvZt+xb90eft98mDaXYI0DFBBCLJgvUu68usuN57dZVeqmiAHgs8lSZ2Xr6i3s7+3n1fRrFEVEUFUEYXfPJsZm/kW5tSzhchOULGTkMefw1SNU04+0uzYaxTzlpJOXJ/4mC1kLBu7r3s44vPEMH7tJEQP1vE7Jl3DG4o3HGde6qy+reOMZr04y+t9TpmrTqEZ2rd2JamSqNs3o2yeMVyfxxqO6lEa2D/XplyRmIcMaS6Xcy4bun7j46wX+uneW8eokk9U3pCElccm3TYwYalmNgd5+rvwx1BL7zP3zXPvnBuW2LsLCZQBk2+W+TAQHyCJ0K32JA5UBvPUIn68TUR69ecz7+gzOuMXlqiqFM/DAlNxvxVyRi8EbMdTyOtef32oysviv9KWmgUZy1+F8rBUPnFGOhzSMuA5bCfXQrNXdVl7ItqQYY/O8rsP6kIYJqxy3/w+/nVnzS8+wGjYg0rNAsSiK6vLXxMlKg6gjphGPPjs5OvYJRYI+gaJ9V4UAAAAASUVORK5CYII=","replaceRating":"tr:has(b:contains(\\"TVDB Rating\\"))","replaceRatingHtml":"<tr><td><b>DouBan Rating:</b></td><td>{score}</td></tr>","replaceRatingPosition":"after","addLinkButtonAfter":"a[href*=\\"thetvdb.com\\"]","addLinkButtonHtml":" <a target=\\"_blank\\" rel=\\"noreferrer\\" href=\\"{link}\\"><img src=\\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAACT0lEQVR42oWTv2sUQRzFP9/Z2du93J5GLRJJkAO1sfAHCElnlIhgJSgICpapQkgriGCaWFrE/Aci2AgKQUkTRYSgSGwkqGDQRM4faDTn7d3uzn4tjpy5GPTBNDNvHu99540AHL4xsF+7zA2QIXEUAWFrqHrEoHNSz8cXxuffyJGpwX3Ol1kbeJV4LSbXnH9BxFAsF3FNt+SletLmolM2sJXGWjPtLff4kV9Ct7CwvtdwTT7+qKZBuVBxWTplVcyJZi3RbWHk3z1/m+3hNv6H07fO+u++L2nghSesCL6IkOUZi19fs7O4A6cO2eRBUTzxyPKMOG1gxAiivhycHlQBnOZkuWPP9n4CG6CabwiiiBiaWZMPP5cxYrBiURS7ns8aS+JSJo5fYaD/6JbW55efc+nuCKEf4tQBtATW4dRRDiKerbxg4tEk3WE3AKuNVa4eu0w5iHDqULR9x24edetQEaRNXJ+Htggd6BAwxlBLfjHQd5R7F+78HWHlOcaYzl4cnB7UPzVTess9lIMyjSTm6tBlACbmJgn9kLWkRrX2qeOFOgQ84/Gp9pnrw9c4d+AMRb8IQJzGPH7/lJH7Y+wKu3Eb2mpVSUWwgKgqUaHEqy+LzC09IXEJAvhegYXqS7psuHEEqkomh24OPjAleyqrZamYVqnqSZ3EpYhIm2mNR1SIUBTNSW1k/fxX9tAaZdQ13ayNvIqrO1SVUqFEJJuaqNr+aDbyfNd0S54y6lVnlr/tHu6bUcNeRPpQrKKiqnSslnnFk5hcZ02cX1wYm3/7G0f0F7GPR+eKAAAAAElFTkSuQmCC\\" border=\\"0\\" width=\\"16\\" height=\\"16\\" alt=\\"Douban\\" title=\\"Douban\\"></a>","listPage":{"path":"^/torrents\\\\.php$","excludeQuery":"[?&]id=","titleLink":"a[title=\\"View Torrent\\"]","row":"tr.torrent","idPattern":["[?&]torrentid=(\\\\d+)","[?&]id=(\\\\d+)"],"releaseName":"div.nobr span[title]","popupTheme":"card"}},"eiga.moi":{"url":"https://eiga.moi","host":"eiga.moi","siteName":"ACM","imdb":".meta__imdb a[href*=\\"imdb.com/title\\"]:nth-child(1)","titleDom":".torrent__name","addTitleInside":"h1.meta__title","addTitleHtml":"<a class=\\"douban-title-link douban-title-acm\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":"p.meta__description","replaceRating":"li.work__rating","replaceRatingHtml":"<li class=\\"work__rating\\"><a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分 {votes}人评价\\"><span class=\\"work__rating-text\\">豆瓣 {score}</span></a></li>","addLinkButtonAfter":"ul.meta__ids li.meta__imdb","addLinkButtonHtml":"<li class=\\"meta__douban\\"><a class=\\"meta-id-tag\\" href=\\"{link}\\" title=\\"Douban\\" target=\\"_blank\\" rel=\\"noreferrer\\"><img src=\\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAARCAYAAACilZ5PAAAEHElEQVR42s2Wy29VVRTGf2uffe7j9N5a+uZRCgJpMLUVkdAUhCYycuCMARP/AU30HzBiYkIiE00U49DEGF8JAxONAyOIaGKICgIRMbQX5EJf3F7u+55z9nLQYhwg9Bg17GRnD85e63z723t96xMOHvTGpq4dFl9eUKcdOAQQHqyhGFSM1DTUN86dGDrsjT+fP2zz/kuu6dLovw9a/iadJPuNoAiOtM3bff3rS8ijb020xeDhkCTZjJh7fne6nDB0IdZYjBhEhNjFqCpOHZ7xEARFV8u7YlB1xFYMPpqMZ6eORti4556MnyF0If1BH7eaJWrtGqELyafyWM+SsRmq7Sqhi0gZf3Xgl08pYjB2JWJVsEWEZtRipGcrh0YP0orbyF0iU16Kd396n5mlAs+OH+LS4mUuLf7G/uE9bOvZwpnij6S8NKqOjy8eR1WTvniVsWMTiaKcOjr8gN6gh1bcxv8LWwKELiLrZ5kuzTA5tJs9GyewxuIbn7RN83v5Ohk/TegierLdnCp8y2eXvyCXyuHUrRqHTVps1niUmmWCVMCLE88xW53DMwYFVJXeoIejp1+nHjaYLhXoznZTbpXpC3oZyPVTDWvM1xcpVorkUjkuzv+CNTYx6za5LoGqY21ukFJjiVdPvUZXqhMFamGdI0+9TF/Qy43KLP25PnYMjmGM4cqtaXzj49SRT+fY1bmTjQ9tYLY2x/VKMbFa2X8qc7HGrMsPsn94L93ZNSjK7WaF3qCXWB3WWBbrizTjFqVqCYcSuYjIRRgxLDXL5FIdlJtlrNj/AbhC2maYLhX4ee4Ce4YmmF6aQRC2bxjh7Ox5ipUbZP0M1ys3WagvUKzcJPCzBH6WcrOM7/m0ouX6KJSvISIrd7n6YZLjVkCZrc7y0fnj5NN53jv7AW9+/w5GDF9Nn2S+tkAravNI7wiPr32MXet3smXNZmar8wzk+tnWvZXJod2MDmxnfGCUdtxeAf8fMu7U0ZXpYlPXMPWwjhFhatM+glTAtp4t1MM644OjlFsVzhR/4MLcJF8XTvPEuh3UwxrPjDxNoXyVb65+h2c8vrxykrX5QSIXJevIY8cm3Gp13IihFtY4sHmKJ4f30o5bRC7CMx6BHxC7mEbUpMMP+PTXz0l7KTZ1DeNQZkoFMjbNgYenWKjfInIRxepNPjz/CZ2pTmKNE128jL09oUme1502HroI0JVmBs7FiAhGlqXRikc+naMRNsn4GZpRkzCOcOrI2DRZP4sVj3Lr9n3tw11AYNURJvEqiuIbn5SXuu++etjAiKGxsqZtCkFw6qi1ayiKJ16yAlvxKsaIHrEd1iQxWMqySbrXVNU/mbyz3jFXAJ54yWVQENthjRE94s0Gk6f61i0Z8WUHrBiuB9WPe1J1DXf03ImNr/wBwjPs2VghyRoAAAAASUVORK5CYII=\\"></a></li>","listPage":{"path":"^/torrents/?$","titleLink":"a.torrent-search--list__name","popupTheme":"card"}},"filelist.io":{"url":"https://filelist.io","host":"filelist.io","siteName":"FL","imdb":".cblock-innercontent div a[href*=\\"imdb.com/title\\"]:first","titleDom":".cblock-header h4","addTitleBefore":".cblock-innercontent span[style*=\\"padding-left:25px\\"]","addTitleHtml":"<a class=\\"douban-title-link douban-title-fl\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":".cblock-innercontent span[style*=\\"padding-left:25px\\"]","replaceRating":".cblock-innercontent span:has(img[src*=\\"starbig\\"])","replaceRatingPosition":"before","ratingSourceLabel":"IMDb","replaceRatingHtml":"<span style=\\"font-size:18px;float:right;margin-right:12px;\\"><img src=\\"/styles/images/starbig.png\\" alt=\\"豆瓣评分\\" style=\\"position:relative;bottom:2px;\\"> 豆瓣 {score}</span>","addLinkButtonAfter":".cblock-innercontent a:has(img[src*=\\"imdb.png\\"])","addLinkButtonHtml":" <a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\"><img src=\\"data:image/png;base64,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\\" alt=\\"Douban\\" title=\\"Douban\\"></a>","listPage":{"path":"^/browse\\\\.php$","titleLink":".torrentrow a[href*=\\"details.php?id=\\"]","row":"div.torrentrow","idPattern":"[?&]id=(\\\\d+)","titleAttr":"title","popupTheme":"card"}},"hd-space.org":{"url":"https://hd-space.org","host":"hd-space.org","siteName":"HDS","imdb":"#imdb a[href*=\\"imdb.com/title\\"]","titleDom":"#imdb td.header a","addTitleInside":"#imdb td.header b a","addTitleHtml":"<a class=\\"douban-title-link\\" style=\\"color:inherit; text-decoration: underline;\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceRating":"#imdb tr:has(b:contains(\\"Rating:\\"))","replaceRatingPosition":"after","renameRatingLabel":"IMDB Rating:","starFullHtml":"<span class=\\"star\\" style=\\"background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_full.png); background-repeat: no-repeat; display: inline-block; width: 8px; height: 16px; background-position: 0px 0px; cursor: default;\\"></span><span class=\\"star\\" style=\\"background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_full.png); background-repeat: no-repeat; display: inline-block; width: 9px; height: 16px; background-position: -8px 0px; cursor: default;\\"></span>","starEmptyHtml":"<span class=\\"star\\" style=\\"background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_empty.png); background-repeat: no-repeat; display: inline-block; width: 8px; height: 16px; background-position: 0px 0px; cursor: default;\\"></span><span class=\\"star\\" style=\\"background-image: url(https://hd-space.org/imdbphp/imgs/star_boxed_empty.png); background-repeat: no-repeat; display: inline-block; width: 9px; height: 16px; background-position: -8px 0px; cursor: default;\\"></span>","replaceRatingHtml":"<tr><td class=\\"lista\\"><b>DouBan Rating:</b></td><td class=\\"lista\\"><a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分 {votes}人评价\\" style=\\"text-decoration:none\\">{stars}<span style=\\"color:#999;font-size:12px;font-weight:bold\\">{score}/10</span></a></td></tr>","replaceOverview":"#imdb tr:has(b:contains(\\"Plot:\\")) > td + td","listPage":{"path":"^/index\\\\.php$","query":"[?&]page=torrents(?:&|$)","titleLink":"a[href*=\\"page=torrent-details\\"]","row":"tr","idPattern":"id=([0-9a-f]{40})","popupTheme":"card"}},"hd-torrents.org":{"url":"https://hd-torrents.org","host":"hd-torrents.org","siteName":"HDT","imdb":".imdbnew2 a[href*=\\"imdb.com/title\\"]:first","addTitleAfter":".imdbnew2 a[href*=\\"imdb.com/title\\"]","addTitleHtml":"<strong><font color=\\"black\\"> <img src=\\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAMCAIAAAD3UuoiAAAB/0lEQVR4nHWTPWhUQRDHZ3b3vUu4u9wlohIT9RA/CitLsRYsxMJKucI2YB2tLRS1UMQijViIiBY2FmKlFioEYhMRMa2gJuTOJN69d+/tzozs3b13H8Fhi2WY/4+Z2f/i2vv5IDAiAkOhFExOKKWGcz6EoZOKcyPFiGitM1oZY4IcRAzlIr79FN182DAGmAcCo9E6uXRhaqFebW6T0ZiDmMA4J0pLDhKBOJb5/WahXi0VEaFf3RVAO+KDB4JWm4XBZRJEcE4MEzB5fT8LEEVwrBb+2eL7j5vOCYtPKuUFF8+VT5+a/L3pAo15r4ieMA4C8OOQg69ryefVzqPbs6kVZpmpmOt3Nz6uxJfPV5iARnb0f5Cwn9wEyAJJ6gd3JGGACpHZ1/NuEJEQDXbUA8Ud3jut9s3oxVvrpaJihtSK1nC8Frb9gmSsI6JdO+pFFMnZM6VqWS/e2Xh2b+7EkfDKtZ/lorpan17fJBD/TGMdqR4oP0QAAo0mr35LQFAr/LASvX7Xevnmb20u/PI9+fHL9qcbPbj84lBYGPjIkeypmAdPGk9fbRdCDAw6knbELDBVUp1ETh4tLN2YjRNRmTEQMU0sLj8/PAwSAIXQiji1vtQbEkH7t0cibwQEqJT1mLPTxJrWjjNB14hZCIDWOKF7tywpYrIfs7NlBzbtkpx1/wDkbTxzYNS8TAAAAABJRU5ErkJggg==\\" border=\\"0\\"> </font></strong><a class=\\"douban-title-link douban-title-hdt\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\"><font size=\\"3\\"><b>{title}</b></font></a>","replaceOverviewLabel":"Plot:","replaceRating":".imdbnew2 img[src*=\\"ratings/\\"]","ratingRewriteHtml":"<strong><font color=\\"black\\">IMDB：</font></strong>{siteScore}/10<strong><font color=\\"black\\">（Votes: {siteVotesComma}）</font></strong>","removeRatingVotes":".imdbnew2 strong:has(> font:contains(\\"Votes\\"))","replaceRatingHtml":"<br><strong><font color=\\"black\\">豆瓣: </font></strong>{score}/10 <strong><font color=\\"black\\">（Votes: {votesComma}）</font></strong>","listPage":{"path":"^/torrents\\\\.php$","titleLink":"a[href*=\\"details.php?id=\\"]","row":"tr","idPattern":"id=([0-9a-f]{40})","popupTheme":"card"}},"hdbits.org":{"url":"https://hdbits.org","host":"hdbits.org","siteName":"HDB","imdb":{"movie":".contentlayout h1 a","tv":"#details .showlinks li:nth-child(2) a","tvRequest":".lottery_table2 .showlinks li:nth-child(2) a"},"titleDom":"table.contentlayout h1","addTitleInside":"table.contentlayout h1","addTitleHtml":"<a class=\\"douban-title-link douban-title-hdb\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":"#plotcell tr:has(th:contains(\\"Plot\\")) + tr > td","replaceRating":"#imdbinfo tr:has(th:contains(\\"Rating\\"))","renameRatingLabel":"IMDB Rating","replaceRatingHtml":"<tr><th>DouBan Rating</th><td>{score} ({votesComma} votes)</td></tr>","replaceRatingPosition":"after","listPage":{"path":"^/browse\\\\.php$","titleLink":"td.browse_td_name_cell b a","idPattern":"[?&]id=(\\\\d+)","popupTheme":"card"}},"hdf.world":{"url":"https://hdf.world","host":"hdf.world","siteName":"HDF","imdb":"a[href*=\\"imdb.com/title\\"]","titleDom":"h2","addTitleAfter":"h2 span[dir=\\"ltr\\"]","addTitleHtml":" <a class=\\"douban-title-link\\" style=\\"color: #36F69F; text-decoration: none;\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceOverview":"#plotcell tr:has(th:contains(\\"Synopsis\\")) + tr > td","replaceOverviewLabel":"Synopsis","replaceRating":".torrent_description a[href*=\\"wikipedia.org\\"]","replaceRatingPosition":"before","replaceRatingHtml":"<a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分\\"><img class=\\"scale_image\\" src=\\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0iIzAwNzcyMiIvPjx0ZXh0IHg9IjYwIiB5PSI0MyIgZm9udC1mYW1pbHk9IlBpbmdGYW5nIFNDLEhpcmFnaW5vIFNhbnMgR0IsTWljcm9zb2Z0IFlhSGVpLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7osYbnk6M8L3RleHQ+PC9zdmc+\\" width=\\"62\\" height=\\"30\\" alt=\\"Douban\\"></a> : <strong>{score}</strong>/10 | ","addLinkButtonAfter":".db-links-container-details a[href*=\\"imdb.com/title\\"]","addLinkButtonHtml":"<a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" class=\\"tooltip db-link db-link-copy\\" title=\\"Douban\\"><img src=\\"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMjAgNjAiIHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiPjxyZWN0IHdpZHRoPSIxMjAiIGhlaWdodD0iNjAiIHJ4PSIxMiIgZmlsbD0iIzAwNzcyMiIvPjx0ZXh0IHg9IjYwIiB5PSI0MyIgZm9udC1mYW1pbHk9IlBpbmdGYW5nIFNDLEhpcmFnaW5vIFNhbnMgR0IsTWljcm9zb2Z0IFlhSGVpLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iMzIiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIj7osYbnk6M8L3RleHQ+PC9zdmc+\\" alt=\\"Douban\\"></a>","listPage":{"path":"^/torrents\\\\.php$","excludeQuery":"[?&]id=","titleLink":".group_info a[href*=\\"torrents.php?id=\\"]","row":"tr.group","idPattern":"[?&]id=(\\\\d+)","releaseName":".group_info","popupTheme":"card"}},"iptorrents.com":{"url":"https://iptorrents.com","host":"iptorrents.com","siteName":"IPT","imdb":".main td a[href*=\\"imdb.com/title\\"]","titleDom":".tt","addTitleInside":".tt","addTitleHtml":"<a class=\\"douban-title-link\\" style=\\"color:inherit\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>","replaceRating":".imdb-voters","groupRating":true,"replaceRatingHtml":"<div class=\\"douban-voters rbox\\" title=\\"豆瓣评分 {score} / 10, {votes} votes\\" style=\\"padding-right:25px;font-size:12px\\"><a class=\\"rsrc\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer nofollow\\" style=\\"background:#007722;color:#fff\\">豆瓣</a>{score} / 10<div class=\\"imdb-rating\\" style=\\"width:{scoreWidth}\\"></div><div class=\\"rvotes\\">{votesComma} votes</div></div>","replaceOverview":".main tr:has(td:contains(\\"Plot\\")) > td + td","addLinkButtonAfter":".main td:has(a[href*=\\"imdb.com/title\\"]) a[href*=\\"imdb.com/title\\"]","addLinkButtonHtml":" <a class=\\"douban-ipt-btn\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer nofollow\\" style=\\"display:inline-flex;align-items:center;gap:5px;background:#007722;color:#fff;padding:6px 14px;border-radius:5px;text-decoration:none;font-weight:700;font-size:13px;border:1px solid #005c1b;transition:background .15s,color .15s\\" onmouseover=\\"this.style.background=\'#005c1b\'\\" onmouseout=\\"this.style.background=\'#007722\'\\">豆瓣</a>","listPage":{"path":"^/t$","titleLink":"#torrents a[href*=\\"/t/\\"]","row":"tr","idPattern":"/t/(\\\\d+)","titleTextStrip":".tTip","popupTheme":"card"}},"karagarga.in":{"url":"https://karagarga.in","host":"karagarga.in","siteName":"KG","imdb":"td a[href*=\\"imdb.com/title\\"]:first","insertDomSelector":".outer h1~table:first","doubanContainerDom":"<div class=\\"douban-dom kg\\" style=\\"width:1100px;padding-top:20px;\\"></div>"},"passthepopcorn.me":{"url":"https://passthepopcorn.me","host":"passthepopcorn.me","siteName":"PTP","siteType":"gazelle","imdb":{"request":"#request-table a[href*=\\"imdb.com/title\\"]:first","torrent":"#imdb-title-link"},"top10":{"path":"^/top10\\\\.php$","browsePath":"^/torrents\\\\.php$"}},"privatehd.to":{"url":"https://privatehd.to","host":"privatehd.to","siteName":"PHD","imdb":".movie-details .badge-extra a[href*=\\"imdb.com/title\\"]:first","titleDom":".title .torrent-filename","poster":".movie-poster img","insertDomSelector":".movie-poster","doubanContainerDom":"<div class=\\"douban-dom\\" style=\\"justify-content: flex-start;\\"></div>"},"secret-cinema.pw":{"url":"https://secret-cinema.pw","host":"secret-cinema.pw","siteName":"SC","imdb":".torrent_row a[href*=\\"imdb.com/title\\"]:first","insertDomSelector":".linkbox:first","doubanContainerDom":"<div class=\\"douban-dom sc\\"></div>"},"shadowthein.net":{"url":"http://shadowthein.net","host":"shadowthein.net","siteName":"iTS","imdb":".IMDBtable a[href*=\\"imdb.com/title\\"]:first","titleDom":"h1:first","addTitleAfter":".IMDBtable tr:has(td:contains(\\"Title:\\")) b","addTitleHtml":" <a class=\\"douban-title-link\\" style=\\"color:inherit;font-weight:bold;\\" href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"{title}\\">{title}</a>{year}","addTitleYearFrom":".IMDBtable tr:has(td:contains(\\"Released:\\")) td + td","replaceRating":".IMDBtable tr:has(td:contains(\\"Rating:\\"))","replaceRatingPosition":"after","renameRatingLabel":"IMDB Rating:","replaceRatingHtml":"<tr><td>DouBan Rating:</td><td><a href=\\"{link}\\" target=\\"_blank\\" rel=\\"noreferrer\\" title=\\"豆瓣评分 {votes}人评价\\" style=\\"color:darkorange\\">{score}</a></td></tr>","replaceOverview":".IMDBtable tr:has(td:contains(\\"Plot:\\")) > td + td","addLinkButtonAfter":".IMDBtable tr:has(td:contains(\\"Link:\\")) a","addLinkButtonHtml":" <a href=\\"redir.php?{link}\\" style=\\"color:darkorange\\">{link}</a>","listPage":{"path":"^/browse\\\\.php$","titleLink":"a[href*=\\"/details.php?id=\\"]","row":"tr","idPattern":"[?&]id=(\\\\d+)","titleAttr":"output","popupTheme":"card"}},"tgx.rs":{"url":"https://tgx.rs","host":"tgx.rs","siteName":"TorrentGalaxy","poster":"#covercell img","imdb":"#imdbpage[href*=\\"imdb.com/title\\"]","titleDom":".torrentpagetable.limitwidth:first a.textshadow","insertDomSelector":".buttonbox","doubanContainerDom":"<div class=\\"douban-dom\\" style=\\"display:flex;justify-content: center;\\"></div>"},"www.torrentleech.org":{"url":"https://www.torrentleech.org","host":"torrentleech.org","siteName":"IPT","imdb":".imdb-info a[href*=\\"imdb.com/title\\"]","titleDom":"#torrentnameid","poster":".imdb_cover img","insertDomSelector":".torrent-info .torrent-info-details","doubanContainerDom":"<div class=\\"douban-dom\\"></div>"}}');
   const host = location.host;
   let siteInfo = (_a = PT_SITE == null ? void 0 : PT_SITE[host]) != null ? _a : "";
   if (host && host.match(/iptorrents/i)) {
@@ -111,85 +111,109 @@
   const isChinese = (title) => {
     return /[\u4e00-\u9fa5]+/.test(title);
   };
-  const PTP_DOUBAN_RATING_ICON = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><g transform="translate(32 32) scale(0.74) translate(-32 -32)"><g transform="translate(5 -5) rotate(13 32 32)"><rect x="10" y="17" width="44" height="30" rx="4" fill="#009845"/></g><path fill="#007722" d="M12 20h40a4 4 0 0 1 4 4v6a3.6 3.6 0 0 0 0 7.2v6a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4v-6a3.6 3.6 0 0 0 0-7.2v-6a4 4 0 0 1 4-4z"/><text x="32" y="41.2" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="18" font-weight="700" fill="#ffffff" letter-spacing="1">豆瓣</text></g></svg>'
-)}`;
+  const PTP_DOUBAN_RATING_ICON = "data:image/svg+xml,".concat(encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64"><g transform="translate(32 32) scale(0.74) translate(-32 -32)"><g transform="translate(5 -5) rotate(13 32 32)"><rect x="10" y="17" width="44" height="30" rx="4" fill="#009845"/></g><path fill="#007722" d="M12 20h40a4 4 0 0 1 4 4v6a3.6 3.6 0 0 0 0 7.2v6a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4v-6a3.6 3.6 0 0 0 0-7.2v-6a4 4 0 0 1 4-4z"/><text x="32" y="41.2" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="18" font-weight="700" fill="#ffffff" letter-spacing="1">豆瓣</text></g></svg>'
+  ));
   const addToPtpPage = (data) => {
     console.log(data);
-    $(".page__title").prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
+    $(".page__title").prepend("<a target='_blank' href=\"".concat(data.link, '">[').concat(data.chineseTitle, "] </a>"));
     dedupePrependedTitle(".page__title", data.chineseTitle);
-    if (data.summary) {
-      const synopsisDom = `
-    <div class="panel" id="douban-synopsis">
-    <div class="panel__heading"><span class="panel__heading__title">中文简介</span></div>
-    <div class="panel__body">
-          <div id="synopsis">${data.summary}</div>
-    </div>
-    </div>`;
-      $("#synopsis-and-trailer,#request-table").after(synopsisDom);
+    if (hasChineseText(data.summary)) {
+      $("#synopsis-and-trailer #synopsis").text(data.summary);
     }
-    $("#movieinfo").before(`
-    <div class="panel">
-    <div class="panel__heading"><span class="panel__heading__title">电影信息</span></div>
-    <div class="panel__body">
-    <div><strong>导演:</strong> ${data.director}</div>
-    <div><strong>类型:</strong> ${data.genre}</div>
-    <div><strong>制片国家/地区:</strong> ${data.region}</div>
-    <div><strong>语言:</strong> ${data.language}</div>
-    <div><strong>时长:</strong> ${data.runtime}</div>
-    <div><strong>又名:</strong>  ${data.aka}</div
-    </div>`);
+    $("#movieinfo").before('\n    <div class="panel">\n    <div class="panel__heading"><span class="panel__heading__title">电影信息</span></div>\n    <div class="panel__body">\n    <div><strong>导演:</strong> '.concat(data.director, "</div>\n    <div><strong>类型:</strong> ").concat(data.genre, "</div>\n    <div><strong>制片国家/地区:</strong> ").concat(data.region, "</div>\n    <div><strong>语言:</strong> ").concat(data.language, "</div>\n    <div><strong>时长:</strong> ").concat(data.runtime, "</div>\n    <div><strong>又名:</strong>  ").concat(data.aka, "</div\n    </div>"));
     if (data.average) {
       const votesText = data.votes ? Number(data.votes).toLocaleString("en-US") : "";
       $("#movie-ratings-table tr").prepend(
-        `<td colspan="1" style="width: 63px;"><center><a target="_blank" class="rating" href="${data.link}" rel="noreferrer"><img src="${PTP_DOUBAN_RATING_ICON}" style="height:64px;width:64px;" title="Douban"></a></center></td>
-    <td style="width: 90px;"><span class="rating">${data.average}</span> <span class="mid">/</span> <span class="outof"> 10</span><br>(${votesText} votes)</td>`
+        '<td colspan="1" style="width: 63px;"><center><a target="_blank" class="rating" href="'.concat(data.link, '" rel="noreferrer"><img src="').concat(PTP_DOUBAN_RATING_ICON, '" style="height:64px;width:64px;" title="Douban"></a></center></td>\n    <td style="width: 90px;"><span class="rating">').concat(data.average, '</span> <span class="mid">/</span> <span class="outof"> 10</span><br>(').concat(votesText, " votes)</td>")
       );
     }
     $(".main-column").prepend($("#movie-ratings-table").parent());
+    normalizePtpRatingsTable();
+    addPtpGroupNames();
+  };
+  const normalizePtpRatingsTable = () => {
+    const $row = $("#movie-ratings-table tr:first");
+    if (!$row.length) {
+      return;
+    }
+    const cells = Array.from($row.children("td"));
+    const starIndex = cells.findIndex((cell) => cell.id === "ptp_rating_td");
+    const external = starIndex > 0 ? cells.slice(0, starIndex) : cells.slice(0, Math.max(0, cells.length - 2));
+    const pairs = [];
+    let iconWidth = 0;
+    let valueWidth = 0;
+    for (let i = 0; i + 1 < external.length; i += 2) {
+      const icon = external[i];
+      const value = external[i + 1];
+      if (!icon.querySelector("img") || value.querySelector("img") || !value.querySelector(".rating")) {
+        break;
+      }
+      pairs.push([icon, value]);
+      iconWidth = Math.max(iconWidth, cellWidth($(icon)));
+      valueWidth = Math.max(valueWidth, cellWidth($(value)));
+    }
+    if (!pairs.length || !iconWidth || !valueWidth) {
+      return;
+    }
+    pairs.forEach(([icon, value]) => {
+      icon.style.width = "".concat(iconWidth, "px");
+      value.style.width = "".concat(valueWidth, "px");
+    });
+  };
+  const cellWidth = ($cell) => {
+    var _a2, _b2;
+    return parseFloat((_b2 = (_a2 = $cell[0]) == null ? void 0 : _a2.style) == null ? void 0 : _b2.width) || $cell.width() || 0;
+  };
+  const addPtpGroupNames = () => {
+    const table = document.querySelector("#torrent-table");
+    if (table && typeof MutationObserver === "function" && !table.dataset.groupObserver) {
+      table.dataset.groupObserver = "1";
+      let timer = null;
+      new MutationObserver(() => {
+        clearTimeout(timer);
+        timer = setTimeout(() => addPtpGroupNames(), 300);
+      }).observe(table, { childList: true, subtree: true });
+    }
+    $("#torrent-table a.torrent-info-link:not([data-group-name])").each(function() {
+      const $link = $(this);
+      const onclick = $link.attr("onclick") || "";
+      const groupFromRow = String($link.parent().parent().data("releasegroup") || "").trim();
+      let groupname = groupFromRow || groupFromTorrentId((onclick.match(/#torrent_(\d+)/) || [])[1] || "");
+      if (!groupname && $link.text().split(" / ").includes("TBB")) {
+        $link.html((index, html) => html.replace(" / TBB", ""));
+        groupname = "TBB";
+      }
+      if (groupname) {
+        $link.attr("data-group-name", groupname).append(" / ").append('<span style="font-weight:bold">'.concat(groupname, "</span>"));
+      }
+    });
+  };
+  const GROUP_FROM_FILENAME = /[-_]([A-Za-z0-9_[\]]{2,})\.(?:mkv|mp4|avi|m2ts|ts|vob|iso|mov|wmv|mpg|mpeg|flac|srt|idx|sub|ass|sup)$/i;
+  const groupFromTorrentId = (torrentId) => {
+    var _a2, _b2;
+    if (!torrentId) {
+      return "";
+    }
+    const infoRow = document.getElementById("torrent_".concat(torrentId));
+    if (!infoRow) {
+      return "";
+    }
+    const fileName = ((_b2 = (_a2 = infoRow.querySelector("#files_".concat(torrentId, " td"))) == null ? void 0 : _a2.textContent) == null ? void 0 : _b2.trim()) || (infoRow.textContent.match(/Complete name\s*:\s*(\S+)/) || [])[1] || "";
+    return (fileName.match(GROUP_FROM_FILENAME) || [])[1] || "";
   };
   const addToANTPage = (data) => {
     console.log(data);
-    $(".header h2").prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
+    $(".header h2").prepend("<a target='_blank' href=\"".concat(data.link, '">[').concat(data.chineseTitle, "] </a>"));
     dedupePrependedTitle(".header h2", data.chineseTitle);
     if (data.summary) {
-      const synopsisDom = `
-    <div class="box torrent_description">
-      <div class="head"><a href="#">↑</a>&nbsp;<strong>中文简介</strong></div>
-      <div class="body" style="text-align:justify">${data.summary}</div>
-    </div>`;
+      const synopsisDom = '\n    <div class="box torrent_description">\n      <div class="head"><a href="#">↑</a>&nbsp;<strong>中文简介</strong></div>\n      <div class="body" style="text-align:justify">'.concat(data.summary, "</div>\n    </div>");
       $(".torrent_description,.box_request_desc").after(synopsisDom);
     }
-    $(".box_details:first").before(`
-    <div class="box box_details">
-      <div class="head"><strong></strong>电影信息</div>
-      <div class="pad">
-        <ul class="stats nobullet">
-          <li><strong>导演:</strong> ${data.director}</li>
-          <li><strong>类型:</strong> ${data.genre}</li>
-          <li><strong>制片国家/地区:</strong> ${data.region}</li>
-          <li><strong>语言:</strong> ${data.language}</li>
-          <li><strong>时长:</strong> ${data.runtime}</li>
-          <li><strong>又名:</strong>  ${data.aka}</li
-      </ul>
-      </div>    
-    </div>`);
+    $(".box_details:first").before('\n    <div class="box box_details">\n      <div class="head"><strong></strong>电影信息</div>\n      <div class="pad">\n        <ul class="stats nobullet">\n          <li><strong>导演:</strong> '.concat(data.director, "</li>\n          <li><strong>类型:</strong> ").concat(data.genre, "</li>\n          <li><strong>制片国家/地区:</strong> ").concat(data.region, "</li>\n          <li><strong>语言:</strong> ").concat(data.language, "</li>\n          <li><strong>时长:</strong> ").concat(data.runtime, "</li>\n          <li><strong>又名:</strong>  ").concat(data.aka, "</li\n      </ul>\n      </div>    \n    </div>"));
     if (data.average) {
       $(".box.torrent_ratings .body tr").prepend(
-        `<td colspan="1">
-      <center>
-        <a target="_blank" class="rating ant" href="${data.link}" rel="noreferrer">
-          <div style="font-size: 0;">
-            <span class="icon-pt1">豆</span>
-          </div>
-        </a>
-      </center>
-    </td>
-    <td>
-      <span class="rating">${data.average}</span>
-      <span class="mid">/</span>
-      <span class="outof"> 10</span>
-      <br>(${data.votes} votes)</td>`
+        '<td colspan="1">\n      <center>\n        <a target="_blank" class="rating ant" href="'.concat(data.link, '" rel="noreferrer">\n          <div style="font-size: 0;">\n            <span class="icon-pt1">豆</span>\n          </div>\n        </a>\n      </center>\n    </td>\n    <td>\n      <span class="rating">').concat(data.average, '</span>\n      <span class="mid">/</span>\n      <span class="outof"> 10</span>\n      <br>(').concat(data.votes, " votes)</td>")
       );
     }
     $(".main_column").prepend($(".box.torrent_ratings"));
@@ -201,7 +225,7 @@
     if (typeof imdbConfig === "object") {
       try {
         Object.keys(imdbConfig).forEach((key) => {
-          if ($(`${imdbConfig[key]}`)[0]) {
+          if ($("".concat(imdbConfig[key]))[0]) {
             imdbLink = $(imdbConfig[key]).attr("href");
             throw new Error("end loop");
           }
@@ -264,7 +288,7 @@
     }
   };
   const fetchDoubanApi = (path) => {
-    return fetch(`${DOUBAN_API_URL}${path}`, {
+    return fetch("".concat(DOUBAN_API_URL).concat(path), {
       data: encodeURI("apikey=0ab215a8b1977939201640fa14c66bab"),
       method: "POST",
       headers: {
@@ -294,18 +318,18 @@
       return "十";
     }
     if (value < 20) {
-      return `十${digits[value - 10]}`;
+      return "十".concat(digits[value - 10]);
     }
     const tens = digits[Math.floor(value / 10)];
     const ones = value % 10 ? digits[value % 10] : "";
-    return `${tens}十${ones}`;
+    return "".concat(tens, "十").concat(ones);
   };
   const matchSeasonSubject = (subjects, chineseTitle, seasonNumber, strict = true) => {
     const cnSeason = numberToChinese(seasonNumber);
     const seasonMarkers = [
-      `第${seasonNumber}季`,
-      cnSeason ? `第${cnSeason}季` : "",
-      `season ${seasonNumber}`
+      "第".concat(seasonNumber, "季"),
+      cnSeason ? "第".concat(cnSeason, "季") : "",
+      "season ".concat(seasonNumber)
     ].filter(Boolean);
     const nameHit = (subject) => {
       const title = subject.title || "";
@@ -331,10 +355,10 @@
       if (parseInt(seasonNumber) === 1) {
         return data;
       } else {
-        const query = `${chineseTitle} 第${seasonNumber}季`;
+        const query = "".concat(chineseTitle, " 第").concat(seasonNumber, "季");
         let subjects = [];
         try {
-          const searchData = await fetchDoubanApi(`/search?q=${query}`);
+          const searchData = await fetchDoubanApi("/search?q=".concat(query));
           if (searchData.count > 0) {
             subjects = searchData.subjects;
           }
@@ -344,7 +368,7 @@
         let subject = matchSeasonSubject(subjects, chineseTitle, seasonNumber);
         if (!subject) {
           try {
-            const suggestData = await fetch(`${DOUBAN_SUGGEST_API_URL}?q=${encodeURIComponent(query)}`, {
+            const suggestData = await fetch("".concat(DOUBAN_SUGGEST_API_URL, "?q=").concat(encodeURIComponent(query)), {
               responseType: "json"
             });
             if (Array.isArray(suggestData) && suggestData.length > 0) {
@@ -390,7 +414,7 @@
   };
   const getSubjectTitle = async (doubanId) => {
     try {
-      const { title = "" } = await fetchDoubanApi(`/subject/${doubanId}`);
+      const { title = "" } = await fetchDoubanApi("/subject/".concat(doubanId));
       return isChinese(title) ? title.replace(/\s*第.+?季$/, "") : "";
     } catch (error) {
       console.log(error);
@@ -400,7 +424,7 @@
   const getDoubanInfoByIMDB = async (imdbId) => {
     var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i, _j, _k;
     try {
-      const doubanData = await fetchDoubanApi(`/imdb/${imdbId}`);
+      const doubanData = await fetchDoubanApi("/imdb/".concat(imdbId));
       const { title = "", attrs = {}, image = "", summary = "", rating = {}, alt_title: altTitle, mobile_link: mobileLink } = doubanData;
       if (!mobileLink) {
         throw new Error("豆瓣API未返回条目");
@@ -442,7 +466,7 @@
   };
   const getDoubanInfoBySubject = async (doubanId) => {
     try {
-      const doubanData = await fetchDoubanApi(`/subject/${doubanId}`);
+      const doubanData = await fetchDoubanApi("/subject/".concat(doubanId));
       if (!(doubanData == null ? void 0 : doubanData.id)) {
         throw new Error("豆瓣API未返回条目");
       }
@@ -464,7 +488,7 @@
         genre: genres.join(" / "),
         aka: aka.join(" / "),
         region: countries.join(" / "),
-        link: `https://movie.douban.com/subject/${doubanData.id}`,
+        link: "https://movie.douban.com/subject/".concat(doubanData.id),
         poster: getLargePoster(images.large),
         summary,
         chineseTitle: title,
@@ -504,7 +528,7 @@
     const votes = jsonData.aggregateRating ? jsonData.aggregateRating.ratingCount : 0;
     const director = jsonData.director ? jsonData.director : [];
     const poster = getLargePoster(jsonData.image);
-    const link = `https://movie.douban.com${jsonData.url}`;
+    const link = "https://movie.douban.com".concat(jsonData.url);
     const introductionDom = $('#link-report > span.all.hidden,#link-report-intra > [property="v:summary"], #link-report > [property="v:summary"]', dom);
     const summary = (introductionDom.length > 0 ? introductionDom.text() : "暂无相关剧情介绍").split("\n").map((a) => a.trim()).filter((a) => a.length > 0).join("\n");
     const genre = $('#info span[property="v:genre"]', dom).map(function() {
@@ -567,8 +591,8 @@
       insertDomSelector = $(insertDomSelector).parent();
     }
     $(insertDomSelector).before(doubanContainerDom);
-    const doubanLink = link || `https://movie.douban.com/subject/${doubanId}`;
-    let htmlData = await fetch(`${doubanLink}/output_card`, {
+    const doubanLink = link || "https://movie.douban.com/subject/".concat(doubanId);
+    let htmlData = await fetch("".concat(doubanLink, "/output_card"), {
       responseType: "text"
     });
     htmlData = htmlData.replace(/wrapper/g, "douban-wrapper").replace(/<script.+?script>/g, "");
@@ -579,17 +603,12 @@
     div.insertAdjacentHTML("beforeend", headDom);
     div.insertAdjacentHTML("beforeend", bodyDom);
     $(".douban-dom").append(div).attr("douban-link", doubanLink);
-    $(".douban-dom .grid-col4").after(`
-  <div class="fix-col grid-col3">
-  <div class="line-wrap">
-  </div>
-  </div>
-  <div class="fix-col grid-col5"></div>`);
+    $(".douban-dom .grid-col4").after('\n  <div class="fix-col grid-col3">\n  <div class="line-wrap">\n  </div>\n  </div>\n  <div class="fix-col grid-col5"></div>');
     const doubanData = doubanInfo || await getDoubanInfo(doubanId, imdbId);
-    $(".douban-dom .grid-col5").html(`<div class="summary">${(doubanData == null ? void 0 : doubanData.summary) || "暂无简介"}</div>`);
+    $(".douban-dom .grid-col5").html('<div class="summary">'.concat((doubanData == null ? void 0 : doubanData.summary) || "暂无简介", "</div>"));
     let posterStyle = $(".picture-douban-wrapper").attr("style");
     const posterImg = (doubanData == null ? void 0 : doubanData.poster) || $(poster).attr("src") || "";
-    posterStyle = posterStyle == null ? void 0 : posterStyle.replace(/\(.+\)/, `(${posterImg})`);
+    posterStyle = posterStyle == null ? void 0 : posterStyle.replace(/\(.+\)/, "(".concat(posterImg, ")"));
     $(".picture-douban-wrapper").attr("style", posterStyle);
     $(".douban-dom").click(() => {
       GM_openInTab(doubanLink);
@@ -619,8 +638,8 @@
     const airedYear = airedRow && airedRow.textContent.match(/\b(?:19|20)\d{2}\b/);
     const year = airedYear && airedYear[0] || titleYear && titleYear[1] || "";
     const titleDuplicated = isSameTitle(chineseTitle, nativeTitle);
-    const titleText = titleDuplicated && year && !matchTrailingYear(chineseTitle) ? `${chineseTitle} (${year})` : chineseTitle;
-    const titleHtml = addTitleLineHtml.replace(/\{link\}/g, doubanLink).replace(/\{title\}/g, titleText).replace(/\{nativeTitle\}/g, titleDuplicated ? "" : year ? `${nativeTitle} (${year})` : nativeTitle).replace(/\s+<\/a>/, "</a>");
+    const titleText = titleDuplicated && year && !matchTrailingYear(chineseTitle) ? "".concat(chineseTitle, " (").concat(year, ")") : chineseTitle;
+    const titleHtml = addTitleLineHtml.replace(/\{link\}/g, doubanLink).replace(/\{title\}/g, titleText).replace(/\{nativeTitle\}/g, titleDuplicated ? "" : year ? "".concat(nativeTitle, " (").concat(year, ")") : nativeTitle).replace(/\s+<\/a>/, "</a>");
     const wrapper = document.createElement("div");
     wrapper.innerHTML = titleHtml;
     host2.parentNode.insertBefore(wrapper.firstChild, host2.nextSibling);
@@ -646,7 +665,7 @@
     }
     const li = document.createElement("li");
     li.className = "ui-state-default ui-corner-left";
-    li.innerHTML = `<a href="#${panelId}" target="_self" title="豆瓣简介"><img src="${addSummaryTabIcon}" width="17" height="17" alt="Douban"></a>`;
+    li.innerHTML = '<a href="#'.concat(panelId, '" target="_self" title="豆瓣简介"><img src="').concat(addSummaryTabIcon, '" width="17" height="17" alt="Douban"></a>');
     nav.insertBefore(li, nav.firstChild);
     const panel = document.createElement("div");
     panel.id = panelId;
@@ -705,7 +724,7 @@
     if (!link || !year || matchTrailingYear(link.textContent)) {
       return;
     }
-    link.appendChild(document.createTextNode(` (${year[1]})`));
+    link.appendChild(document.createTextNode(" (".concat(year[1], ")")));
   };
   const dedupeTitleHtml = (titleHtml, siteTitleText) => {
     const holder = document.createElement("div");
@@ -778,7 +797,7 @@
     if (addTitleHtml && chineseTitle) {
       const yearSource = addTitleYearFrom ? $(addTitleYearFrom).first().text() : "";
       const yearMatched = yearSource.match(/\b(?:19|20)\d{2}\b/);
-      const titleHtml = addTitleHtml.replace(/\{link\}/g, titleLink).replace(/\{title\}/g, chineseTitle).replace(/\{year\}/g, yearMatched ? ` (${yearMatched[0]})` : "");
+      const titleHtml = addTitleHtml.replace(/\{link\}/g, titleLink).replace(/\{title\}/g, chineseTitle).replace(/\{year\}/g, yearMatched ? " (".concat(yearMatched[0], ")") : "");
       const siteTitleText = $(addTitleInside || addTitleAfter || addTitleBefore).first().text();
       const { html: mergedTitleHtml, duplicated } = dedupeTitleHtml(titleHtml, siteTitleText);
       if (addTitleInside) {
@@ -803,9 +822,9 @@
             }
           } else if (titleParent) {
             if (yearMatched2) {
-              lastText.textContent = `${yearMatched2[1].replace(/\s+$/, "")} `;
+              lastText.textContent = "".concat(yearMatched2[1].replace(/\s+$/, ""), " ");
               titleParent.insertBefore(link, lastText.nextSibling);
-              titleParent.insertBefore(document.createTextNode(` ${yearMatched2[2].trim()}`), link.nextSibling);
+              titleParent.insertBefore(document.createTextNode(" ".concat(yearMatched2[2].trim())), link.nextSibling);
             } else {
               let after = lastText;
               if (!/\s$/.test(lastText.textContent)) {
@@ -860,7 +879,7 @@
           }
         }
         if (node) {
-          node.textContent = ` ${summary} `;
+          node.textContent = " ".concat(summary, " ");
           replaced = true;
         }
       }
@@ -915,11 +934,11 @@
         if (ratingSourceLabel) {
           const $icon = $rating.find("img").first();
           if ($icon.length) {
-            $icon.after(` ${ratingSourceLabel}`);
+            $icon.after(" ".concat(ratingSourceLabel));
           }
         }
-        const scorePercent = /^\d+(?:\.\d+)?$/.test(String(score)) ? `${Math.round(parseFloat(score) * 10)}%` : "0%";
-        const scoreWidth = /^\d+(?:\.\d+)?$/.test(String(score)) ? `${Math.round(parseFloat(score) * 20)}px` : "0px";
+        const scorePercent = /^\d+(?:\.\d+)?$/.test(String(score)) ? "".concat(Math.round(parseFloat(score) * 10), "%") : "0%";
+        const scoreWidth = /^\d+(?:\.\d+)?$/.test(String(score)) ? "".concat(Math.round(parseFloat(score) * 20), "px") : "0px";
         let ratingHtml = replaceRatingHtml.replace(/\{link\}/g, doubanLink).replace(/\{score\}/g, score).replace(/\{scorePercent\}/g, scorePercent).replace(/\{scoreWidth\}/g, scoreWidth).replace(/\{votesComma\}/g, votesComma);
         if (starFullHtml && starEmptyHtml) {
           const fullStars = Math.max(0, Math.min(10, Math.round(parseFloat(score))));
@@ -1055,63 +1074,63 @@
       return fetchDoubanListApi(path, false, detailGate);
     }
   };
-  const RELEASE_TECH_PATTERN = new RegExp(`\\b(?:${[
-  "Blu-?Ray",
-  "BRRip",
-  "BDRip",
-  "DVDRip",
-  "DVD",
-  "HDTV",
-  "PDTV",
-  "WEB-?DL",
-  "WEB-?Rip",
-  "REMUX",
-  "UHD",
-  "HDRip",
-  "HDRIp",
-  "PROPER",
-  "REPACK",
-  "COMPLETE",
-  "AMZN",
-  "NF",
-  "HULU",
-  "DSNP",
-  "ATVP",
-  "HMAX",
-  "CRAV",
-  "PCOK",
-  "iTunes",
-  "HEVC",
-  "AVC",
-  "x26[45]",
-  "H26[45]",
-  "VC-?1",
-  "TrueHD",
-  "DTS(?:-HD)?(?: ?MA)?",
-  "DDP\\d?",
-  "DD\\+?",
-  "Atmos",
-  "FLAC",
-  "AAC",
-  "EAC3",
-  "LPCM",
-  "OPUS",
-  "HDR\\d*\\+?",
-  "Do?Vi(?:sion)?\\d*",
-  "DV\\d*",
-  "SDR",
-  "10bit",
-  "8bit",
-  // 分辨率只列真实出现过的档位（不按任意四位数匹配，避免吃掉片名里的 2049 这类数字），
-  // 后缀 p/i 可选：HDS 写的是不带后缀的 2160
-  "(?:480|576|720|1080|2160|4320)[pi]?",
-  "\\d+x\\d+",
-  // 混合版（HDT 的固定标签）；EXTENDED 这类版本词不列，片名本身可能带这些词
-  "HYBRID",
-  "[48]K",
-  "S\\d{1,3}(?:E\\d{1,3})?(?:-E?\\d{1,3})?",
-  "E\\d{1,3}"
-].join("|")})`, "i");
+  const RELEASE_TECH_PATTERN = new RegExp("\\b(?:".concat([
+    "Blu-?Ray",
+    "BRRip",
+    "BDRip",
+    "DVDRip",
+    "DVD",
+    "HDTV",
+    "PDTV",
+    "WEB-?DL",
+    "WEB-?Rip",
+    "REMUX",
+    "UHD",
+    "HDRip",
+    "HDRIp",
+    "PROPER",
+    "REPACK",
+    "COMPLETE",
+    "AMZN",
+    "NF",
+    "HULU",
+    "DSNP",
+    "ATVP",
+    "HMAX",
+    "CRAV",
+    "PCOK",
+    "iTunes",
+    "HEVC",
+    "AVC",
+    "x26[45]",
+    "H26[45]",
+    "VC-?1",
+    "TrueHD",
+    "DTS(?:-HD)?(?: ?MA)?",
+    "DDP\\d?",
+    "DD\\+?",
+    "Atmos",
+    "FLAC",
+    "AAC",
+    "EAC3",
+    "LPCM",
+    "OPUS",
+    "HDR\\d*\\+?",
+    "Do?Vi(?:sion)?\\d*",
+    "DV\\d*",
+    "SDR",
+    "10bit",
+    "8bit",
+    // 分辨率只列真实出现过的档位（不按任意四位数匹配，避免吃掉片名里的 2049 这类数字），
+    // 后缀 p/i 可选：HDS 写的是不带后缀的 2160
+    "(?:480|576|720|1080|2160|4320)[pi]?",
+    "\\d+x\\d+",
+    // 混合版（HDT 的固定标签）；EXTENDED 这类版本词不列，片名本身可能带这些词
+    "HYBRID",
+    "[48]K",
+    "S\\d{1,3}(?:E\\d{1,3})?(?:-E?\\d{1,3})?",
+    "E\\d{1,3}"
+  ].join("|"), ")"), "i");
   const RELEASE_SEASON_PATTERN = /S(\d{1,3})(?:[-\s]?E(\d{1,4})(?:[-\s]?E\d{1,3})*)?(?![a-z0-9])|Season\s+(\d{1,3})(?:\s+Episode\s+(\d{1,3}))?/i;
   const stripSeasonSuffix = (title) => (title || "").replace(/\s*第[一二三四五六七八九十百\d]+季.*$/, "").trim();
   const isSpecialSubject = (item) => /特典|OVA|特別篇|特别篇|短片|饭制|花絮/.test(item.title || "");
@@ -1165,7 +1184,7 @@
       return cached.subjects;
     }
     try {
-      const data = await fetchDoubanListApi(`/search?q=${encodeURIComponent(query)}`);
+      const data = await fetchDoubanListApi("/search?q=".concat(encodeURIComponent(query)));
       const subjects = ((_a2 = data == null ? void 0 : data.subjects) != null ? _a2 : []).map((item) => {
         var _a3, _b2, _c2;
         const posterUrl = ((_a3 = item.images) == null ? void 0 : _a3.large) || ((_b2 = item.images) == null ? void 0 : _b2.medium) || ((_c2 = item.images) == null ? void 0 : _c2.small) || "";
@@ -1182,7 +1201,7 @@
       }).filter((item) => item.id);
       subjects.forEach((item) => {
         if (item.poster) {
-          cache[`poster:${item.id}`] = { poster: item.poster, raw: item.posterRaw, updateTime: Date.now() };
+          cache["poster:".concat(item.id)] = { poster: item.poster, raw: item.posterRaw, updateTime: Date.now() };
         }
       });
       cache[query] = { subjects, updateTime: Date.now() };
@@ -1199,19 +1218,19 @@
       return null;
     }
     const cache = getListSearchCache();
-    const cacheKey = `detail:${doubanId}`;
+    const cacheKey = "detail:".concat(doubanId);
     const cached = cache[cacheKey];
     const applyTmdb = async (detail) => detail ? mergeListSubject(detail, imdbId, release) : detail;
     if (cached && Date.now() - cached.updateTime < LIST_CACHE_EXPIRE_TIME) {
       return applyTmdb(cached.detail);
     }
     try {
-      const data = await fetchDoubanListApi(`/subject/${doubanId}`, true, detailGate);
+      const data = await fetchDoubanListApi("/subject/".concat(doubanId), true, detailGate);
       if (!data || !data.id && !data.title) {
         return null;
       }
       const images = data.images || {};
-      const cachedPoster = cache[`poster:${doubanId}`] || {};
+      const cachedPoster = cache["poster:".concat(doubanId)] || {};
       const posterUrl = images.large || images.medium || images.small || cachedPoster.raw || cachedPoster.poster || "";
       const detail = {
         title: data.title || "",
@@ -1239,13 +1258,13 @@
   const getSubjectByImdb = async (imdbId) => {
     var _a2;
     const cache = getListSearchCache();
-    const cacheKey = `imdb:${imdbId}`;
+    const cacheKey = "imdb:".concat(imdbId);
     const cached = cache[cacheKey];
     if (cached && Date.now() - cached.updateTime < LIST_CACHE_EXPIRE_TIME) {
       return cached.subject;
     }
     try {
-      const { id: idUrl } = await fetchDoubanListApi(`/imdb/${imdbId}`);
+      const { id: idUrl } = await fetchDoubanListApi("/imdb/".concat(imdbId));
       const doubanId = (_a2 = String(idUrl || "").match(/(?:movie|subject)\/(\d+)/)) == null ? void 0 : _a2[1];
       if (!doubanId) {
         return null;
@@ -1282,7 +1301,7 @@
       const normalized = normalizeTitle(original);
       return normalized.length >= 2 && normalized === name || aliasNames.includes(normalized);
     };
-    const seasonMarkers = release.season ? [`第${release.season}季`, `第${numberToChinese(release.season)}季`] : [];
+    const seasonMarkers = release.season ? ["第".concat(release.season, "季"), "第".concat(numberToChinese(release.season), "季")] : [];
     const seasonHit = (item) => seasonMarkers.some((marker) => (item.title || "").includes(marker));
     const kindHit = (item) => release.season ? item.subtype !== "movie" : item.subtype !== "tv";
     const nameRelated = (item) => {
@@ -1350,7 +1369,7 @@
     const hitSeason = (_c2 = (_b2 = (subject.title || "").match(/第(.+?)季/)) == null ? void 0 : _b2[1]) != null ? _c2 : "";
     if (release.season > 1 && hitSeason && hitSeason !== String(release.season) && hitSeason !== numberToChinese(release.season)) {
       const seasonSubject = pickListSubject(
-        await searchDoubanSubjects(`${stripSeasonSuffix(subject.title)} 第${release.season}季`),
+        await searchDoubanSubjects("".concat(stripSeasonSuffix(subject.title), " 第").concat(release.season, "季")),
         release
       );
       if (seasonSubject && isSameListSubject(seasonSubject, subject)) {
@@ -1380,18 +1399,18 @@
   const formatListTitle = (subject, release, episodeCount = 0) => {
     const baseTitle = stripSeasonSuffix(subject.title);
     const year = release.year || subject.year || "";
-    const yearText = year ? ` (${year})` : "";
+    const yearText = year ? " (".concat(year, ")") : "";
     if (!release.season) {
-      return `${baseTitle}${yearText}`;
+      return "".concat(baseTitle).concat(yearText);
     }
-    const seasonText = `第${numberToChinese(release.season)}季`;
+    const seasonText = "第".concat(numberToChinese(release.season), "季");
     if (release.episode) {
-      return `${baseTitle} ${seasonText} 第${release.episode}集${yearText}`;
+      return "".concat(baseTitle, " ").concat(seasonText, " 第").concat(release.episode, "集").concat(yearText);
     }
     if (episodeCount > 0) {
-      return `${baseTitle} ${seasonText} 全${episodeCount}集${yearText}`;
+      return "".concat(baseTitle, " ").concat(seasonText, " 全").concat(episodeCount, "集").concat(yearText);
     }
-    return `${baseTitle} ${seasonText}${yearText}`;
+    return "".concat(baseTitle, " ").concat(seasonText).concat(yearText);
   };
   const LIST_POPUP_SHOW_DELAY = 700;
   const LIST_POPUP_HIDE_DELAY = 400;
@@ -1423,8 +1442,8 @@
     if (popupTop - window.scrollY < 0) {
       popupTop = top + (((_a2 = link.closest("tr")) == null ? void 0 : _a2.offsetHeight) || rect.height) - 12;
     }
-    node.style.top = `${popupTop}px`;
-    node.style.left = `${Math.max(rect.left + window.scrollX - LIST_POPUP_OFFSET_LEFT, 0)}px`;
+    node.style.top = "".concat(popupTop, "px");
+    node.style.left = "".concat(Math.max(rect.left + window.scrollX - LIST_POPUP_OFFSET_LEFT, 0), "px");
   };
   const getListPopup = () => {
     if (!listPopup.node || !document.body.contains(listPopup.node)) {
@@ -1452,36 +1471,26 @@
   };
   const buildCardPopupHtml = (detail, doubanUrl) => {
     const url = escapeListHtml(doubanUrl);
-    const ratingBar = detail.rating ? `<div class="douban-card-head"><span class="douban-card-rating" title="豆瓣评分"><span class="douban-card-star">&#9733;</span> ${detail.rating.toFixed(1)}</span></div>` : '<div class="douban-card-head"></div>';
-    const posterCell = detail.poster ? `<div class="douban-list-poster-cell douban-card-poster-cell"><a href="${url}" target="_blank" rel="noreferrer"><img class="douban-list-poster" src="${escapeListHtml(detail.poster)}" referrerpolicy="unsafe-url" style="width: 110px !important; height: 164px !important; object-fit: cover; border-radius: 5px;"></a></div>` : "";
-    const year = detail.year ? `<span class="douban-card-year">(${escapeListHtml(detail.year)})</span>` : "";
-    const summary = detail.summary ? `<div class="douban-card-summary">${escapeListHtml(detail.summary)}</div>` : "";
-    const countries = detail.countries.length ? `<div class="douban-card-countries">${detail.countries.map((country) => escapeListHtml(country)).join('<span class="douban-card-sep">|</span>')}</div>` : "";
-    const genres = detail.genres.map((genre) => `<span class="douban-card-genre">${escapeListHtml(genre)}</span>`).join("");
-    return `${ratingBar}<div class="douban-card-body">${posterCell}<div class="douban-card-info">
-<div class="douban-card-title-line"><a class="douban-card-title" href="${url}" target="_blank" rel="noreferrer">${escapeListHtml(detail.title)}</a>${year}</div>
-<div class="douban-card-rule"></div>
-${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div>`;
+    const ratingBar = detail.rating ? '<div class="douban-card-head"><span class="douban-card-rating" title="豆瓣评分"><span class="douban-card-star">&#9733;</span> '.concat(detail.rating.toFixed(1), "</span></div>") : '<div class="douban-card-head"></div>';
+    const posterCell = detail.poster ? '<div class="douban-list-poster-cell douban-card-poster-cell"><a href="'.concat(url, '" target="_blank" rel="noreferrer"><img class="douban-list-poster" src="').concat(escapeListHtml(detail.poster), '" referrerpolicy="unsafe-url" style="width: 110px !important; height: 164px !important; object-fit: cover; border-radius: 5px;"></a></div>') : "";
+    const year = detail.year ? '<span class="douban-card-year">('.concat(escapeListHtml(detail.year), ")</span>") : "";
+    const summary = detail.summary ? '<div class="douban-card-summary">'.concat(escapeListHtml(detail.summary), "</div>") : "";
+    const countries = detail.countries.length ? '<div class="douban-card-countries">'.concat(detail.countries.map((country) => escapeListHtml(country)).join('<span class="douban-card-sep">|</span>'), "</div>") : "";
+    const genres = detail.genres.map((genre) => '<span class="douban-card-genre">'.concat(escapeListHtml(genre), "</span>")).join("");
+    return "".concat(ratingBar, '<div class="douban-card-body">').concat(posterCell, '<div class="douban-card-info">\n<div class="douban-card-title-line"><a class="douban-card-title" href="').concat(url, '" target="_blank" rel="noreferrer">').concat(escapeListHtml(detail.title), "</a>").concat(year, '</div>\n<div class="douban-card-rule"></div>\n').concat(summary).concat(countries, '<div class="douban-card-genres">').concat(genres, "</div></div></div>");
   };
   const buildListPopupHtml = (detail, doubanUrl) => {
     if (isCardListPopup()) {
       return buildCardPopupHtml(detail, doubanUrl);
     }
     const url = escapeListHtml(doubanUrl);
-    const ratingRow = detail.rating ? `<div class="hd-table"><div class="bhd-td bhd-w100"><div class="rule-line" style="padding-bottom: 6px; margin-bottom: 12px;"><div class="button-holder"><div class="beta-td beta-w40 text-left"></div><div class="beta-td beta-w60 text-right"><h3 class="description_title class-standard" style="padding: 0; margin: 0; text-transform: uppercase; font-size: 12px;"><span class="badge-meta" title="豆瓣评分"><span class="movie-rating-stars"><i class="fal fa-star"></i></span> ${detail.rating.toFixed(1)}</span></h3></div></div></div></div></div>` : "";
-    const posterCell = detail.poster ? `<div class="beta-td text-left douban-list-poster-cell" style="width: 120px;"><a href="${url}" target="_blank" rel="noreferrer"><img class="douban-list-poster" src="${escapeListHtml(detail.poster)}" referrerpolicy="unsafe-url" style="width: 110px !important; height: 164px !important; object-fit: cover;"></a></div>` : "";
-    const yearCell = detail.year ? `<div class="beta-td text-right"><h3 class="beta-fix-desc-h3" style="margin: 0; padding: 0;"><a class="beta-link-blend" href="${url}" target="_blank" rel="noreferrer" style="text-decoration: none !important; border-bottom: none; font-size: 16px;"><span class="text-bold">${escapeListHtml(detail.year)}</span></a></h3></div>` : "";
-    const summary = detail.summary ? `<a href="${url}" target="_blank" rel="noreferrer" class="beta-link-blend" style="display: block; max-height: 120px; overflow-y: auto;">${escapeListHtml(detail.summary)}</a><div style="margin-top: 12px;"></div>` : "";
-    const countries = detail.countries.length ? `<div class="font-stat">${detail.countries.map((country) => escapeListHtml(country)).join('<span style="margin: auto 6px;">|</span>')}</div>` : "";
-    const genres = detail.genres.map((genre) => `<span class="badge-meta beta-link-blend">${escapeListHtml(genre)}</span>`).join("");
-    return `${ratingRow}<div class="hd-table">${posterCell}<div class="beta-td text-right" style="vertical-align: top; text-align: right;">
-<div class="rule-line" style="text-align: right; width: 95%; margin: auto; padding-bottom: 6px;"><div class="bhd-table" style="width: 100%;">
-<div class="beta-td text-left" style="width: 80%;"><h3 class="beta-fix-desc-h3" style="margin: 0; padding: 0; font-size: 16px;"><a href="${url}" target="_blank" rel="noreferrer" style="color: #ffffff; font-weight: bold !important;"><span class="beta-link-big">${escapeListHtml(detail.title)}</span></a></h3></div>${yearCell}
-</div></div>
-<div style="margin-right: 0; margin-top: 6px; padding-top: 6px;"></div>
-<div style="font-size: 13px; color: #999999; text-align: left; width: 95%; margin: auto;">${summary}${countries}</div></div></div>
-<div class="beta-divider" style="padding-top: 12px; margin-top: 12px; font-size: 13px; margin-left: auto; margin-right: auto;"></div>
-<div style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;">${genres}</div>`;
+    const ratingRow = detail.rating ? '<div class="hd-table"><div class="bhd-td bhd-w100"><div class="rule-line" style="padding-bottom: 6px; margin-bottom: 12px;"><div class="button-holder"><div class="beta-td beta-w40 text-left"></div><div class="beta-td beta-w60 text-right"><h3 class="description_title class-standard" style="padding: 0; margin: 0; text-transform: uppercase; font-size: 12px;"><span class="badge-meta" title="豆瓣评分"><span class="movie-rating-stars"><i class="fal fa-star"></i></span> '.concat(detail.rating.toFixed(1), "</span></h3></div></div></div></div></div>") : "";
+    const posterCell = detail.poster ? '<div class="beta-td text-left douban-list-poster-cell" style="width: 120px;"><a href="'.concat(url, '" target="_blank" rel="noreferrer"><img class="douban-list-poster" src="').concat(escapeListHtml(detail.poster), '" referrerpolicy="unsafe-url" style="width: 110px !important; height: 164px !important; object-fit: cover;"></a></div>') : "";
+    const yearCell = detail.year ? '<div class="beta-td text-right"><h3 class="beta-fix-desc-h3" style="margin: 0; padding: 0;"><a class="beta-link-blend" href="'.concat(url, '" target="_blank" rel="noreferrer" style="text-decoration: none !important; border-bottom: none; font-size: 16px;"><span class="text-bold">').concat(escapeListHtml(detail.year), "</span></a></h3></div>") : "";
+    const summary = detail.summary ? '<a href="'.concat(url, '" target="_blank" rel="noreferrer" class="beta-link-blend" style="display: block; max-height: 120px; overflow-y: auto;">').concat(escapeListHtml(detail.summary), '</a><div style="margin-top: 12px;"></div>') : "";
+    const countries = detail.countries.length ? '<div class="font-stat">'.concat(detail.countries.map((country) => escapeListHtml(country)).join('<span style="margin: auto 6px;">|</span>'), "</div>") : "";
+    const genres = detail.genres.map((genre) => '<span class="badge-meta beta-link-blend">'.concat(escapeListHtml(genre), "</span>")).join("");
+    return "".concat(ratingRow, '<div class="hd-table">').concat(posterCell, '<div class="beta-td text-right" style="vertical-align: top; text-align: right;">\n<div class="rule-line" style="text-align: right; width: 95%; margin: auto; padding-bottom: 6px;"><div class="bhd-table" style="width: 100%;">\n<div class="beta-td text-left" style="width: 80%;"><h3 class="beta-fix-desc-h3" style="margin: 0; padding: 0; font-size: 16px;"><a href="').concat(url, '" target="_blank" rel="noreferrer" style="color: #ffffff; font-weight: bold !important;"><span class="beta-link-big">').concat(escapeListHtml(detail.title), "</span></a></h3></div>").concat(yearCell, '\n</div></div>\n<div style="margin-right: 0; margin-top: 6px; padding-top: 6px;"></div>\n<div style="font-size: 13px; color: #999999; text-align: left; width: 95%; margin: auto;">').concat(summary).concat(countries, '</div></div></div>\n<div class="beta-divider" style="padding-top: 12px; margin-top: 12px; font-size: 13px; margin-left: auto; margin-right: auto;"></div>\n<div style="width: 100%; text-align: right; margin-left: auto; margin-right: auto;">').concat(genres, "</div>");
   };
   const POSTER_FETCH_TIMEOUT = 15e3;
   const readPosterAsDataUrl = async (body) => {
@@ -1562,7 +1571,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
   });
   const parseHoverPoster = (link) => {
     var _a2;
-    const hoverAttr = `${link.getAttribute("onmouseover") || ""} ${link.getAttribute("title") || ""}`;
+    const hoverAttr = "".concat(link.getAttribute("onmouseover") || "", " ").concat(link.getAttribute("title") || "");
     const hoverPoster = (_a2 = hoverAttr.match(/\bsrc=\\?["']?([^"'\s>]+\.(?:jpe?g|png|webp))/i)) == null ? void 0 : _a2[1];
     if (!hoverPoster) {
       return "";
@@ -1576,7 +1585,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
   const getNativeListPoster = (link, row) => {
     var _a2, _b2, _c2, _d, _e, _f, _g, _h, _i;
     const libraryId = ((_a2 = link.closest("tr")) == null ? void 0 : _a2.getAttribute("library")) || link.getAttribute("library") || "";
-    const panelPoster = libraryId ? (_b2 = document.querySelector(`#librarydiv${libraryId} img`)) == null ? void 0 : _b2.getAttribute("src") : "";
+    const panelPoster = libraryId ? (_b2 = document.querySelector("#librarydiv".concat(libraryId, " img"))) == null ? void 0 : _b2.getAttribute("src") : "";
     if (panelPoster) {
       return panelPoster;
     }
@@ -1838,7 +1847,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     const dataImdbId = (row == null ? void 0 : row.getAttribute("data-imdb-id")) || ((_a2 = link.closest("[data-imdb-id]")) == null ? void 0 : _a2.getAttribute("data-imdb-id")) || "";
     const imdbDigits = (dataImdbId.match(/^(?:tt)?(\d+)$/i) || [])[1];
     if (imdbDigits) {
-      return `tt${imdbDigits.padStart(7, "0")}`;
+      return "tt".concat(imdbDigits.padStart(7, "0"));
     }
     const rowImdb = (_d = (_c2 = (_b2 = row || link.closest("tr")) == null ? void 0 : _b2.querySelector('a[href*="imdb.com/title/"]')) == null ? void 0 : _c2.getAttribute("href")) == null ? void 0 : _d.match(/imdb\.com\/title\/(tt\d+)/);
     if (rowImdb) {
@@ -1862,7 +1871,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     if (!libraryId || !/^\d+$/.test(libraryId)) {
       return "";
     }
-    const panel = document.querySelector(`#librarydiv${libraryId}`);
+    const panel = document.querySelector("#librarydiv".concat(libraryId));
     const matched = (_l = (_k = panel == null ? void 0 : panel.querySelector('a[href*="imdb.com/title/"]')) == null ? void 0 : _k.getAttribute("href")) == null ? void 0 : _l.match(/imdb\.com\/title\/(tt\d+)/);
     return (_m = matched == null ? void 0 : matched[1]) != null ? _m : "";
   };
@@ -1939,8 +1948,8 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
   };
   const resolveListEntry = async (release, imdbId) => {
     const key = [
-      imdbId ? `imdb:${imdbId}` : "",
-      `name:${listResolveKeyTitle(release.name)}`,
+      imdbId ? "imdb:".concat(imdbId) : "",
+      "name:".concat(listResolveKeyTitle(release.name)),
       release.year || "",
       release.season || 0,
       release.episode || 0
@@ -2012,12 +2021,12 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     });
     await Promise.all(workers);
   };
-  const PTP_TOP10_DOUBAN_ICON = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><g transform="translate(2.5 -2.5) rotate(13 16 16)"><rect x="5" y="8.5" width="22" height="15" rx="2" fill="#009845"/></g><path fill="#007722" d="M6 10h20a2 2 0 0 1 2 2v3a1.8 1.8 0 0 0 0 3.6v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a1.8 1.8 0 0 0 0-3.6v-3a2 2 0 0 1 2-2z"/><text x="16" y="20.4" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="9" font-weight="700" fill="#ffffff">豆瓣</text></svg>'
-)}`;
-  const PTP_TOP10_TMDB_ICON = `data:image/svg+xml,${encodeURIComponent(
-  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><rect x="3" y="6" width="26" height="20" rx="4" fill="#01b4e4"/><text x="16" y="18.2" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="7.6" font-weight="700" fill="#ffffff">TMDB</text></svg>'
-)}`;
+  const PTP_TOP10_DOUBAN_ICON = "data:image/svg+xml,".concat(encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><g transform="translate(2.5 -2.5) rotate(13 16 16)"><rect x="5" y="8.5" width="22" height="15" rx="2" fill="#009845"/></g><path fill="#007722" d="M6 10h20a2 2 0 0 1 2 2v3a1.8 1.8 0 0 0 0 3.6v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3a1.8 1.8 0 0 0 0-3.6v-3a2 2 0 0 1 2-2z"/><text x="16" y="20.4" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="9" font-weight="700" fill="#ffffff">豆瓣</text></svg>'
+  ));
+  const PTP_TOP10_TMDB_ICON = "data:image/svg+xml,".concat(encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><rect x="3" y="6" width="26" height="20" rx="4" fill="#01b4e4"/><text x="16" y="18.2" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="7.6" font-weight="700" fill="#ffffff">TMDB</text></svg>'
+  ));
   const ptpTop10Infos = /* @__PURE__ */ new Map();
   const getTop10GroupId = (link) => {
     var _a2;
@@ -2068,7 +2077,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     const imdbLink = host2.querySelector("a.cover-movie-list__movie__rating");
     if (imdbLink && !imdbLink.dataset.doubanTop10ImdbLabel) {
       imdbLink.dataset.doubanTop10ImdbLabel = "1";
-      imdbLink.textContent = `IMDB${imdbLink.textContent}`;
+      imdbLink.textContent = "IMDB".concat(imdbLink.textContent);
     }
     if (!rating) {
       return;
@@ -2079,7 +2088,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     anchor.rel = "noreferrer";
     anchor.className = "cover-movie-list__movie__rating douban-top10-rating";
     anchor.href = rating.link;
-    anchor.textContent = `${rating.label}${rating.value}`;
+    anchor.textContent = "".concat(rating.label).concat(rating.value);
     if (imdbLink) {
       imdbLink.after(anchor);
     } else {
@@ -2154,7 +2163,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     const br = votesCell == null ? void 0 : votesCell.querySelector("br");
     if (br) {
       if (votes) {
-        br.nextSibling.textContent = `(${votes.toLocaleString("en-US")} votes)`;
+        br.nextSibling.textContent = "(".concat(votes.toLocaleString("en-US"), " votes)");
       } else {
         br.nextSibling.textContent = "";
         br.remove();
@@ -2387,7 +2396,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       if (doubanData) {
         replaceNativeInfo(
           doubanData,
-          link || `https://movie.douban.com/subject/${doubanId}`,
+          link || "https://movie.douban.com/subject/".concat(doubanId),
           titleLink
         );
       }
@@ -2450,12 +2459,12 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     try {
       const key = getTmdbApiKey();
       const options = { responseType: "json" };
-      let url = `${TMDB_API_URL}${path}`;
+      let url = "".concat(TMDB_API_URL).concat(path);
       if (isV4Token(key)) {
-        options.headers = { Authorization: `Bearer ${key}` };
+        options.headers = { Authorization: "Bearer ".concat(key) };
       } else {
         const sep = path.includes("?") ? "&" : "?";
-        url += `${sep}api_key=${encodeURIComponent(key)}`;
+        url += "".concat(sep, "api_key=").concat(encodeURIComponent(key));
       }
       const data = await gmFetch(url, options);
       if (isTmdbError(data)) {
@@ -2497,10 +2506,10 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       title: chineseFrom(zh == null ? void 0 : zh.title, data.title),
       year: (data.release_date || "").slice(0, 4),
       summary: chineseFrom(zh == null ? void 0 : zh.overview, data.overview),
-      poster: data.poster_path ? `${TMDB_IMAGE_URL}/${TMDB_POSTER_SIZE}${data.poster_path}` : "",
+      poster: data.poster_path ? "".concat(TMDB_IMAGE_URL, "/").concat(TMDB_POSTER_SIZE).concat(data.poster_path) : "",
       rating: parseFloat(data.vote_average) || 0,
       votes: parseInt(data.vote_count, 10) || 0,
-      webUrl: `https://www.themoviedb.org/movie/${data.id}`
+      webUrl: "https://www.themoviedb.org/movie/".concat(data.id)
     };
   };
   const normalizeTmdbTv = (data) => {
@@ -2512,10 +2521,10 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       title: chineseFrom(zh == null ? void 0 : zh.name, data.name),
       year: (data.first_air_date || "").slice(0, 4),
       summary: chineseFrom(zh == null ? void 0 : zh.overview, data.overview),
-      poster: data.poster_path ? `${TMDB_IMAGE_URL}/${TMDB_POSTER_SIZE}${data.poster_path}` : "",
+      poster: data.poster_path ? "".concat(TMDB_IMAGE_URL, "/").concat(TMDB_POSTER_SIZE).concat(data.poster_path) : "",
       rating: parseFloat(data.vote_average) || 0,
       votes: parseInt(data.vote_count, 10) || 0,
-      webUrl: `https://www.themoviedb.org/tv/${data.id}`
+      webUrl: "https://www.themoviedb.org/tv/".concat(data.id)
     };
   };
   const findTmdbId = async (imdbId) => {
@@ -2523,7 +2532,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     if (!imdbId) {
       return null;
     }
-    const data = await fetchTmdbApi(`/find/${encodeURIComponent(imdbId)}?external_source=imdb_id&language=zh-CN`);
+    const data = await fetchTmdbApi("/find/".concat(encodeURIComponent(imdbId), "?external_source=imdb_id&language=zh-CN"));
     if (!data) {
       return null;
     }
@@ -2544,8 +2553,8 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     return null;
   };
   const getTmdbDetail = async (mediaType, tmdbId) => {
-    const path = mediaType === "movie" ? `/movie/${tmdbId}` : `/tv/${tmdbId}`;
-    const data = await fetchTmdbApi(`${path}?language=zh-CN&append_to_response=translations,external_ids`);
+    const path = mediaType === "movie" ? "/movie/".concat(tmdbId) : "/tv/".concat(tmdbId);
+    const data = await fetchTmdbApi("".concat(path, "?language=zh-CN&append_to_response=translations,external_ids"));
     if (!data) {
       return null;
     }
@@ -2556,7 +2565,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       return null;
     }
     const cache = getTmdbCache();
-    const cacheKey = `imdb:${imdbId}`;
+    const cacheKey = "imdb:".concat(imdbId);
     const cached = cache[cacheKey];
     if (cached && Date.now() - cached.updateTime < TMDB_CACHE_EXPIRE_TIME) {
       return cached.info;
@@ -2601,11 +2610,11 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
     const latin = /^[\x20-\x7e]+$/.test(query);
     const years = kind === "tv" && year && latin ? [year, ""] : [year || ""];
     for (const itemYear of years) {
-      const params = [`query=${encodeURIComponent(query)}`, "language=zh-CN"];
+      const params = ["query=".concat(encodeURIComponent(query)), "language=zh-CN"];
       if (itemYear) {
-        params.push(kind === "tv" ? `first_air_date_year=${encodeURIComponent(itemYear)}` : `year=${encodeURIComponent(itemYear)}`);
+        params.push(kind === "tv" ? "first_air_date_year=".concat(encodeURIComponent(itemYear)) : "year=".concat(encodeURIComponent(itemYear)));
       }
-      const data = await fetchTmdbApi(`/search/${kind}?${params.join("&")}`);
+      const data = await fetchTmdbApi("/search/".concat(kind, "?").concat(params.join("&")));
       const hit = pickTmdbSearchHit(data == null ? void 0 : data.results, query, itemYear, latin, kind);
       if (hit) {
         return { mediaType: kind, tmdbId: String(hit.id) };
@@ -2618,7 +2627,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       return null;
     }
     const cache = getTmdbCache();
-    const cacheKey = `title:${normalizeTitle(title)}|${year || ""}|${mediaType || ""}`;
+    const cacheKey = "title:".concat(normalizeTitle(title), "|").concat(year || "", "|").concat(mediaType || "");
     const cached = cache[cacheKey];
     if (cached && Date.now() - cached.updateTime < TMDB_CACHE_EXPIRE_TIME) {
       return cached.info;
@@ -2645,12 +2654,12 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       return 0;
     }
     const cache = getTmdbCache();
-    const cacheKey = `season:${tmdbId}:${season}`;
+    const cacheKey = "season:".concat(tmdbId, ":").concat(season);
     const cached = cache[cacheKey];
     if (cached && Date.now() - cached.updateTime < TMDB_CACHE_EXPIRE_TIME) {
       return cached.count || 0;
     }
-    const data = await fetchTmdbApi(`/tv/${encodeURIComponent(tmdbId)}/season/${encodeURIComponent(season)}?language=zh-CN`);
+    const data = await fetchTmdbApi("/tv/".concat(encodeURIComponent(tmdbId), "/season/").concat(encodeURIComponent(season), "?language=zh-CN"));
     const count = Array.isArray(data == null ? void 0 : data.episodes) ? data.episodes.length : 0;
     cache[cacheKey] = { count, updateTime: Date.now() };
     setTmdbCache(cache);
@@ -2714,6 +2723,52 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
         window.alert("TMDB API Key 已清除，豆瓣兜底已关闭。");
       }
     });
+  };
+  const getTrailerVideoId = (src) => {
+    const url = String(src || "").trim();
+    const matched = url.match(/youtube(?:-nocookie)?\.com\/(?:embed|v|shorts)\/([\w-]{6,})|youtu\.be\/([\w-]{6,})/i);
+    if (matched) {
+      return matched[1] || matched[2];
+    }
+    const tail = url.split("/").pop().replace(/\.html?$/i, "");
+    return /^[\w-]{6,}$/.test(tail) ? tail : "";
+  };
+  const addPtpTrailerLink = (videoId) => {
+    var _a2;
+    if (!videoId || document.querySelector("#ptp-trailer-link")) {
+      return;
+    }
+    const link = document.createElement("a");
+    link.id = "ptp-trailer-link";
+    link.className = "linkbox__link";
+    link.href = "https://www.youtube.com/watch?v=".concat(videoId);
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = "[Trailer]";
+    const subscribe = Array.from(document.querySelectorAll(".linkbox__link")).find((item) => /\[Subscribe\]/.test(item.textContent));
+    if (subscribe) {
+      subscribe.after(document.createTextNode(" "), link);
+    } else {
+      (_a2 = document.querySelector(".linkbox")) == null ? void 0 : _a2.appendChild(link);
+    }
+  };
+  const removePtpSynopsisTrailer = () => {
+    var _a2;
+    (_a2 = document.querySelector("#trailer")) == null ? void 0 : _a2.remove();
+    const toggle = document.querySelector("#toggletrailer");
+    if (toggle) {
+      const box = toggle.parentElement;
+      toggle.remove();
+      if (box && box !== document.body && !box.textContent.trim()) {
+        box.remove();
+      }
+    }
+  };
+  const replacePtpTrailer = () => {
+    var _a2;
+    const videoId = getTrailerVideoId((_a2 = document.querySelector("#trailer iframe")) == null ? void 0 : _a2.getAttribute("src"));
+    removePtpSynopsisTrailer();
+    addPtpTrailerLink(videoId);
   };
   const CACHE_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1e3;
   const getCachedInfo = (imdbId) => {
@@ -2795,10 +2850,11 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       if (!info) {
         throw new Error("没有找到影片条目");
       }
-      const link = doubanId ? `https://movie.douban.com/subject/${doubanId}` : info.tmdbUrl || "";
+      const link = doubanId ? "https://movie.douban.com/subject/".concat(doubanId) : info.tmdbUrl || "";
       const titleLink = info.titleSource === "tmdb" && info.tmdbUrl ? info.tmdbUrl : link;
       if (CURRENT_SITE_NAME.match(/PTP/)) {
         addToPtpPage(info);
+        replacePtpTrailer();
       } else if (CURRENT_SITE_NAME.match(/ANT/)) {
         addToANTPage(info);
       } else {
@@ -2807,6 +2863,10 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       }
     } catch (error) {
       console.log(error);
+      if (CURRENT_SITE_NAME.match(/PTP/)) {
+        addPtpGroupNames();
+        replacePtpTrailer();
+      }
       addDarkLinkButton();
     }
   })();

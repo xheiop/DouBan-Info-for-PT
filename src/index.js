@@ -5,9 +5,10 @@ import {
   getImdbId, getTvSeasonData, isChinese,
   addToPtpPage, getDoubanInfo, getDoubanInfoByIMDB, getDoubanInfoBySubject, getDoubanInfoFallback,
   addToANTPage, renderDoubanInfo, addDarkLinkButton, addDoubanTitlesToList, addDoubanTitlesToPtpTop10,
-  setListTmdb,
+  addPtpGroupNames, setListTmdb,
 } from './common';
 import { mergeTmdbInfo, getTmdbPoster, getTmdbSeasonEpisodeCount, registerTmdbMenu } from './tmdb';
+import { replacePtpTrailer } from './trailer';
 import './style.css';
 
 const CACHE_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1000;
@@ -138,6 +139,8 @@ const isListPage = () => {
     // PTP、ANT 只有电影，直接插入站点页面
     if (CURRENT_SITE_NAME.match(/PTP/)) {
       addToPtpPage(info);
+      // 预告片处理不依赖豆瓣数据：撤掉 Synopsis 栏的播放器，菜单栏加 [Trailer] 链接
+      replacePtpTrailer();
     } else if (CURRENT_SITE_NAME.match(/ANT/)) {
       addToANTPage(info);
     } else {
@@ -146,6 +149,11 @@ const isListPage = () => {
     }
   } catch (error) {
     console.log(error);
+    // 没有影片条目时，PTP 的种子组名、预告片入口这些不依赖豆瓣数据的优化照常做
+    if (CURRENT_SITE_NAME.match(/PTP/)) {
+      addPtpGroupNames();
+      replacePtpTrailer();
+    }
     // 没有影片条目时补上暗色的豆瓣入口按钮，保持外链栏完整
     addDarkLinkButton();
   }

@@ -29,15 +29,10 @@ const addToPtpPage = (data) => {
   $('.page__title').prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
   // 豆瓣片名与站点原片名相同时删掉站点原片名，只保留豆瓣片名
   dedupePrependedTitle('.page__title', data.chineseTitle);
-  if (data.summary) {
-    const synopsisDom = `
-    <div class="panel" id="douban-synopsis">
-    <div class="panel__heading"><span class="panel__heading__title">中文简介</span></div>
-    <div class="panel__body">
-          <div id="synopsis">${data.summary}</div>
-    </div>
-    </div>`;
-    $('#synopsis-and-trailer,#request-table').after(synopsisDom);
+  // 中文简介直接替换站点原有 Synopsis：不另挂面板，也不给英文原文留悬停。
+  // 豆瓣、TMDB 都没有中文简介时保留站点原英文，不动
+  if (hasChineseText(data.summary)) {
+    $('#synopsis-and-trailer #synopsis').text(data.summary);
   }
   $('#movieinfo').before(`
     <div class="panel">
@@ -59,6 +54,96 @@ const addToPtpPage = (data) => {
     <td style="width: 90px;"><span class="rating">${data.average}</span> <span class="mid">/</span> <span class="outof"> 10</span><br>(${votesText} votes)</td>`);
   }
   $('.main-column').prepend($('#movie-ratings-table').parent());
+  // 评分栏布局归一化，种子表追加上传组名
+  normalizePtpRatingsTable();
+  addPtpGroupNames();
+};
+// 评分栏布局：站点原生的 IMDb / Metacritic / 烂番茄三组外站评分，图标格与数值格
+// 宽度各不相同（75/67/89、116/61/61），豆瓣格再按自己的宽度插进去，并排时间距
+// 忽宽忽窄。取这四组里的最大值，把图标格、数值格各自归一化；最后两格是 PTP 自己的
+// 星星格（宽 245px），不参与。站点脚本会把每个 td 的宽度冻结成实测值，归一化跑在
+// addToPtpPage 里（站点脚本早已执行完），设上去的宽度不会被覆盖回去
+const normalizePtpRatingsTable = () => {
+  const $row = $('#movie-ratings-table tr:first');
+  if (!$row.length) {
+    return;
+  }
+  const cells = Array.from($row.children('td'));
+  // 星星格带 id，以它为界：前面的都是外站评分，图标格、数值格成对出现
+  const starIndex = cells.findIndex(cell => cell.id === 'ptp_rating_td');
+  const external = starIndex > 0 ? cells.slice(0, starIndex) : cells.slice(0, Math.max(0, cells.length - 2));
+  const pairs = [];
+  let iconWidth = 0;
+  let valueWidth = 0;
+  for (let i = 0; i + 1 < external.length; i += 2) {
+    const icon = external[i];
+    const value = external[i + 1];
+    // 图标格里放的是 64×64 的图，数值格里是评分文字；对不上（如某站只给了图标）
+    // 就停下来，后面的格子保持站点原样
+    if (!icon.querySelector('img') || value.querySelector('img') || !value.querySelector('.rating')) {
+      break;
+    }
+    pairs.push([icon, value]);
+    iconWidth = Math.max(iconWidth, cellWidth($(icon)));
+    valueWidth = Math.max(valueWidth, cellWidth($(value)));
+  }
+  if (!pairs.length || !iconWidth || !valueWidth) {
+    return;
+  }
+  pairs.forEach(([icon, value]) => {
+    icon.style.width = `${iconWidth}px`;
+    value.style.width = `${valueWidth}px`;
+  });
+};
+// td 宽度：先读行内样式（站点脚本冻结后写在这里），读不到再退回 jQuery 实测
+const cellWidth = ($cell) => parseFloat($cell[0]?.style?.width) || $cell.width() || 0;
+// PTP Show Group Name（用户脚本）的详情页部分：给种子表里每个资源追加上传组名。
+// 组名读行上的 data-releasegroup，加粗、' / ' 分隔追加在资源格式名后面；组名为空的
+// 资源跳过（TBB 的个别 release 组名是空的，但格式名里带着 ' / TBB'，抹平后按 TBB
+// 处理）。用户只要详情页，列表页的 PageData.Movies 分支不加
+const addPtpGroupNames = () => {
+  // 站点自己上传的资源 data-releasegroup 是空的，组名只写在种子文件名里，而行展开后
+  // PTP 才会把文件清单塞进来。挂一个观察器，展开时补跑一次（自身追加内容也会触发，
+  // 但追加过的行都带了 data-group-name，不会重复加）
+  const table = document.querySelector('#torrent-table');
+  if (table && typeof MutationObserver === 'function' && !table.dataset.groupObserver) {
+    table.dataset.groupObserver = '1';
+    let timer = null;
+    new MutationObserver(() => {
+      clearTimeout(timer);
+      timer = setTimeout(() => addPtpGroupNames(), 300);
+    }).observe(table, { childList: true, subtree: true });
+  }
+  $('#torrent-table a.torrent-info-link:not([data-group-name])').each(function () {
+    const $link = $(this);
+    const onclick = $link.attr('onclick') || '';
+    const groupFromRow = String($link.parent().parent().data('releasegroup') || '').trim();
+    let groupname = groupFromRow ||
+      groupFromTorrentId((onclick.match(/#torrent_(\d+)/) || [])[1] || '');
+    if (!groupname && $link.text().split(' / ').includes('TBB')) {
+      $link.html((index, html) => html.replace(' / TBB', ''));
+      groupname = 'TBB';
+    }
+    if (groupname) {
+      $link.attr('data-group-name', groupname).append(' / ').append(`<span style="font-weight:bold">${groupname}</span>`);
+    }
+  });
+};
+// 从种子文件名里取组名：文件名形如 The.Cable.Guy.DVD.PAL.DD5.1.x264-BRSTW.mkv，
+// 最后一个 '-' 之后、扩展名之前就是组名。文件清单和「Complete name」都取一遍
+const GROUP_FROM_FILENAME = /[-_]([A-Za-z0-9_[\]]{2,})\.(?:mkv|mp4|avi|m2ts|ts|vob|iso|mov|wmv|mpg|mpeg|flac|srt|idx|sub|ass|sup)$/i;
+const groupFromTorrentId = (torrentId) => {
+  if (!torrentId) {
+    return '';
+  }
+  const infoRow = document.getElementById(`torrent_${torrentId}`);
+  if (!infoRow) {
+    return '';
+  }
+  const fileName = infoRow.querySelector(`#files_${torrentId} td`)?.textContent?.trim() ||
+    (infoRow.textContent.match(/Complete name\s*:\s*(\S+)/) || [])[1] ||
+    '';
+  return (fileName.match(GROUP_FROM_FILENAME) || [])[1] || '';
 };
 const addToANTPage = (data) => {
   console.log(data);
@@ -2833,6 +2918,8 @@ export {
   createDoubanDom,
   addToPtpPage,
   addToANTPage,
+  normalizePtpRatingsTable,
+  addPtpGroupNames,
   getDoubanId,
   getTvSeasonData,
   getDoubanIdByIMDB,
