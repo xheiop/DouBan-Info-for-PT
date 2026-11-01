@@ -1,3 +1,12 @@
+# [1.9.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.8.4...1.9.0) (2026-11-01)
+
+
+### Features
+
+* PTP 详情页评分栏归一化、简介就地替换、种子组名与预告片入口 ([#22](https://github.com/techmovie/DouBan-Info-for-PT/issues/22)) ([8064319](https://github.com/techmovie/DouBan-Info-for-PT/commit/8064319762b72c5b5d746933cfbb7127a8f14d85))
+
+
+
 ## [1.8.4](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.8.3...1.8.4) (2026-10-30)
 
 
@@ -21,8 +30,8 @@
 
 ### Bug Fixes
 
-* 缓存中片名不是中文时重新获取豆瓣数据 ([1f0d6cb](https://github.com/techmovie/DouBan-Info-for-PT/commit/1f0d6cb8a69c2691723dc86815c7f952c4769f16))
 * 豆瓣API未返回中文别名时从条目接口获取中文片名 ([3cced6f](https://github.com/techmovie/DouBan-Info-for-PT/commit/3cced6f2e259f297d2cdab13f9918c0a1d7e4d7c))
+* 缓存中片名不是中文时重新获取豆瓣数据 ([1f0d6cb](https://github.com/techmovie/DouBan-Info-for-PT/commit/1f0d6cb8a69c2691723dc86815c7f952c4769f16))
 
 
 ### Features
@@ -369,14 +378,14 @@
 
 ### Bug Fixes
 
-* add hdt fl match ([79b877e](https://github.com/techmovie/DouBan-Info-for-PT/commit/79b877e73633c7811949914f28695cec81a6cb92))
 * 修改UHD BHD的插入节点 ([3a73903](https://github.com/techmovie/DouBan-Info-for-PT/commit/3a73903df5d326e20c7dc943b364bde1249d7b01))
+* add hdt fl match ([79b877e](https://github.com/techmovie/DouBan-Info-for-PT/commit/79b877e73633c7811949914f28695cec81a6cb92))
 
 
 ### Features
 
-* 增加poster配置 ([cd706a9](https://github.com/techmovie/DouBan-Info-for-PT/commit/cd706a9a0f87db8c79bddd2a5c25572c2530a8ce))
 * 插入节点改为从iframe替换为div ([67a5fcd](https://github.com/techmovie/DouBan-Info-for-PT/commit/67a5fcdd64680db9dc921e96d3a51d378bdda6ef))
+* 增加poster配置 ([cd706a9](https://github.com/techmovie/DouBan-Info-for-PT/commit/cd706a9a0f87db8c79bddd2a5c25572c2530a8ce))
 * **newsite:** 支持ACM KG PHD ([70d7a51](https://github.com/techmovie/DouBan-Info-for-PT/commit/70d7a51647d5219ca4ff46083f7d1723695b80c8))
 * 支持PTP HDB BLU HDT BHD FL ([1bd1bc8](https://github.com/techmovie/DouBan-Info-for-PT/commit/1bd1bc861f6de6fb08eaa42daa5b3d339b2496a6))
 

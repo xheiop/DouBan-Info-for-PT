@@ -2,7 +2,7 @@
 // @name            douban-info-for-pt
 // @name:en         douban-info-for-pt
 // @namespace       https://github.com/techmovie/DouBan-Info-for-PT
-// @version         1.8.4
+// @version         1.9.0
 // @author          birdplane
 // @description     在PT站电影详情页展示部分中文信息
 // @description:en  Display some Chinese information on the PT site movie details page
@@ -118,15 +118,8 @@
     console.log(data);
     $(".page__title").prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
     dedupePrependedTitle(".page__title", data.chineseTitle);
-    if (data.summary) {
-      const synopsisDom = `
-    <div class="panel" id="douban-synopsis">
-    <div class="panel__heading"><span class="panel__heading__title">中文简介</span></div>
-    <div class="panel__body">
-          <div id="synopsis">${data.summary}</div>
-    </div>
-    </div>`;
-      $("#synopsis-and-trailer,#request-table").after(synopsisDom);
+    if (hasChineseText(data.summary)) {
+      $("#synopsis-and-trailer #synopsis").text(data.summary);
     }
     $("#movieinfo").before(`
     <div class="panel">
@@ -147,6 +140,78 @@
       );
     }
     $(".main-column").prepend($("#movie-ratings-table").parent());
+    normalizePtpRatingsTable();
+    addPtpGroupNames();
+  };
+  const normalizePtpRatingsTable = () => {
+    const $row = $("#movie-ratings-table tr:first");
+    if (!$row.length) {
+      return;
+    }
+    const cells = Array.from($row.children("td"));
+    const starIndex = cells.findIndex((cell) => cell.id === "ptp_rating_td");
+    const external = starIndex > 0 ? cells.slice(0, starIndex) : cells.slice(0, Math.max(0, cells.length - 2));
+    const pairs = [];
+    let iconWidth = 0;
+    let valueWidth = 0;
+    for (let i = 0; i + 1 < external.length; i += 2) {
+      const icon = external[i];
+      const value = external[i + 1];
+      if (!icon.querySelector("img") || value.querySelector("img") || !value.querySelector(".rating")) {
+        break;
+      }
+      pairs.push([icon, value]);
+      iconWidth = Math.max(iconWidth, cellWidth($(icon)));
+      valueWidth = Math.max(valueWidth, cellWidth($(value)));
+    }
+    if (!pairs.length || !iconWidth || !valueWidth) {
+      return;
+    }
+    pairs.forEach(([icon, value]) => {
+      icon.style.width = `${iconWidth}px`;
+      value.style.width = `${valueWidth}px`;
+    });
+  };
+  const cellWidth = ($cell) => {
+    var _a2, _b2;
+    return parseFloat((_b2 = (_a2 = $cell[0]) == null ? void 0 : _a2.style) == null ? void 0 : _b2.width) || $cell.width() || 0;
+  };
+  const addPtpGroupNames = () => {
+    const table = document.querySelector("#torrent-table");
+    if (table && typeof MutationObserver === "function" && !table.dataset.groupObserver) {
+      table.dataset.groupObserver = "1";
+      let timer = null;
+      new MutationObserver(() => {
+        clearTimeout(timer);
+        timer = setTimeout(() => addPtpGroupNames(), 300);
+      }).observe(table, { childList: true, subtree: true });
+    }
+    $("#torrent-table a.torrent-info-link:not([data-group-name])").each(function() {
+      const $link = $(this);
+      const onclick = $link.attr("onclick") || "";
+      const groupFromRow = String($link.parent().parent().data("releasegroup") || "").trim();
+      let groupname = groupFromRow || groupFromTorrentId((onclick.match(/#torrent_(\d+)/) || [])[1] || "");
+      if (!groupname && $link.text().split(" / ").includes("TBB")) {
+        $link.html((index, html) => html.replace(" / TBB", ""));
+        groupname = "TBB";
+      }
+      if (groupname) {
+        $link.attr("data-group-name", groupname).append(" / ").append(`<span style="font-weight:bold">${groupname}</span>`);
+      }
+    });
+  };
+  const GROUP_FROM_FILENAME = /[-_]([A-Za-z0-9_[\]]{2,})\.(?:mkv|mp4|avi|m2ts|ts|vob|iso|mov|wmv|mpg|mpeg|flac|srt|idx|sub|ass|sup)$/i;
+  const groupFromTorrentId = (torrentId) => {
+    var _a2, _b2;
+    if (!torrentId) {
+      return "";
+    }
+    const infoRow = document.getElementById(`torrent_${torrentId}`);
+    if (!infoRow) {
+      return "";
+    }
+    const fileName = ((_b2 = (_a2 = infoRow.querySelector(`#files_${torrentId} td`)) == null ? void 0 : _a2.textContent) == null ? void 0 : _b2.trim()) || (infoRow.textContent.match(/Complete name\s*:\s*(\S+)/) || [])[1] || "";
+    return (fileName.match(GROUP_FROM_FILENAME) || [])[1] || "";
   };
   const addToANTPage = (data) => {
     console.log(data);
@@ -2715,6 +2780,52 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       }
     });
   };
+  const getTrailerVideoId = (src) => {
+    const url = String(src || "").trim();
+    const matched = url.match(/youtube(?:-nocookie)?\.com\/(?:embed|v|shorts)\/([\w-]{6,})|youtu\.be\/([\w-]{6,})/i);
+    if (matched) {
+      return matched[1] || matched[2];
+    }
+    const tail = url.split("/").pop().replace(/\.html?$/i, "");
+    return /^[\w-]{6,}$/.test(tail) ? tail : "";
+  };
+  const addPtpTrailerLink = (videoId) => {
+    var _a2;
+    if (!videoId || document.querySelector("#ptp-trailer-link")) {
+      return;
+    }
+    const link = document.createElement("a");
+    link.id = "ptp-trailer-link";
+    link.className = "linkbox__link";
+    link.href = `https://www.youtube.com/watch?v=${videoId}`;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = "[Trailer]";
+    const subscribe = Array.from(document.querySelectorAll(".linkbox__link")).find((item) => /\[Subscribe\]/.test(item.textContent));
+    if (subscribe) {
+      subscribe.after(document.createTextNode(" "), link);
+    } else {
+      (_a2 = document.querySelector(".linkbox")) == null ? void 0 : _a2.appendChild(link);
+    }
+  };
+  const removePtpSynopsisTrailer = () => {
+    var _a2;
+    (_a2 = document.querySelector("#trailer")) == null ? void 0 : _a2.remove();
+    const toggle = document.querySelector("#toggletrailer");
+    if (toggle) {
+      const box = toggle.parentElement;
+      toggle.remove();
+      if (box && box !== document.body && !box.textContent.trim()) {
+        box.remove();
+      }
+    }
+  };
+  const replacePtpTrailer = () => {
+    var _a2;
+    const videoId = getTrailerVideoId((_a2 = document.querySelector("#trailer iframe")) == null ? void 0 : _a2.getAttribute("src"));
+    removePtpSynopsisTrailer();
+    addPtpTrailerLink(videoId);
+  };
   const CACHE_EXPIRE_TIME = 30 * 24 * 60 * 60 * 1e3;
   const getCachedInfo = (imdbId) => {
     const cached = (GM_getValue("ids_v2") || {})[imdbId];
@@ -2799,6 +2910,7 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       const titleLink = info.titleSource === "tmdb" && info.tmdbUrl ? info.tmdbUrl : link;
       if (CURRENT_SITE_NAME.match(/PTP/)) {
         addToPtpPage(info);
+        replacePtpTrailer();
       } else if (CURRENT_SITE_NAME.match(/ANT/)) {
         addToANTPage(info);
       } else {
@@ -2807,6 +2919,10 @@ ${summary}${countries}<div class="douban-card-genres">${genres}</div></div></div
       }
     } catch (error) {
       console.log(error);
+      if (CURRENT_SITE_NAME.match(/PTP/)) {
+        addPtpGroupNames();
+        replacePtpTrailer();
+      }
       addDarkLinkButton();
     }
   })();
