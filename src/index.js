@@ -4,7 +4,7 @@ import {
 import {
   getImdbId, getTvSeasonData, isChinese,
   addToPtpPage, getDoubanInfo, getDoubanInfoByIMDB, getDoubanInfoBySubject, getDoubanInfoFallback,
-  addToANTPage, renderDoubanInfo, addDarkLinkButton, addDoubanTitlesToList, addDoubanTitlesToPtpTop10,
+  addToANTPage, addToTlPage, renderDoubanInfo, addDarkLinkButton, addDoubanTitlesToList, addDoubanTitlesToPtpTop10,
   addPtpGroupNames, setListTmdb,
 } from './common';
 import { mergeTmdbInfo, getTmdbPoster, getTmdbSeasonEpisodeCount, registerTmdbMenu } from './tmdb';
@@ -143,6 +143,11 @@ const isListPage = () => {
       replacePtpTrailer();
     } else if (CURRENT_SITE_NAME.match(/ANT/)) {
       addToANTPage(info);
+    } else if (CURRENT_SITE_NAME === 'TL') {
+      // TL 详情页是站点专属布局：原片名替换 + 评分栏重建，见 addToTlPage。
+      // 剧集同样先按种子标题定位对应季的条目
+      const season = await resolveSeason(info, imdbId);
+      addToTlPage(season.doubanData, link, titleLink);
     } else {
       const season = await resolveSeason(info, imdbId);
       renderDoubanInfo(season.doubanData, season.doubanId, imdbId, link, titleLink);

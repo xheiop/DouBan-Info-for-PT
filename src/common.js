@@ -191,6 +191,78 @@ const addToANTPage = (data) => {
   }
   $('.main_column').prepend($('.box.torrent_ratings'));
 };
+// TL 评分栏的豆瓣小图标：站点自带的 IMDb 图标高 20px（.imdb-info #imdbImg），
+// 豆瓣图标按同样高度做一块绿色圆角牌，40×20 与 IMDb 图标的宽高比协调
+const TL_DOUBAN_RATING_ICON = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" width="40" height="20">' +
+  '<rect width="120" height="60" rx="12" fill="#007722"/>' +
+  '<text x="60" y="42" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,' +
+  'Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="32" font-weight="700" ' +
+  'fill="#ffffff">豆瓣</text>' +
+  '</svg>',
+)}`;
+// TL 详情页（站点专属布局，不走通用原生融合）：
+// 1. Torrent Description 下方的原片名（.torrent-info-details h3）整体换成豆瓣/TMDB
+//    中文片名，字号、颜色、风格沿用 h3 自身；资源名称（#torrentnameid）下不加内容
+// 2. 站点英文简介替换为中文简介，原文留悬停
+// 3. 评分栏重建为「Rating: [IMDb 图标] 分数/票数 [豆瓣图标] 分数/票数」：
+//    删掉站点原有的星级图与 Your Rating 表单，Rating 标签沿用站点 description 样式
+const addToTlPage = (data, doubanLink, titleLink = doubanLink) => {
+  const chineseTitle = data?.chineseTitle || '';
+  // 片名：豆瓣与 TMDB 都没有中文片名时保留站点原片名
+  if (chineseTitle) {
+    const titleDom = document.querySelector('.torrent-info-details h3');
+    if (titleDom) {
+      titleDom.textContent = '';
+      titleDom.insertAdjacentHTML('beforeend',
+        `<a class="douban-title-link" href="${titleLink}" target="_blank" rel="noreferrer" title="${chineseTitle}" style="color:inherit;text-decoration:none">${chineseTitle}</a>`);
+    }
+  }
+  // 简介：中文简介整个替换，原英文留作悬停
+  const summary = data?.summary || '';
+  if (summary && summary !== '暂无相关剧情介绍' && isChinese(summary)) {
+    const summaryDom = document.querySelector('.torrent-summary p');
+    if (summaryDom) {
+      summaryDom.setAttribute('title', summaryDom.textContent.trim());
+      summaryDom.textContent = summary;
+    }
+  }
+  // 评分栏
+  const imdbInfo = document.querySelector('.imdb-info');
+  if (!imdbInfo) {
+    return;
+  }
+  // 站点星级图与 Your Rating 表单整个删掉（Your Rating 表单包在 .mt-10 里）
+  imdbInfo.querySelector('#torrent_imdb_rating')?.remove();
+  const rateForm = imdbInfo.querySelector('#rate_torrent');
+  if (rateForm) {
+    const rateBox = rateForm.closest('.mt-10');
+    if (rateBox && rateBox !== imdbInfo) {
+      rateBox.remove();
+    } else {
+      rateForm.remove();
+    }
+  }
+  const imdbIcon = imdbInfo.querySelector('a[href*="imdb.com/title"]');
+  const imdbIconHtml = imdbIcon ? imdbIcon.outerHTML : '';
+  const siteScoreHtml = imdbInfo.querySelector('#tenBaseRating')?.outerHTML || '';
+  const siteVotesDom = imdbInfo.querySelector('#numVotes');
+  const siteVotesHtml = siteVotesDom ? `(${siteVotesDom.outerHTML})` : '';
+  const score = data?.average || data?.rating || '';
+  const votes = data?.votes ?? 0;
+  const votesComma = String(votes).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  const groups = ['<span class="description">Rating: </span>'];
+  if (imdbIconHtml && siteScoreHtml) {
+    groups.push(`${imdbIconHtml} ${siteScoreHtml}${siteVotesHtml ? ` ${siteVotesHtml}` : ''}`);
+  }
+  if (score) {
+    groups.push(
+      `<a href="${doubanLink}" target="_blank" rel="noreferrer" title="豆瓣评分 ${votes}人评价" style="text-decoration:none;margin-left:6px">` +
+      `<img src="${TL_DOUBAN_RATING_ICON}" alt="Douban" style="height:20px;vertical-align:middle"></a> ` +
+      `<span style="font-weight:bold">${score}</span>/10 (${votesComma} Votes)`);
+  }
+  imdbInfo.innerHTML = `<p style="margin:0">${groups.join(' ')}</p>`;
+};
 const getImdbId = () => {
   let imdbLink = '';
   const imdbConfig = CURRENT_SITE_INFO.imdb;
@@ -2918,6 +2990,7 @@ export {
   createDoubanDom,
   addToPtpPage,
   addToANTPage,
+  addToTlPage,
   normalizePtpRatingsTable,
   addPtpGroupNames,
   getDoubanId,

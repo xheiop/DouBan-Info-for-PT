@@ -78,6 +78,7 @@ export default defineConfig({
           '*://www.iptorrents.com/t',
           '*://www.iptorrents.com/t?*',
           '*://www.torrentleech.org/torrent/*',
+          '*://www.torrentleech.org/torrents/browse*',
           '*://avistaz.to/torrent/*',
           '*://secret-cinema.pw/torrents.php?id=*',
           '*://aither.cc/torrents/*',

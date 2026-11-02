@@ -1,8 +1,15 @@
 url: https://www.torrentleech.org
 host: torrentleech.org
-siteName: IPT
+siteName: TL
 imdb: '.imdb-info a[href*="imdb.com/title"]'
+# 剧集按种子标题匹配对应季的条目时取发行名（含 S02E04 标记）
 titleDom: '#torrentnameid'
-poster: '.imdb_cover img'
-insertDomSelector: '.torrent-info .torrent-info-details'
-doubanContainerDom: '<div class="douban-dom"></div>'
+# 详情页走站点专属逻辑（addToTlPage）：Torrent Description 下方原片名替换为中文片名、
+# 评分栏重建为「Rating: IMDb 评分 豆瓣评分」并删掉星级与 Your Rating
+listPage:
+  path: '^/torrents/browse'
+  titleLink: '.td-name .name a[href*="/torrent/"]'
+  row: 'tr.torrent'
+  idPattern: '/torrent/(\d+)'
+  titleTextStrip: '.label'
+  popupTheme: 'card'
