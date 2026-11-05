@@ -8,3 +8,6 @@ imdb:
 top10:
   path: '^/top10\.php$'
   browsePath: '^/torrents\.php$'
+  # 站点自己的 Top10 布局（Cover / Huge / List 四种视图），
+  # 与 ANT 的 Top10（海报网格）不是一套，按这个字段区分走哪份实现
+  layout: 'ptp'

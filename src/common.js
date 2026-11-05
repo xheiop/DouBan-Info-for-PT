@@ -145,18 +145,47 @@ const groupFromTorrentId = (torrentId) => {
     '';
   return (fileName.match(GROUP_FROM_FILENAME) || [])[1] || '';
 };
+// ANT 详情页评分栏的豆瓣图标：站点自带的几个外站评分都是 SVG 位图
+// （TMDb、IMDb 是 50px 宽的标标，烂番茄是 30px 高的图标），豆瓣按同一套规范做，
+// 造型照 PTP 详情页那张来：浅绿票根斜垫在后面，深绿票根压在前面并刻出两侧缺口，
+// 中间放「豆瓣」字样。用内联 SVG 数据地址，不请求外网，随脚本一起分发。
+// 画布 120×100，50px 宽时高 41.7px，比 TMDb 图标（251.34×222.81，50px 宽时
+// 44.3px 高）矮：评分行的高度仍由站点原生的 TMDb 图标决定，不会变高。
+// 票根占画布 73% 宽、56% 高（与 PTP 那张 75%×59% 同比例），「豆瓣」用 25px
+// 字号，上下各留 7px 空白，缩到 50px 也认得清
+const ANT_DOUBAN_RATING_ICON = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="120" height="100">' +
+  '<g transform="translate(6 -7) rotate(12 60 50)">' +
+  '<rect x="16" y="22" width="88" height="56" rx="5" fill="#009845"/></g>' +
+  '<path fill="#007722" d="M16 22h88a5 5 0 0 1 5 5v17.5a5.5 5.5 0 0 0 0 11v17.5a5 5 0 0 1-5 5H16' +
+  'a5 5 0 0 1-5-5v-17.5a5.5 5.5 0 0 0 0-11v-17.5a5 5 0 0 1 5-5z"/>' +
+  '<text x="60" y="58.8" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,' +
+  'Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="25" font-weight="700" ' +
+  'fill="#ffffff" letter-spacing="1">豆瓣</text>' +
+  '</svg>',
+)}`;
+// ANT 详情页（站点专属布局，不走通用原生融合）：
+// 1. 片名前加豆瓣中文片名，中文简介直接替换站点原有 Synopsis（不另挂面板），
+//    豆瓣、TMDB 都没有中文简介时保留站点原英文不动
+// 2. 评分栏补豆瓣：图标照站点其它评分的规格做（50px 宽的 SVG 位图），
+//    数值格的结构与 TMDb、IMDb 两格完全一致
+// 3. 评分栏的间距沿用站点自己的表格算法，不指定列宽：站点各站图标本来宽窄不一
+//    （TMDb、IMDb 50px 宽、烂番茄 30px 高），数值格也宽窄不同，这是站点原生的
+//    排布；硬把各列拉成齐平会把表格总宽顶到表宽之外，浏览器再按比例压缩数值格，
+//    「(8,820 votes)」被折成三行，整个评分栏就变高了。间距靠单元格自带的 5px
+//    内边距本来就是均匀的，插进来的豆瓣格与相邻格一致即可
 const addToANTPage = (data) => {
   console.log(data);
   $('.header h2').prepend(`<a target='_blank' href="${data.link}">[${data.chineseTitle}] </a>`);
   // 豆瓣片名与站点原片名相同时删掉站点原片名，只保留豆瓣片名
   dedupePrependedTitle('.header h2', data.chineseTitle);
-  if (data.summary) {
-    const synopsisDom = `
-    <div class="box torrent_description">
-      <div class="head"><a href="#">↑</a>&nbsp;<strong>中文简介</strong></div>
-      <div class="body" style="text-align:justify">${data.summary}</div>
-    </div>`;
-    $('.torrent_description,.box_request_desc').after(synopsisDom);
+  // 中文简介整个替换站点原有 Synopsis，原文不留悬坠（与 PTP 一致）。
+  // 豆瓣、TMDB 都没有中文简介时保留站点原英文，不动
+  if (hasChineseText(data.summary)) {
+    const synopsisDom = document.querySelector('.torrent_description .body, .box_request_desc .body');
+    if (synopsisDom) {
+      synopsisDom.textContent = data.summary;
+    }
   }
   $('.box_details:first').before(`
     <div class="box box_details">
@@ -168,26 +197,28 @@ const addToANTPage = (data) => {
           <li><strong>制片国家/地区:</strong> ${data.region}</li>
           <li><strong>语言:</strong> ${data.language}</li>
           <li><strong>时长:</strong> ${data.runtime}</li>
-          <li><strong>又名:</strong>  ${data.aka}</li
-      </ul>
+          <li><strong>又名:</strong>  ${data.aka}</li>
+        </ul>
       </div>    
     </div>`);
-  if (data.average) {
+  // 评分取豆瓣的，豆瓣没有评分时用 TMDB 兜上来的（两个都没有就不插豆瓣格）
+  const score = parseFloat(data.average) || parseFloat(data.rating) || 0;
+  if (score) {
+    // 票数千分位与站点其它评分一致（IMDb 写的是 8,820）
+    const votes = data.votes ? Number(data.votes).toLocaleString('en-US') : '';
+    // 两格的结构与站点原生的 TMDb、IMDb 两格逐字对应：图标一个 td、
+    // 数值一个 td，数值格里的 id 与 display:inline 的小 div 也照站点写法
     $('.box.torrent_ratings .body tr').prepend(
     `<td colspan="1">
-      <center>
-        <a target="_blank" class="rating ant" href="${data.link}" rel="noreferrer">
-          <div style="font-size: 0;">
-            <span class="icon-pt1">豆</span>
-          </div>
-        </a>
-      </center>
+      <a target="_blank" href="${data.link}" rel="noreferrer">
+        <img src="${ANT_DOUBAN_RATING_ICON}" style="width:50px;" title="Douban" />
+      </a>
     </td>
     <td>
-      <span class="rating">${data.average}</span>
-      <span class="mid">/</span>
-      <span class="outof"> 10</span>
-      <br>(${data.votes} votes)</td>`);
+      <div id="doubanrating" style="display:inline">${score}</div> / 10 <br />
+      (<div id="doubanratingvotecount" style="display:inline">${votes}</div>
+      votes)
+    </td>`);
   }
   $('.main_column').prepend($('.box.torrent_ratings'));
 };
@@ -1696,10 +1727,11 @@ const getSubjectEpisodeCount = async (doubanId) => {
 // 电影「宇宙巨人：希曼崛起 (2026)」
 // 单集「中央情报局 第二季 第4集 (2026)」
 // 整季「妄想代理人 第一季 全13集 (2004)」，集数取豆瓣该季的总集数
-const formatListTitle = (subject, release, episodeCount = 0) => {
+// bracketYear 给年份换成方括号（ANT 的原片名写的就是「片名 [2026]」，中文片名跟着来）
+const formatListTitle = (subject, release, episodeCount = 0, bracketYear = false) => {
   const baseTitle = stripSeasonSuffix(subject.title);
   const year = release.year || subject.year || '';
-  const yearText = year ? ` (${year})` : '';
+  const yearText = year ? (bracketYear ? ` [${year}]` : ` (${year})`) : '';
   if (!release.season) {
     return `${baseTitle}${yearText}`;
   }
@@ -1723,7 +1755,22 @@ const LIST_POPUP_OFFSET_LEFT = 2;
 const listPopup = { node: null, inner: null, showTimer: 0, hideTimer: 0, hoverLink: null };
 // 没有原站悬浮简介面板可复刻的站点（Blutopia，以及 BTN、FL、HDS、HDT、iTS），
 // 面板按一套自包含的暗色卡片另做，不依赖站点自身的样式类
-const isCardListPopup = () => CURRENT_SITE_INFO.listPage?.popupTheme === 'card';
+// 站点可能同时有两套列表页：影片浏览页（listPage）与 Top 10 榜单（top10），
+// 结构与配置都不一样（如 ANT 的 torrents.php 与 top10.php）。按当前路径取对应
+// 那一套，悬浮面板的取海报、定位、主题、宽度都靠它拿到正确的选择器
+const getListPageConfig = () => {
+  const { listPage = {}, top10 = {} } = CURRENT_SITE_INFO;
+  if (top10.path && new RegExp(top10.path).test(location.pathname)) {
+    return top10;
+  }
+  return listPage;
+};
+// 中文片名的年份写法由站点配置决定：ANT 的原片名写的就是「片名 [2026]」，
+// 中文片名跟着用方括号；其余站点用豆瓣卡片一贯的「片名 (2026)」
+const isBracketListYear = () => getListPageConfig().titleYear === 'bracket';
+// 没有原站悬浮简介面板可复刻的站点（Blutopia，以及 BTN、FL、HDS、HDT、iTS、ANT 的
+// Top10），面板按一套自包含的暗色卡片另做，不依赖站点自身的样式类
+const isCardListPopup = () => getListPageConfig().popupTheme === 'card';
 const escapeListHtml = (text) => String(text ?? '').replace(/[&<>"']/g, (char) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
 }[char]));
@@ -1750,11 +1797,17 @@ const getListPopup = () => {
     const node = document.createElement('div');
     node.className = 'librarydiv douban-list-popup';
     node.setAttribute('style', 'z-index: 99999; position: absolute; width: 680px; height: 300px; background: transparent; display: none;');
+    // 面板宽度可按站点配置收窄：海报网格类的列表页（如 ANT 的 Top10）
+    // 用默认的 680px 会盖住旁边三四格，PTP 的悬浮窗也是窄卡片
+    const popupWidth = parseInt(getListPageConfig().popupWidth, 10);
+    if (popupWidth > 0) {
+      node.style.width = `${popupWidth}px`;
+    }
     const inner = document.createElement('div');
     if (isCardListPopup()) {
       // 配色、圆角、字体都取站点自己的变量，主题切换时面板跟着变
       inner.className = 'douban-list-popup-inner douban-card-inner';
-      inner.setAttribute('style', 'width: 680px; position: absolute; height: 290px; box-sizing: border-box; padding: 0; overflow: hidden; background: var(--torrent-card-bg, #272727); border: 1px solid #3c3c3c; border-radius: 6px; color: var(--torrent-row-fg, #ccc); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.46667;');
+      inner.setAttribute('style', `width: ${popupWidth > 0 ? popupWidth : 680}px; position: absolute; height: 290px; box-sizing: border-box; padding: 0; overflow: hidden; background: var(--torrent-card-bg, #272727); border: 1px solid #3c3c3c; border-radius: 6px; color: var(--torrent-row-fg, #ccc); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 13px; line-height: 1.46667;`);
     } else {
       inner.className = 'libraryinner';
       // 尺寸与原站完全一致：外层 680x300、内层 680x290，简介超长时内部滚动
@@ -1934,6 +1987,15 @@ const parseHoverPoster = (link) => {
   }
 };
 const getNativeListPoster = (link, row) => {
+  // 站点把海报放在行内的固定元素里（如 ANT 的 Top10 海报、浏览页缩略图），
+  // 配置给出选择器，先从那里取：与页面同源，浏览器不会拦
+  const posterImg = getListPageConfig().posterImg;
+  if (posterImg) {
+    const pagePoster = (row || link.closest('tr'))?.querySelector(posterImg)?.getAttribute('src');
+    if (pagePoster) {
+      return pagePoster;
+    }
+  }
   const libraryId = link.closest('tr')?.getAttribute('library') || link.getAttribute('library') || '';
   const panelPoster = libraryId
     ? document.querySelector(`#librarydiv${libraryId} img`)?.getAttribute('src')
@@ -2087,23 +2149,19 @@ const loadListPoster = (img, urls, getTmdbPoster) => {
     advance();
   }
 };
-const showListPopup = async (link, doubanId, doubanUrl, imdbId = '', release = null) => {
-  // 豆瓣有条目时拉豆瓣详情（缺字段由 TMDB 补），走详情闸门不被整页检索堵住；
-  // 豆瓣没有条目时面板直接用 TMDB 的数据（BTN 这类没有 IMDb 编号的站按片名检索）
-  const detail = doubanId
-    ? await getSubjectDetail(doubanId, imdbId, true, release)
-    : await mergeListSubject(null, imdbId, release);
-  // 请求期间鼠标可能已经移开，也可能移到了另一个片名上
-  if (!detail || listPopup.hoverLink !== link) {
-    return;
-  }
+// 用已经取到的数据渲染面板：ANT 的 Top10 扫页时就把条目详情取好了，
+// 悬浮时直接渲染，不再发请求（「只读页面内容」）
+const renderListPopup = (link, detail, doubanUrl, imdbId = '') => {
   // 原站自己有同一条资源的海报，与页面同源，浏览器不会拦：
   // 豆瓣没给海报时先用它顶上，外链图片全被拦时也靠它兜底
-  const { listPage = {} } = CURRENT_SITE_INFO;
-  const row = link.closest(listPage.row || 'tr');
-  const nativePoster = getNativeListPoster(link, row);
-  // 豆瓣条目没有海报（多见于刚上线的新剧集）时借站点海报，缓存里的详情不改动
-  const popupDetail = detail.poster || !nativePoster ? detail : { ...detail, poster: nativePoster };
+  const listPage = getListPageConfig();
+  const nativePoster = getNativeListPoster(link, link.closest(listPage.row || 'tr'));
+  // 豆瓣条目没有海报（多见于刚上线的新剧集）时借站点海报，缓存里的详情不改动；
+  // 配了 preferNativePoster 的站点一律用页面里那一张（与页面同源不会被拦，
+  // 也符合「只读页面内容」的要求，如 ANT 的 Top10 海报）
+  const popupDetail = nativePoster && (listPage.preferNativePoster || !detail.poster)
+    ? { ...detail, poster: nativePoster, posterFallback: detail.posterFallback || detail.poster || '' }
+    : detail;
   const { node, inner } = getListPopup();
   inner.innerHTML = buildListPopupHtml(popupDetail, doubanUrl);
   // 海报走加载链：豆瓣大图、原图直连失败后换 TMDB、再换原站海报，
@@ -2131,14 +2189,28 @@ const showListPopup = async (link, doubanId, doubanUrl, imdbId = '', release = n
   // 淡入与原站的 fadeIn 一致，浏览器不支持动画时直接显示
   node.animate?.([{ opacity: 0 }, { opacity: 1 }], { duration: 200 });
 };
-const scheduleListPopup = (link, doubanId, doubanUrl, imdbId = '', release = null) => {
+const showListPopup = async (link, doubanId, doubanUrl, imdbId = '', release = null) => {
+  // 豆瓣有条目时拉豆瓣详情（缺字段由 TMDB 补），走详情闸门不被整页检索堵住；
+  // 豆瓣没有条目时面板直接用 TMDB 的数据（BTN 这类没有 IMDb 编号的站按片名检索）
+  const detail = doubanId
+    ? await getSubjectDetail(doubanId, imdbId, true, release)
+    : await mergeListSubject(null, imdbId, release);
+  // 请求期间鼠标可能已经移开，也可能移到了另一个片名上
+  if (!detail || listPopup.hoverLink !== link) {
+    return;
+  }
+  renderListPopup(link, detail, doubanUrl, imdbId);
+};
+// 面板内容由调用方给出：要么按 doubanId 现拉（通用列表页），
+// 要么直接用扫页时已取到的详情（ANT 的 Top10，悬浮时不再发请求）
+const scheduleListPopup = (link, show) => {
   clearTimeout(listPopup.showTimer);
   listPopup.hoverLink = link;
-  listPopup.showTimer = setTimeout(() => showListPopup(link, doubanId, doubanUrl, imdbId, release), LIST_POPUP_SHOW_DELAY);
+  listPopup.showTimer = setTimeout(() => show(link), LIST_POPUP_SHOW_DELAY);
 };
 // 原标题与豆瓣片名视为一组，共用同一个简介面板：原站的悬浮面板在列表页已停用，
 // 光标放到哪个标题上都弹豆瓣的，延迟与收起时序和原站一致
-const bindListPopup = (links, doubanId, doubanUrl, imdbId = '', release = null) => {
+const bindListPopupTo = (links, show) => {
   links.forEach((link) => {
     // 站点把原生悬浮挂在 inline 的 onmouseover/onmouseout 上（HDS、HDT 的 overlib），
     // 摘掉它，避免和豆瓣面板同时弹出；悬浮里的海报地址先留下来兜底
@@ -2150,7 +2222,7 @@ const bindListPopup = (links, doubanId, doubanUrl, imdbId = '', release = null) 
     link.removeAttribute('onmouseout');
     link.addEventListener('mouseenter', () => {
       clearTimeout(listPopup.hideTimer);
-      scheduleListPopup(link, doubanId, doubanUrl, imdbId, release);
+      scheduleListPopup(link, show);
     });
     link.addEventListener('mouseleave', (event) => {
       clearTimeout(listPopup.showTimer);
@@ -2160,7 +2232,7 @@ const bindListPopup = (links, doubanId, doubanUrl, imdbId = '', release = null) 
           listPopup.hoverLink = event.relatedTarget;
           positionListPopup(listPopup.node, event.relatedTarget);
         } else {
-          scheduleListPopup(event.relatedTarget, doubanId, doubanUrl, imdbId, release);
+          scheduleListPopup(event.relatedTarget, show);
         }
         return;
       }
@@ -2171,6 +2243,14 @@ const bindListPopup = (links, doubanId, doubanUrl, imdbId = '', release = null) 
     });
     link.addEventListener('click', hideListPopup);
   });
+};
+const bindListPopup = (links, doubanId, doubanUrl, imdbId = '', release = null) => {
+  bindListPopupTo(links, (link) => showListPopup(link, doubanId, doubanUrl, imdbId, release));
+};
+// 扫页时已取到条目详情的页面用这一份：海报、原片名、中文片名三处共用同一个面板，
+// 悬浮时直接渲染现成数据，不发请求
+const bindListPopupWithDetail = (links, detail, doubanUrl, imdbId = '') => {
+  bindListPopupTo(links, (link) => renderListPopup(link, detail, doubanUrl, imdbId));
 };
 // 中文片名挂在原标题下方：块级元素、左对齐，字体样式逐个拷贝原标题的计算样式，
 // 保证大小、颜色、粗细与原标题一致
@@ -2544,8 +2624,13 @@ const getTop10Year = (text) => (String(text || '').match(/((?:19|20)\d{2})/) || 
 const hasChineseText = (text) => !!text && text !== '暂无相关剧情介绍' && isChinese(text);
 // 评分二选一：豆瓣优先，豆瓣没有评分（含豆瓣没有条目）时用 TMDB 的，两个都没有就不加。
 // 评分取谁的数据就跳谁的详情页。doubanId 由调用方从检索结果带进来：条目详情接口
-// 返回的对象不带编号，直接读会拿不到豆瓣链接
-const getTop10Rating = (info, doubanId) => {
+// 返回的对象不带编号，直接读会拿不到豆瓣链接。
+// 列表页（BHD 的种子列表、ANT 的浏览页与 Top10）与 PTP 的 Top10 共用这一份。
+// tmdbFallback 决定「豆瓣没有评分时要不要拿 TMDB 顶上」：PTP 的 Top10 自己不带
+// TMDb 评分，顶上才不会少一份；ANT 的浏览页与 Top10 原站就挂着 TMDb 评分，再补
+// 一份就是并排两个一样的分数，所以这两个页面传 false。片名与简介的兜底不受影响，
+// 该用 TMDB 还用
+const getListRating = (info, doubanId, tmdbFallback = true) => {
   const score = parseFloat(info.rating) || 0;
   if (!score) {
     return null;
@@ -2553,12 +2638,13 @@ const getTop10Rating = (info, doubanId) => {
   // 站点自己的评分都带一位小数（IMDb 6.0、MC 38），豆瓣与 TMDB 的原始值
   // 有的是整数，统一成一位小数与站点格式一致
   const value = score.toFixed(1);
-  if (info.ratingSource === 'tmdb') {
+  if (!doubanId || info.ratingSource === 'tmdb') {
+    if (!tmdbFallback) {
+      return null;
+    }
     return info.tmdbUrl ? { label: 'TMDB', value, link: info.tmdbUrl } : null;
   }
-  return doubanId
-    ? { label: '豆瓣', value, link: DOUBAN_SUBJECT_URL.replace('{doubanId}', doubanId) }
-    : null;
+  return { label: '豆瓣', value, link: DOUBAN_SUBJECT_URL.replace('{doubanId}', doubanId) };
 };
 // 中文片名挂在原标题下方：块级、左对齐，字体样式逐个拷贝原标题的计算样式，
 // 与列表页的片名同一套做法；链接指向站点详情页，与原片名跳同一处
@@ -2874,7 +2960,7 @@ const addToPtpTop10Movie = async (movie) => {
         const data = {
           title: merged.title,
           summary: hasChineseText(info.summary) ? info.summary : '',
-          rating: getTop10Rating(info, merged.id),
+          rating: getListRating(info, merged.id),
           votes: parseInt(info.votes, 10) || 0,
           titleText: formatListTitle(merged, release, 0),
         };
@@ -2930,6 +3016,453 @@ const addDoubanTitlesToPtpTop10 = async () => {
   observeTop10Tooltips();
   await processTop10Movies();
 };
+// ============================================================================
+// ANT（anthelion.me）的列表页：影片浏览页与 Top 10 / Top 100 / Top 250
+// 两个页面都是站点专属布局，与通用列表页、PTP 的 Top10 都不是一套结构，
+// 各自走一份实现，共用的匹配（resolveListEntry）、片名格式（formatListTitle）、
+// 评分（getListRating）与悬浮面板（listPopup）都复用上面那几份
+// ============================================================================
+
+// ---- 影片浏览页（torrents.php 不带 id）------------------------------------
+// 一部影片一行 tr.group，行内自带海报、原片名 [年份]、标签与评分栏。
+// 站点自己的悬浮窗（getCover）读元素上的 data-cover / data-title / data-summary
+// 三个属性，因此不做自建面板，只做三件事：
+//   1. 原片名下方补豆瓣/TMDB 中文片名 [年份]，字体样式逐个拷贝原标题
+//   2. 评分栏补豆瓣评分，插在 IMDb 右侧，样式与站点其它评分一致
+//   3. 海报链接与片名链接的 data-title / data-summary 换成中文，站点悬浮窗的
+//      片名与简介随之替换，海报地址（data-cover）原样不动
+// 数据只在扫页时取一次（中文片名、评分本来就要），悬浮窗只读页面里的属性，
+// 不再额外发请求
+const collectAntListGroups = () => {
+  const { listPage = {} } = CURRENT_SITE_INFO;
+  const rowSelector = listPage.row || 'tr.group';
+  const groups = [];
+  document.querySelectorAll(rowSelector).forEach(row => {
+    if (row.dataset.doubanAntList) {
+      return;
+    }
+    const info = row.querySelector('.group_info');
+    const titleLink = info?.querySelector('a[href*="torrents.php?id="]');
+    const groupId = (titleLink?.getAttribute('href')?.match(/id=(\d+)/) || [])[1];
+    if (!info || !titleLink || !groupId) {
+      return;
+    }
+    groups.push({
+      row,
+      info,
+      titleLink,
+      groupId,
+      title: (titleLink.textContent || '').trim(),
+      // 年份与原片名同行，写在方括号里：「片名 [2026] [R] by 导演」
+      year: pickAntYear(titleLink.nextSibling?.textContent),
+      imdbId: getListTitleImdbId(titleLink, row),
+      // 站点的悬浮窗挂在 img 上：data-cover / data-title / data-summary 三个属性
+      // 都写在 img.browse_poster 上，外层的 <a> 反而没有。取带 data-cover 的那个
+      // 节点，鼠标放上去 getCover 读到的才是换过的内容
+      posterNode: row.querySelector('.poster_wrap [data-cover]'),
+    });
+  });
+  return groups;
+};
+// 站点把年份写在原片名后面的方括号里（「片名 [2026]」），优先取方括号中的那个；
+// 取不到再退到第一个四位年份。片名本身带年份的（如 2001 太空漫游）
+// 靠方括号优先才不会取错。调用方给原片名那一行的文本
+const pickAntYear = (text) => {
+  const value = String(text || '');
+  return (value.match(/\[((?:19|20)\d{2})\]/) || value.match(/((?:19|20)\d{2})/) || [])[1] || '';
+};
+// 中文片名的落点：站点把「片名 [年份] [分级] by 导演」连同书签写成一整行，
+// 行尾是 <br>，其后才是标签与评分栏。块级的中文片名若插在片名链接后面，
+// 会把这一行从中间截断（导演、书签都被挤到下一行），所以要插到整行之后。
+// 取标签、评分栏里最靠前的那个插在它前面，两者都没有就追加到末尾
+const findAntListTitleRef = (parent) => Array.from(parent.children)
+  .find(node => node.classList.contains('tags') || node.classList.contains('browse_rating'));
+// 中文片名挂在原片名下方：块级、左对齐，字体样式逐个拷贝原标题的计算样式，
+// 与其它站点的列表片名同一套做法（大小、颜色、粗细、字体全一致）。
+// 站点把悬浮窗挂在行内的 onmouseover 上，中文片名照原片名挂一份，
+// 光标放上去同样弹站点自己的悬浮窗
+const insertAntListTitle = (titleLink, text, url) => {
+  const parent = titleLink.parentNode;
+  Array.from(parent.children)
+    .filter(node => node.classList.contains('douban-ant-title'))
+    .forEach(node => node.remove());
+  const anchor = document.createElement('a');
+  anchor.href = url;
+  anchor.target = '_blank';
+  anchor.rel = 'noreferrer';
+  anchor.title = text;
+  anchor.textContent = text;
+  anchor.setAttribute('onmouseover', 'getCover(event);');
+  anchor.setAttribute('onmouseleave', 'ungetCover()');
+  const titleStyle = getComputedStyle(titleLink);
+  ['fontSize', 'color', 'fontWeight', 'fontFamily', 'fontStyle', 'lineHeight', 'letterSpacing', 'textTransform', 'textDecoration'].forEach(property => {
+    anchor.style[property] = titleStyle[property];
+  });
+  const wrapper = document.createElement('div');
+  wrapper.className = 'douban-ant-title';
+  wrapper.style.setProperty('display', 'block', 'important');
+  wrapper.style.setProperty('text-align', 'left', 'important');
+  wrapper.appendChild(anchor);
+  parent.insertBefore(wrapper, findAntListTitleRef(parent) || null);
+  return anchor;
+};
+// 评分栏补豆瓣评分：站点自己的评分是一个个 .browse_rating 小方块
+// （inline-block、深色底、圆角、11px 字），豆瓣照样做一个插在 IMDb 右侧，
+// 没有 IMDb 评分时追加到末尾。内容、字号、颜色全靠站点自己的类，与其它评分一致
+const insertAntListRating = (info, rating) => {
+  info.querySelectorAll('.browse_rating.douban-ant-rating').forEach(node => node.remove());
+  if (!rating) {
+    return;
+  }
+  const box = document.createElement('div');
+  box.className = 'browse_rating douban-ant-rating';
+  const link = document.createElement('a');
+  link.href = rating.link;
+  link.target = '_blank';
+  link.rel = 'noreferrer';
+  link.textContent = `${rating.label}:`;
+  box.appendChild(link);
+  box.appendChild(document.createTextNode(` ${rating.value}`));
+  const imdbBox = Array.from(info.querySelectorAll('.browse_rating'))
+    .find(item => item.querySelector('a[href*="imdb.com/title/"]'));
+  if (imdbBox) {
+    imdbBox.after(box);
+  } else {
+    info.appendChild(box);
+  }
+};
+// 站点悬浮窗（getCover）读元素上的 data-title / data-summary / data-cover，
+// 前两个换成豆瓣/TMDB 的中文片名与简介，海报地址原样不动。海报图、原片名链接与
+// 新加的中文片名链接三处都换，光标放到哪里都弹中文内容。
+// 中文片名那一行本来没有 data-cover（站点只在海报与原片名上放），补上原海报地址：
+// 没有它悬浮窗会显示站点的「无海报」占位图，与原片名上的效果不一致
+const applyAntCoverData = (nodes, info) => {
+  const title = info.title || '';
+  const summary = hasChineseText(info.summary) ? info.summary : '';
+  const cover = info.cover || '';
+  if (!title && !summary && !cover) {
+    return;
+  }
+  nodes.filter(Boolean).forEach(node => {
+    if (title) {
+      node.setAttribute('data-title', title);
+    }
+    if (summary) {
+      node.setAttribute('data-summary', summary);
+    }
+    if (cover) {
+      node.setAttribute('data-cover', cover);
+    }
+  });
+};
+const addDoubanInfoToAntListGroup = async (group) => {
+  group.row.dataset.doubanAntList = '1';
+  const release = parseReleaseTitle(group.title) || {};
+  // 年份取站点显示的：解析片名时可能把片名里的数字（2049）当年份
+  if (group.year) {
+    release.year = group.year;
+  }
+  // 与其它列表页同一套匹配：片名（含 AKA）检索 + IMDb 反查 + TMDB 兜底，
+  // 匹配不到豆瓣条目、或没有中文片名时整个资源保持原样
+  const entry = await resolveListEntry(release, group.imdbId);
+  if (!entry) {
+    return;
+  }
+  const { merged } = entry;
+  const doubanId = merged.id || '';
+  const doubanUrl = DOUBAN_SUBJECT_URL.replace('{doubanId}', doubanId);
+  // 评分与简介在条目详情里，检索结果没有：走详情闸门，不被整页检索排队堵住。
+  // 豆瓣没有条目时 merged 整份是 TMDB 数据，直接用它
+  const detail = doubanId ? await getSubjectDetail(doubanId, group.imdbId, true, release) : null;
+  const info = detail || merged;
+  // 中文片名与原片名跳同一处（站点详情页）：片名取自豆瓣还是 TMDB 只影响文字内容，
+  // 不影响跳转，读者点中文片名期望看到的就是这个资源的详情页
+  const titleUrl = group.titleLink.getAttribute('href') || doubanUrl;
+  const titleText = formatListTitle(merged, release, 0, isBracketListYear());
+  const chineseTitle = insertAntListTitle(group.titleLink, titleText, titleUrl);
+  // 评分不兜底：原站的评分栏里已经带着 TMDb 评分，豆瓣没有评分时留空即可
+  insertAntListRating(group.info, getListRating(info, doubanId, false));
+  // 悬浮窗只读页面里的属性：片名、简介换成豆瓣/TMDB 的中文内容，
+  // 海报地址照原样带走，光标放上去不再发请求
+  applyAntCoverData([group.posterNode, group.titleLink, chineseTitle], {
+    title: titleText,
+    summary: info.summary,
+    cover: group.posterNode?.getAttribute('data-cover') || group.titleLink.getAttribute('data-cover') || '',
+  });
+};
+// 与 Top10 一致的控制并发：一页几十部影片，逐个排队请求，避开豆瓣限流。
+// 批次不重入：首屏批次要一部部过闸门，我们自己的插入又会触发 observer 补扫，
+// 重入会让同一部影片并行处理多遍——评分插两遍、条目详情多打几次接口。
+// 补扫在批次结束后自动再跑一轮，批次期间新出现的行（翻页、筛选）不会漏
+let antListBatchRunning = false;
+const processAntListGroups = async () => {
+  if (antListBatchRunning) {
+    return;
+  }
+  antListBatchRunning = true;
+  try {
+    let groups = collectAntListGroups();
+    while (groups.length) {
+      const workers = Array.from({ length: Math.min(LIST_SEARCH_CONCURRENCY, groups.length) }, async () => {
+        while (groups.length) {
+          await addDoubanInfoToAntListGroup(groups.shift());
+        }
+      });
+      await Promise.all(workers);
+      groups = collectAntListGroups();
+    }
+  } finally {
+    antListBatchRunning = false;
+  }
+};
+// 列表可能由脚本异步渲染（筛选、翻页、无限滚动），监听 DOM 变化补插新增的行
+const observeAntList = () => {
+  if (document.documentElement.dataset.doubanAntListObserver) {
+    return;
+  }
+  document.documentElement.dataset.doubanAntListObserver = '1';
+  let timer = null;
+  new MutationObserver(() => {
+    clearTimeout(timer);
+    timer = setTimeout(processAntListGroups, 300);
+  }).observe(document.body, { childList: true, subtree: true });
+};
+const addDoubanTitlesToAntList = async () => {
+  observeAntList();
+  await processAntListGroups();
+};
+
+// ---- Top 10 / Top 100 / Top 250（top10.php）-------------------------------
+// 一部影片一格 td.top10main，格内是海报、原片名 [年份]、标签与评分栏。
+// 站点自己没有悬浮窗，海报、原片名、中文片名三处统一挂脚本生成的暗色卡片面板
+// （与 PTP 同款），内容取页面里的海报 + 扫页时已取到的豆瓣/TMDB 数据，
+// 悬浮时不再发请求
+// 32×32 的评分行图标另做一份：详情页那个 100×88 的票根缩到 16px 会认不出
+const ANT_TOP10_DOUBAN_ICON = `data:image/svg+xml,${encodeURIComponent(
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">' +
+  '<rect x="0" y="0" width="32" height="32" rx="6" fill="#007722"/>' +
+  '<text x="16" y="23.5" text-anchor="middle" font-family="PingFang SC,Hiragino Sans GB,' +
+  'Microsoft YaHei,Noto Sans CJK SC,sans-serif" font-size="20" font-weight="700" ' +
+  'fill="#ffffff">豆</text>' +
+  '</svg>',
+)}`;
+const collectAntTop10Movies = () => {
+  const { top10 = {} } = CURRENT_SITE_INFO;
+  const rowSelector = top10.row || 'td.top10main';
+  const movies = [];
+  document.querySelectorAll(rowSelector).forEach(node => {
+    if (node.dataset.doubanAntTop10) {
+      return;
+    }
+    const titleLink = node.querySelector(top10.titleLink || '.top10title a[href*="torrents.php?id="]');
+    const groupId = (titleLink?.getAttribute('href')?.match(/id=(\d+)/) || [])[1];
+    if (!titleLink || !groupId) {
+      return;
+    }
+    movies.push({
+      node,
+      titleLink,
+      groupId,
+      title: (titleLink.textContent || '').trim(),
+      // 年份与原片名同行，写在方括号里：「Sense and Sensibility [2026]」
+      year: pickAntYear(node.querySelector('.top10title strong')?.textContent),
+      imdbId: getTop10ImdbId(node),
+      posterLink: node.querySelector(top10.posterLink || '.top10posterwrapper > a'),
+    });
+  });
+  return movies;
+};
+// 中文片名挂在原片名下方：块级、居中（站点自己的标题行就是居中的），
+// 字体样式逐个拷贝原标题的计算样式；链接指向站点详情页，与原片名跳同一处
+const insertAntTop10Title = (titleLink, text) => {
+  const parent = titleLink.closest('.top10title') || titleLink.parentNode;
+  Array.from(parent.children)
+    .filter(node => node.classList.contains('douban-ant-top10-title'))
+    .forEach(node => node.remove());
+  // 站点把「片名 [年份]」里的年份写在 <strong> 里而不是链接里，年份因此是正文色、
+  // 片名是链接色。中文片名的年份也照原样拆出来单独放，颜色取 <strong> 的，
+  // 不跟着链接色走，两边才一致
+  const yearMatch = String(text).match(/\s*\[((?:19|20)\d{2})\]\s*$/);
+  const titleText = yearMatch ? text.slice(0, yearMatch.index) : text;
+  const yearText = yearMatch ? yearMatch[0].trim() : '';
+  const anchor = document.createElement('a');
+  anchor.href = titleLink.getAttribute('href') || '#';
+  anchor.target = '_blank';
+  anchor.rel = 'noreferrer';
+  anchor.title = text;
+  anchor.textContent = titleText;
+  const titleStyle = getComputedStyle(titleLink);
+  const copyTitleStyle = (node) => {
+    ['fontSize', 'color', 'fontWeight', 'fontFamily', 'fontStyle', 'lineHeight', 'letterSpacing', 'textTransform', 'textDecoration'].forEach(property => {
+      node.style[property] = titleStyle[property];
+    });
+  };
+  copyTitleStyle(anchor);
+  const wrapper = document.createElement('div');
+  wrapper.className = 'douban-ant-top10-title';
+  wrapper.style.setProperty('display', 'block', 'important');
+  // 原标题行常禁止换行，长片名一行放不下会溢出，中文片名允许折行
+  wrapper.style.setProperty('white-space', 'normal', 'important');
+  wrapper.appendChild(anchor);
+  if (yearText) {
+    const year = document.createElement('span');
+    year.textContent = ` ${yearText}`;
+    copyTitleStyle(year);
+    // 先整套拷片名的（字号、字体一致），再把颜色换回 <strong> 的正文色
+    const strong = titleLink.closest('strong');
+    const strongColor = strong ? getComputedStyle(strong).color : '';
+    if (strongColor) {
+      year.style.color = strongColor;
+    }
+    wrapper.appendChild(year);
+  }
+  // 站点是「<strong>片名 [年份]</strong><br/>标签」：<strong> 后面那个 <br> 会
+  // 在块级的中文片名之前多撑出一整个空行，原片名与中文片名之间就空出一大截。
+  // 中文片名本身是块级、自带换行，<br> 是多余的，先删掉再插入，三行（原片名、
+  // 中文片名、标签）的间距才匀得开；剩下的间距由样式表统一补成与标签一致
+  const lineBreak = parent.querySelector(':scope > strong + br');
+  if (lineBreak) {
+    lineBreak.remove();
+  }
+  parent.insertBefore(wrapper, parent.querySelector('.top10tags'));
+  return anchor;
+};
+// 评分栏补豆瓣评分：站点自己的评分是一个个 <a>（16px 图标 + 分数），IMDb 那条带
+// top10rating 类（左内边距 30px）。豆瓣照样做一个跟在 IMDb 右侧，没有 IMDb 评分时
+// 追加到末尾
+// 站点自己的两条链接一律不动：标题格内容宽 194px，站点原样（TMDb 无内边距 +
+// IMDb 左内边距 30px）下两条共 102px，加上豆瓣这条 69px 是 171px，放得下；
+// 实测最坏情况（TMDb 100 / IMDb 10.0 / 豆瓣 10.0）也才 191px。若按老做法把三条
+// 的内边距统一缩到 8px，总宽反而涨到 162px 以上，再把站点自己的间距也改了——
+// 折行的正是这种「统一缩间距」的版本（三条总宽 288px，评分栏从 25px 涨到 31px，
+// 第二条被固定高度切掉一半）。这里只加 nowrap 兜底：正常情况根本用不上，
+// 万一哪个站把格子改窄了也不会折成两行
+const insertAntTop10Rating = (node, rating) => {
+  const box = node.querySelector('.top10ratings');
+  box?.querySelectorAll('a.douban-ant-top10-rating').forEach(item => item.remove());
+  if (!box || !rating) {
+    return;
+  }
+  const link = document.createElement('a');
+  link.className = 'top10rating douban-ant-top10-rating';
+  link.href = rating.link;
+  link.target = '_blank';
+  link.rel = 'noreferrer';
+  link.title = rating.label;
+  const img = document.createElement('img');
+  img.src = ANT_TOP10_DOUBAN_ICON;
+  img.className = 'top10douban';
+  link.appendChild(img);
+  link.appendChild(document.createTextNode(` ${rating.value}`));
+  const imdbLink = Array.from(box.querySelectorAll('a'))
+    .find(item => /imdb\.com\/title/.test(item.getAttribute('href') || ''));
+  if (imdbLink) {
+    imdbLink.after(link);
+  } else {
+    box.appendChild(link);
+  }
+  box.style.setProperty('white-space', 'nowrap', 'important');
+};
+const renderAntTop10Movie = (movie, data) => {
+  const chineseTitle = insertAntTop10Title(movie.titleLink, data.titleText);
+  insertAntTop10Rating(movie.node, data.rating);
+  // 海报、原片名、中文片名三处挂同一个简介面板：面板是脚本生成的暗色卡片
+  // （与 PTP 同款），海报取页面里那一张，其余内容用扫页时已取到的数据。
+  // 数据现成，悬浮时直接渲染，不再发请求
+  const links = [movie.posterLink, movie.titleLink, chineseTitle].filter(Boolean);
+  if (links.length) {
+    bindListPopupWithDetail(links, data.detail, data.doubanUrl, movie.imdbId);
+  }
+};
+// 同一部影片在一页里会出现多次（多个榜单分类），站点重绘后也会再扫到。
+// 按组编号存正在处理的任务：并发的工作协程同时拿到同一部影片时挂在同一个
+// Promise 上等，条目详情与 TMDB 兜底都只走一次，不会重复打接口
+const antTop10Infos = new Map();
+const antTop10Pending = new Map();
+const addToAntTop10Movie = async (movie) => {
+  movie.node.dataset.doubanAntTop10 = '1';
+  if (antTop10Infos.has(movie.groupId)) {
+    renderAntTop10Movie(movie, antTop10Infos.get(movie.groupId));
+    return;
+  }
+  let pending = antTop10Pending.get(movie.groupId);
+  if (!pending) {
+    pending = (async () => {
+      try {
+        const parsed = parseReleaseTitle(movie.title) || {};
+        // 年份取站点显示的，解析片名时可能把片名里的数字（2049）当年份
+        const release = { ...parsed, year: movie.year || parsed.year || '' };
+        const entry = await resolveListEntry(release, movie.imdbId);
+        if (!entry) {
+          return null;
+        }
+        const { merged } = entry;
+        const doubanId = merged.id || '';
+        // 评分与简介在条目详情里，检索结果没有：走详情闸门，不被整页检索排队堵住。
+        // 豆瓣没有条目时 merged 整份是 TMDB 数据，直接用它
+        const detail = doubanId ? await getSubjectDetail(doubanId, movie.imdbId, true, release) : null;
+        const info = detail || merged;
+        const data = {
+          doubanId,
+          doubanUrl: DOUBAN_SUBJECT_URL.replace('{doubanId}', doubanId),
+          release,
+          titleText: formatListTitle(merged, release, 0, isBracketListYear()),
+          // 评分不兜底：原站每一格自己就带着 TMDb 评分
+          rating: getListRating(info, doubanId, false),
+          detail: info,
+        };
+        antTop10Infos.set(movie.groupId, data);
+        return data;
+      } catch (error) {
+        // 一部影片的意外不能把整批 Worker 带崩：其余影片继续处理
+        console.log(error);
+        return null;
+      }
+    })();
+    antTop10Pending.set(movie.groupId, pending);
+  }
+  const data = await pending;
+  if (data) {
+    renderAntTop10Movie(movie, data);
+  }
+};
+// 与 PTP 的 Top10 一致的控制并发：一页最多 250 部影片，逐个排队请求，避开豆瓣限流。
+// 批次不重入：首屏批次要一部部过闸门，我们自己的插入又会触发 observer 补扫，
+// 重入会让同一部影片并行处理多遍——评分插两遍、条目详情多打几次接口。
+// 补扫在批次结束后自动再跑一轮，批次期间新出现的资源（切换榜单）不会漏
+let antTop10BatchRunning = false;
+const processAntTop10Movies = async () => {
+  if (antTop10BatchRunning) {
+    return;
+  }
+  antTop10BatchRunning = true;
+  try {
+    let movies = collectAntTop10Movies();
+    while (movies.length) {
+      const workers = Array.from({ length: Math.min(LIST_SEARCH_CONCURRENCY, movies.length) }, async () => {
+        while (movies.length) {
+          await addToAntTop10Movie(movies.shift());
+        }
+      });
+      await Promise.all(workers);
+      movies = collectAntTop10Movies();
+    }
+  } finally {
+    antTop10BatchRunning = false;
+  }
+};
+const observeAntTop10Movies = () => {
+  let timer = null;
+  new MutationObserver(() => {
+    clearTimeout(timer);
+    timer = setTimeout(processAntTop10Movies, 300);
+  }).observe(document.body, { childList: true, subtree: true });
+};
+const addDoubanTitlesToAntTop10 = async () => {
+  observeAntTop10Movies();
+  await processAntTop10Movies();
+};
+
 // 已做就地融合的站点只替换站内原生内容，不生成豆瓣卡片；
 // 其余站点保持原有的豆瓣信息卡片
 // link 由调用方给出：豆瓣有条目时是豆瓣详情页，只有 TMDB 兜底到时是 TMDB 条目页
@@ -3003,5 +3536,7 @@ export {
   addDarkLinkButton,
   addDoubanTitlesToList,
   addDoubanTitlesToPtpTop10,
+  addDoubanTitlesToAntList,
+  addDoubanTitlesToAntTop10,
   setListTmdb,
 };

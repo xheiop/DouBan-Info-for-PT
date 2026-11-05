@@ -5,3 +5,33 @@ siteType: gazelle
 imdb: 
   request: '.layout a[href*="imdb.com/title"]:first'
   torrent: '.torrent_ratings a[href*="imdb.com/title"]:first'
+# 影片浏览页（torrents.php 不带 id）：一部影片一行 tr.group，行内自带海报、
+# 片名、标签与评分栏。站点自己的悬浮窗（getCover）读元素上的 data-cover /
+# data-title / data-summary 三个属性，因此只换这三个属性的值，不另做面板
+listPage:
+  path: '^/torrents\.php$'
+  excludeQuery: '[?&]id='
+  titleLink: '.group_info > a[href*="torrents.php?id="]'
+  row: 'tr.group'
+  idPattern: 'torrents\.php\?id=(\d+)'
+  # 中文片名的年份用站点自己的方括号写法（原片名是「片名 [2026]」）。
+  # 本站列表页复用站点悬浮窗，popupTheme / popupWidth 只给 Top10 页的面板用
+  titleYear: 'bracket'
+  popupTheme: 'card'
+# Top 10 / Top 100 / Top 250（top10.php）：一部影片一格 td.top10main，
+# 格内是海报、原片名 [年份]、标签与评分栏。站点自己没有悬浮窗，
+# 海报、原片名、中文片名三处统一挂脚本生成的暗色卡片面板
+top10:
+  path: '^/top10\.php$'
+  layout: 'ant'
+  titleLink: '.top10title a[href*="torrents.php?id="]'
+  row: 'td.top10main'
+  idPattern: 'torrents\.php\?id=(\d+)'
+  posterLink: '.top10posterwrapper > a'
+  posterImg: 'img.top10poster'
+  # 海报一律用页面里那一张：与页面同源不会被拦，也符合「只读页面内容」的要求
+  preferNativePoster: true
+  titleYear: 'bracket'
+  popupTheme: 'card'
+  # 面板比列表页窄：Top10 是海报网格，680px 宽的面板会盖住三四格
+  popupWidth: 380
