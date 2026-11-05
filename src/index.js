@@ -4,8 +4,8 @@ import {
 import {
   getImdbId, getTvSeasonData, isChinese,
   addToPtpPage, getDoubanInfo, getDoubanInfoByIMDB, getDoubanInfoBySubject, getDoubanInfoFallback,
-  addToANTPage, renderDoubanInfo, addDarkLinkButton, addDoubanTitlesToList, addDoubanTitlesToPtpTop10,
-  addPtpGroupNames, setListTmdb,
+  addToANTPage, addToTlPage, renderDoubanInfo, addDarkLinkButton, addDoubanTitlesToList, addDoubanTitlesToPtpTop10,
+  addDoubanTitlesToAntList, addDoubanTitlesToAntTop10, addPtpGroupNames, setListTmdb,
 } from './common';
 import { mergeTmdbInfo, getTmdbPoster, getTmdbSeasonEpisodeCount, registerTmdbMenu } from './tmdb';
 import { replacePtpTrailer } from './trailer';
@@ -66,13 +66,17 @@ const waitForImdbId = async (timeout = 15000) => {
   return imdbId;
 };
 
-// PTP 的 Top 10 Movies 页（top10.php，含 Top 100 / Top 250）与影片浏览页
-// （torrents.php）是同一套列表结构：Cover、Huge、List、Compact list 四种视图，
-// 每个资源是一部影片而不是发行名，走单独的逻辑。
-// torrents.php 同时是详情页地址（?id= 带组编号），用查询串区分：带 id 的走详情页流程
+// Top 10 榜单页有两套完全不同的布局，按配置里的 layout 区分走哪份实现：
+//   ptp：PTP 的 Top 10 Movies（top10.php，含 Top 100 / Top 250）与影片浏览页
+//        （torrents.php）是同一套列表结构，Cover、Huge、List、Compact list 四种视图，
+//        每个资源是一部影片而不是发行名。
+//        torrents.php 同时是详情页地址（?id= 带组编号），用查询串区分
+//   ant：ANT 的 Top 10 / Top 100 / Top 250（top10.php）是海报网格，
+//        一部影片一格，与它的影片浏览页（torrents.php）也不是一套结构
+const top10Layout = () => CURRENT_SITE_INFO.top10?.layout || '';
 const isPtpTop10Page = () => {
   const { top10 } = CURRENT_SITE_INFO;
-  if (!top10) {
+  if (!top10 || top10Layout() !== 'ptp') {
     return false;
   }
   if (top10.path && new RegExp(top10.path).test(location.pathname)) {
@@ -81,6 +85,11 @@ const isPtpTop10Page = () => {
   return !!top10.browsePath &&
     new RegExp(top10.browsePath).test(location.pathname) &&
     !/(?:[?&])id=/.test(location.search);
+};
+const isAntTop10Page = () => {
+  const { top10 } = CURRENT_SITE_INFO;
+  return !!top10?.path && top10Layout() === 'ant' &&
+    new RegExp(top10.path).test(location.pathname);
 };
 // 列表页（如 BHD 的 /torrents）与详情页（/torrents/{id}）是两套页面结构，走不同逻辑
 const isListPage = () => {
@@ -104,6 +113,12 @@ const isListPage = () => {
   }
   // TMDB API Key 设置入口。没配 key 时兜底整体关闭，脚本行为与之前一致
   registerTmdbMenu();
+  if (isAntTop10Page()) {
+    // 与列表页同一套 TMDB 兜底：中文片名、简介、评分各自独立回退
+    setListTmdb({ merge: mergeTmdbInfo, poster: getTmdbPoster, seasonCount: getTmdbSeasonEpisodeCount });
+    addDoubanTitlesToAntTop10();
+    return;
+  }
   if (isPtpTop10Page()) {
     // 与列表页同一套 TMDB 兜底：中文片名、简介、评分各自独立回退
     setListTmdb({ merge: mergeTmdbInfo, poster: getTmdbPoster, seasonCount: getTmdbSeasonEpisodeCount });
@@ -113,7 +128,13 @@ const isListPage = () => {
   if (isListPage()) {
     // 列表页的 TMDB 兜底：字段合并与海报兜底都走这里注册进来
     setListTmdb({ merge: mergeTmdbInfo, poster: getTmdbPoster, seasonCount: getTmdbSeasonEpisodeCount });
-    addDoubanTitlesToList();
+    // ANT 的影片浏览页是站点专属布局：中文片名、豆瓣评分与悬浮窗数据三处
+    // 就地融合，其余站点走通用的列表页逻辑
+    if (CURRENT_SITE_NAME.match(/ANT/)) {
+      addDoubanTitlesToAntList();
+    } else {
+      addDoubanTitlesToList();
+    }
     return;
   }
   const imdbId = await waitForImdbId();
@@ -143,6 +164,11 @@ const isListPage = () => {
       replacePtpTrailer();
     } else if (CURRENT_SITE_NAME.match(/ANT/)) {
       addToANTPage(info);
+    } else if (CURRENT_SITE_NAME === 'TL') {
+      // TL 详情页是站点专属布局：原片名替换 + 评分栏重建，见 addToTlPage。
+      // 剧集同样先按种子标题定位对应季的条目
+      const season = await resolveSeason(info, imdbId);
+      addToTlPage(season.doubanData, link, titleLink);
     } else {
       const season = await resolveSeason(info, imdbId);
       renderDoubanInfo(season.doubanData, season.doubanId, imdbId, link, titleLink);

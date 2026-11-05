@@ -685,3 +685,36 @@
     color: #eee;
     font-size: 12px;
 }
+
+/* ANT 影片浏览页：中文片名挂在原片名下方，块级 + 左对齐；
+   字体大小、颜色、粗细由脚本逐个拷贝原标题的计算样式，这里只负责换行与对齐 */
+.douban-ant-title {
+    display: block;
+    text-align: left;
+}
+
+/* ANT Top 10 / Top 100 / Top 250：原片名下方补中文片名。站点把标题格的高度
+   固定成 70px 并裁切溢出内容，多一行片名会被切掉，这里把高度改成自适应
+   （保留原来的最小高度）、取消裁切；对齐方式继承站点自己的居中 */
+#top10 .top10title {
+    height: auto !important;
+    min-height: 70px !important;
+    overflow: visible !important;
+}
+
+/* 中文片名与原片名、标签三行的间距要匀：站点给标签加了 4px 上内边距
+   （.top10tags{padding-top:4px}），原片名与标签之间因此是 4px 空隙；
+   中文片名这条也补 4px 上外边距，三行之间才一样宽 */
+.douban-ant-top10-title {
+    display: block;
+    margin-top: 4px;
+}
+
+/* ANT Top 10：豆瓣评分图标按站点其它评分图标的规格做（16px 见方、垂直居中），
+   与 TMDb、IMDb 两个 16px 图标摆到一行；间距沿用站点自己的（IMDb 那条的
+   30px 左内边距），脚本只保证不换行 */
+.top10ratings .top10douban {
+    width: 16px !important;
+    height: 16px !important;
+    vertical-align: middle;
+}
