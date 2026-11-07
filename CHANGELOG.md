@@ -1,3 +1,12 @@
+## [1.11.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.9.0...1.11.1) (2026-11-07)
+
+
+### Features
+
+* 适配 TorrentLeech 列表页/详情页与 ANT 影片浏览页/Top10 榜单 ([#24](https://github.com/techmovie/DouBan-Info-for-PT/issues/24)) ([2d406a5](https://github.com/techmovie/DouBan-Info-for-PT/commit/2d406a5158e242b5d9dcef2521abecee0262186d))
+
+
+
 # [1.9.0](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.8.4...1.9.0) (2026-11-01)
 
 
