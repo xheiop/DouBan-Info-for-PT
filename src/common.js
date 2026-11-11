@@ -46,11 +46,9 @@ const addToPtpPage = (data) => {
     <div><strong>又名:</strong>  ${data.aka}</div
     </div>`);
   if (data.average) {
-    // 图标格与评分格都照站点原生的宽度来：IMDb 是 63px + 90px，
-    //  Metastric 是 56px + 51px，64×64 的图配 63px 的格子正合适
     const votesText = data.votes ? Number(data.votes).toLocaleString('en-US') : '';
     $('#movie-ratings-table tr').prepend(
-    `<td colspan="1" style="width: 63px;"><center><a target="_blank" class="rating" href="${data.link}" rel="noreferrer"><img src="${PTP_DOUBAN_RATING_ICON}" style="height:64px;width:64px;" title="Douban"></a></center></td>
+    `<td colspan="1" style="width: 63px;"><center><a target="_blank" class="rating" href="${data.link}" rel="noreferrer"><img src="${PTP_DOUBAN_RATING_ICON}" style="height:64px !important;width:64px !important;padding:0 !important;background:url('${PTP_DOUBAN_RATING_ICON}') center / contain no-repeat;" title="Douban"></a></center></td>
     <td style="width: 90px;"><span class="rating">${data.average}</span> <span class="mid">/</span> <span class="outof"> 10</span><br>(${votesText} votes)</td>`);
   }
   $('.main-column').prepend($('#movie-ratings-table').parent());
