@@ -1,3 +1,12 @@
+## [1.11.2](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.11.1...1.11.2) (2026-11-11)
+
+
+### Bug Fixes
+
+* **ptp:** 修复部分主题下评分栏豆瓣图标不显示 ([4be4c6c](https://github.com/techmovie/DouBan-Info-for-PT/commit/4be4c6cafa6200bec62e0f54f6c1ddbbe0a98ad9))
+
+
+
 ## [1.11.1](https://github.com/techmovie/DouBan-Info-for-PT/compare/1.9.0...1.11.1) (2026-11-07)
 
 

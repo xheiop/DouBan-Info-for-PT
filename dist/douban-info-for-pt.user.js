@@ -2,7 +2,7 @@
 // @name            douban-info-for-pt
 // @name:en         douban-info-for-pt
 // @namespace       https://github.com/techmovie/DouBan-Info-for-PT
-// @version         1.11.1
+// @version         1.11.2
 // @author          birdplane
 // @description     在PT站电影详情页展示部分中文信息
 // @description:en  Display some Chinese information on the PT site movie details page
@@ -137,7 +137,7 @@
     if (data.average) {
       const votesText = data.votes ? Number(data.votes).toLocaleString("en-US") : "";
       $("#movie-ratings-table tr").prepend(
-        `<td colspan="1" style="width: 63px;"><center><a target="_blank" class="rating" href="${data.link}" rel="noreferrer"><img src="${PTP_DOUBAN_RATING_ICON}" style="height:64px;width:64px;" title="Douban"></a></center></td>
+        `<td colspan="1" style="width: 63px;"><center><a target="_blank" class="rating" href="${data.link}" rel="noreferrer"><img src="${PTP_DOUBAN_RATING_ICON}" style="height:64px !important;width:64px !important;padding:0 !important;background:url('${PTP_DOUBAN_RATING_ICON}') center / contain no-repeat;" title="Douban"></a></center></td>
     <td style="width: 90px;"><span class="rating">${data.average}</span> <span class="mid">/</span> <span class="outof"> 10</span><br>(${votesText} votes)</td>`
       );
     }
